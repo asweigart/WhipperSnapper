@@ -76,6 +76,13 @@
             android:id="@+id/tvTaskDoneAtLabel"
             android:layout_below="@+id/ivTaskPhoto" />
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@+id/tvTaskDoneAtLabel"
+            />
+
     </RelativeLayout>
     </ScrollView>
 
