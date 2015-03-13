@@ -29,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
         TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         try {
             thisUser.logIn(tMgr.getLine1Number(), "password");
-            thisUser.fetchIfNeeded(); // TODO this doesn't work?
+            thisUser = (ParseWSUser) ParseWSUser.getCurrentUser();
         } catch (ParseException e) {
             if (e.getCode() == INVALID_LOGIN_CREDENTIAL) {
                 // bad login means the account does not exist, so launch the profile creation activity

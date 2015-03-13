@@ -212,8 +212,15 @@ public class FillOutProfileActivity extends ActionBarActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Intent i = new Intent(FillOutProfileActivity.this, SeniorHomeActivity.class);
-                    startActivity(i);
+                    if (getIntent().getBooleanExtra("isSenior", true)) {
+                        // This is a senior, start the Senior Home activity
+                        Intent i = new Intent(FillOutProfileActivity.this, SeniorHomeActivity.class);
+                        startActivity(i);
+                    } else {
+                        // This is a volunteer, start the Find Task activity
+                        Intent i = new Intent(FillOutProfileActivity.this, FindTaskActivity.class);
+                        startActivity(i);
+                    }
                     FillOutProfileActivity.this.finish();
                 } else {
                     e.printStackTrace();
