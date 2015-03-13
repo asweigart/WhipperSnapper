@@ -8,7 +8,6 @@ import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.LocationListener;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
@@ -33,8 +32,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.location.LocationListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -74,6 +75,14 @@ public class CreateTaskActivity extends FragmentActivity implements
         spTaskType = (Spinner) findViewById(R.id.spTaskType);
         etTaskDetails = (EditText) findViewById(R.id.etTaskDetails);
         ivTaskPhoto = (ImageView) findViewById(R.id.ivTaskPhoto);
+
+        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap map) {
+                loadMap(map);
+            }
+        });
     }
 
 
@@ -221,15 +230,6 @@ public class CreateTaskActivity extends FragmentActivity implements
         }
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "Enabled new provider " + provider, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "Disabled provider " + provider, Toast.LENGTH_SHORT).show();
-    }
 
     /*
  * Called by Location Services if the connection to the location client
@@ -281,12 +281,7 @@ public class CreateTaskActivity extends FragmentActivity implements
         //longitudeField.setText(String.valueOf(lon));
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    /*
+/*
  * Called by Location Services when the request to connect the client
  * finishes successfully. At this point, you can request the current
  * location or start periodic updates
@@ -300,9 +295,19 @@ public class CreateTaskActivity extends FragmentActivity implements
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             map.animateCamera(cameraUpdate);
-            //startLocationUpdates();
+            startLocationUpdates();
         } else {
             Toast.makeText(this, "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    protected void startLocationUpdates() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, this);
+
     }
 }

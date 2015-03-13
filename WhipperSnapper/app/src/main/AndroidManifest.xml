@@ -24,9 +24,10 @@
         android:theme="@style/AppTheme" >
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <!-- 79:7E:92:AC:69:20:96:D5:14:1E:45:7B:8E:13:05:59:63:56:6A:BE;com.al.whippersnapper -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="YOUR-KEY-HERE" />
+            android:value="AIzaSyACuMz-XWLRZ6oOIXeI-W9PDJeXK4-YtV0" />
 
         <activity
             android:name=".activities.MainActivity"
