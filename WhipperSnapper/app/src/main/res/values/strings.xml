@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">WhipperSnapper</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_profile_creation">ProfileCreationActivity</string>
+    <string name="title_activity_create_task">CreateTaskActivity</string>
+    <string name="title_activity_find_task">FindTaskActivity</string>
+    <string name="title_activity_user_type_picker">UserTypePickerActivity</string>
+    <string name="WhipperSnapper">WhipperSnapper</string>
+    <string name="I_am_a_senior">I am a senior.</string>
+    <string name="I_am_a_volunteer">I am a volunteer.</string>
+    <string name="title_activity_fill_out_profile">FillOutProfileActivity</string>
+    <string name="Tell_us_your_information">Tell us your information:</string>
+    <string name="Full_name">Full name</string>
+    <string name="For_privacy_your_name_will_appear_as">For privacy, your name will appear as:</string>
+    <string name="Street_address">Street address</string>
+    <string name="City_State_Zip">City, State, ZIP</string>
+    <string name="Your_address_will_only_be_shown">Your address will only be shown to volunteers you accept.</string>
+    <string name="Take_photo_now">Take photo now</string>
+    <string name="Upload_a_photo">Upload a photo</string>
+    <string name="All_done">All done! Create my profile.</string>
+</resources>

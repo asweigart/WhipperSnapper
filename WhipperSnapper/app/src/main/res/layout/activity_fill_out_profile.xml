@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.al.whippersnapper.activities.FillOutProfileActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Tell_us_your_information"
+        android:id="@+id/tvTellUsLabel"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etFullName"
+        android:layout_below="@+id/tvTellUsLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="@string/Full_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/For_privacy_your_name_will_appear_as"
+        android:id="@+id/tvForPrivacyLabel"
+        android:layout_below="@+id/etFullName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etAddress"
+        android:layout_below="@+id/tvForPrivacyLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:elegantTextHeight="true"
+        android:hint="@string/Street_address" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etCityStateZip"
+        android:layout_below="@+id/etAddress"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/etAddress"
+        android:layout_alignEnd="@+id/etAddress"
+        android:hint="@string/City_State_Zip" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Your_address_will_only_be_shown"
+        android:id="@+id/textView"
+        android:layout_below="@+id/etCityStateZip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btnTakePhotoNow"
+        android:layout_alignEnd="@+id/btnTakePhotoNow" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/ivProfilePhoto"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@mipmap/ic_launcher" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Take_photo_now"
+        android:id="@+id/btnTakePhotoNow"
+        android:layout_below="@+id/textView"
+        android:layout_toRightOf="@+id/ivProfilePhoto"
+        android:layout_alignRight="@+id/etCityStateZip"
+        android:layout_alignEnd="@+id/etCityStateZip"
+        android:onClick="onTakePhotoNowClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Upload_a_photo"
+        android:id="@+id/btnUploadPhoto"
+        android:layout_below="@+id/btnTakePhotoNow"
+        android:layout_toRightOf="@+id/ivProfilePhoto"
+        android:layout_alignRight="@+id/btnTakePhotoNow"
+        android:layout_alignEnd="@+id/btnTakePhotoNow"
+        android:onClick="onUploadPhotoClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Your_name_still_needs_to_be_entered"
+        android:id="@+id/btnCreateProfile"
+        android:layout_alignLeft="@+id/ivProfilePhoto"
+        android:layout_alignStart="@+id/ivProfilePhoto"
+        android:layout_alignRight="@+id/btnUploadPhoto"
+        android:layout_alignEnd="@+id/btnUploadPhoto"
+        android:layout_alignParentBottom="true"
+        android:onClick="onCreateProfileClick" />
+
+</RelativeLayout>
