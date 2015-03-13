@@ -19,8 +19,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.utils.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -37,6 +39,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
     private EditText etAddress;
     private EditText etCityStateZip;
     private Button btnCreateProfile;
+    private TextView tvForPrivacyLabel;
 
     private String userPhoneNumber;
 
@@ -55,6 +58,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
         etAddress = (EditText) findViewById(R.id.etAddress);
         etCityStateZip = (EditText) findViewById(R.id.etCityStateZip);
         btnCreateProfile = (Button) findViewById(R.id.btnCreateProfile);
+        tvForPrivacyLabel = (TextView) findViewById(R.id.tvForPrivacyLabel);
 
         isPhotoSet = false;
         setDoneButtonIfComplete();
@@ -71,6 +75,9 @@ public class FillOutProfileActivity extends ActionBarActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // s.toString()
+                String fullName = etFullName.getText().toString();
+                tvForPrivacyLabel.setText(getResources().getString(R.string.For_privacy_your_name_will_appear_as) + Util.getAnonymizedName(fullName));
+                setDoneButtonIfComplete();
             }
 
             @Override
@@ -85,6 +92,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // s.toString()
+                setDoneButtonIfComplete();
             }
 
             @Override
@@ -99,6 +107,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // s.toString()
+                setDoneButtonIfComplete();
             }
 
             @Override
@@ -142,7 +151,8 @@ public class FillOutProfileActivity extends ActionBarActivity {
     }
 
     public void onCreateProfileClick(View v) {
-
+        // save the profile info into shared prefs and also create a user account on Parse
+        
     }
 
     @Override

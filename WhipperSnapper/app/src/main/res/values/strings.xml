@@ -14,11 +14,14 @@
     <string name="title_activity_fill_out_profile">FillOutProfileActivity</string>
     <string name="Tell_us_your_information">Tell us your information:</string>
     <string name="Full_name">Full name</string>
-    <string name="For_privacy_your_name_will_appear_as">For privacy, your name will appear as:</string>
+    <string name="For_privacy_your_name_will_appear_as">For privacy, your name will appear as: </string>
     <string name="Street_address">Street address</string>
     <string name="City_State_Zip">City, State, ZIP</string>
     <string name="Your_address_will_only_be_shown">Your address will only be shown to volunteers you accept.</string>
     <string name="Take_photo_now">Take photo now</string>
     <string name="Upload_a_photo">Upload a photo</string>
     <string name="All_done">All done! Create my profile.</string>
+    <string name="Your_name_still_needs_to_be_entered">(Your name still needs to be entered.)</string>
+    <string name="Your_address_still_needs_to_be_entered">(Your address still needs to be entered.)</string>
+    <string name="Your_photo_is_still_needed">(Your photo is still needed.)</string>
 </resources>

@@ -102,7 +102,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Your_name_still_needs_to_be_entered"
+        android:text="TODO Your_name_still_needs_to_be_entered"
         android:id="@+id/btnCreateProfile"
         android:layout_alignLeft="@+id/ivProfilePhoto"
         android:layout_alignStart="@+id/ivProfilePhoto"
