@@ -3,4 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="senior_home_screen_padding">16dp</dimen>
+
+    <dimen name="profile_photo_on_signup_size">130dp</dimen>
+    <dimen name="task_photo_size">80dp</dimen>
 </resources>

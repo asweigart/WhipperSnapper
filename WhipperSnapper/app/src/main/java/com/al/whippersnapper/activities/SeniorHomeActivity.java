@@ -1,5 +1,6 @@
 package com.al.whippersnapper.activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -42,6 +43,8 @@ public class SeniorHomeActivity extends ActionBarActivity {
 
 
     public void onCreateTaskRequestClick(View v) {
-        // TODO
+        Intent i = new Intent(this, CreateTaskActivity.class);
+        startActivity(i);
+        // TODO - get rid of this from back stack? We might want to keep it there though.
     }
 }

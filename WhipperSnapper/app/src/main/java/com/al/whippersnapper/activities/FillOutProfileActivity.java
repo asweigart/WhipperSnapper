@@ -49,7 +49,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
     private ProgressBar pbCreatingProfile;
 
     private String userPhoneNumber;
-    byte[] photoBytes;
+    private byte[] photoBytes;
 
     private boolean isPhotoSet;
 
@@ -168,14 +168,8 @@ public class FillOutProfileActivity extends ActionBarActivity {
 
     public void onCreateProfileClick(View v) {
         // disable everything so the form can't be modified while creating the profile
-        pbCreatingProfile.setVisibility(View.VISIBLE);
-        btnTakePhotoNow.setEnabled(false);
-        btnUploadPhoto.setEnabled(false);
-        etFullName.setEnabled(false);
-        etAddress.setEnabled(false);
-        etCityStateZip.setEnabled(false);
+        disableTheForm();
         btnCreateProfile.setText(getResources().getString(R.string.Creating_profile));
-        btnCreateProfile.setEnabled(false);
 
         // create a user account on Parse
         ParseWSUser thisUser = new ParseWSUser();
@@ -199,13 +193,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
             Toast.makeText(FillOutProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 
             // enable everything so the user can retry
-            pbCreatingProfile.setVisibility(View.INVISIBLE);
-            btnTakePhotoNow.setEnabled(true);
-            btnUploadPhoto.setEnabled(true);
-            etFullName.setEnabled(true);
-            etAddress.setEnabled(true);
-            etCityStateZip.setEnabled(true);
-            setDoneButtonIfComplete();
+            enableTheForm();
         }
 
         thisUser.signUpInBackground(new SignUpCallback() {
@@ -227,16 +215,32 @@ public class FillOutProfileActivity extends ActionBarActivity {
                     Toast.makeText(FillOutProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 
                     // enable everything so the user can retry
-                    pbCreatingProfile.setVisibility(View.INVISIBLE);
-                    btnTakePhotoNow.setEnabled(true);
-                    btnUploadPhoto.setEnabled(true);
-                    etFullName.setEnabled(true);
-                    etAddress.setEnabled(true);
-                    etCityStateZip.setEnabled(true);
-                    setDoneButtonIfComplete();
+                    enableTheForm();
                 }
             }
         });
+    }
+
+    public void enableTheForm() {
+        // enable all the fields and buttons on this activity, hide the progress bar
+        pbCreatingProfile.setVisibility(View.INVISIBLE);
+        btnTakePhotoNow.setEnabled(true);
+        btnUploadPhoto.setEnabled(true);
+        etFullName.setEnabled(true);
+        etAddress.setEnabled(true);
+        etCityStateZip.setEnabled(true);
+        setDoneButtonIfComplete();
+    }
+
+    public void disableTheForm() {
+        // disable all the fields and buttons on this activity, show the progress bar
+        pbCreatingProfile.setVisibility(View.VISIBLE);
+        btnTakePhotoNow.setEnabled(false);
+        btnUploadPhoto.setEnabled(false);
+        etFullName.setEnabled(false);
+        etAddress.setEnabled(false);
+        etCityStateZip.setEnabled(false);
+        btnCreateProfile.setEnabled(false);
     }
 
     @Override

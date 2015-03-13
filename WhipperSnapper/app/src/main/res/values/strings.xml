@@ -1,5 +1,18 @@
 <resources>
-    <string name="app_name">WhipperSnapper</string>
+    <string name="app_name">Whippersnapper</string>
+
+    <string-array name="taskTypes">
+        <item>Outdoor, Gardening</item>
+        <item>Computer, Tech Help</item>
+        <item>Car Ride to a Place</item>
+        <item>Pickup from Pharmacy/Some Place</item>
+        <item>Card Game, Social Call</item>
+        <item>Housekeeping</item>
+        <item>Fixing, Maintenance</item>
+        <item>Paperwork, Phone Call to a Company</item>
+        <item>Petcare</item>
+        <item>Other</item>
+    </string-array>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -17,7 +30,7 @@
     <string name="For_privacy_your_name_will_appear_as">For privacy, your name will appear as: </string>
     <string name="Street_address">Street address</string>
     <string name="City_State_Zip">City, State, ZIP</string>
-    <string name="Your_address_will_only_be_shown">Your address will only be shown to volunteers you accept.</string>
+    <string name="Your_address_will_only_be_shown">Your address will only be shown to WhipperSnapper volunteers you accept.</string>
     <string name="Take_photo_now">Take photo now</string>
     <string name="Upload_a_photo">Upload a photo</string>
     <string name="All_done">All done! Create my profile.</string>
@@ -28,4 +41,12 @@
     <string name="title_activity_senior_home">SeniorHomeActivity</string>
     <string name="This_is_the_home_screen">This is the home screen. You have no requests currently. You can request a task now, or close this app until you need a task done.</string>
     <string name="Create_a_task_request">Create a Task Request</string>
+    <string name="The_task_I_need_done_is">The task I need done is:</string>
+    <string name="Additional_details">Additional details about the task:</string>
+    <string name="Optional_take_photos">(Optional) Click to take a photo that can help WhipperSnapper volunteers understand the task:</string>
+    <string name="Task_details_hint">Tell the WhipperSnapper volunteer if they need to bring something, when this task needs to be done, if the time flexible, and so on...</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="I_need_the_task_done_at">I need the task done at:</string>
 </resources>

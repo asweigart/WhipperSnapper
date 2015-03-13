@@ -69,8 +69,8 @@
         android:layout_alignEnd="@+id/btnTakePhotoNow" />
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="@dimen/task_photo_size"
+        android:layout_height="@dimen/profile_photo_on_signup_size"
         android:id="@+id/ivProfilePhoto"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
