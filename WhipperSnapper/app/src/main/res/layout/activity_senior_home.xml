@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/senior_home_screen_padding"
+    android:orientation="vertical" >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/WhipperSnapper"
+        android:id="@+id/tvTitleLabel"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/This_is_the_home_screen"
+        android:id="@+id/tvInstructionsLabel"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Create_a_task_request"
+        android:id="@+id/btnCreateTaskRequest"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onCreateTaskRequestClick" />
+</LinearLayout>

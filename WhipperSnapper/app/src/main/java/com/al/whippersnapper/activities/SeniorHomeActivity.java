@@ -1,6 +1,5 @@
 package com.al.whippersnapper.activities;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,20 +8,19 @@ import android.view.View;
 
 import com.al.whippersnapper.R;
 
-public class UserTypePickerActivity extends ActionBarActivity {
-    public static final int USER_TYPE_REQUEST_CODE = 42;
+public class SeniorHomeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_type_picker);
+        setContentView(R.layout.activity_senior_home);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user_type_picker, menu);
+        getMenuInflater().inflate(R.menu.menu_senior_home, menu);
         return true;
     }
 
@@ -41,20 +39,9 @@ public class UserTypePickerActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onSeniorClick(View v) {
-        Intent i = new Intent(UserTypePickerActivity.this, FillOutProfileActivity.class);
-        i.putExtra("isSenior", true);
-        startActivityForResult(i, USER_TYPE_REQUEST_CODE);
-    }
 
-    public void onVolunteerClick(View v) {
-        Intent i = new Intent(UserTypePickerActivity.this, FillOutProfileActivity.class);
-        i.putExtra("isSenior", false);
-        startActivityForResult(i, USER_TYPE_REQUEST_CODE);
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        finish(); // we actually don't care about the result, we just want this activity to finish when FillOutProfileActivity finishes.
+    public void onCreateTaskRequestClick(View v) {
+        // TODO
     }
 }

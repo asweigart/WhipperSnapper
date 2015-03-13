@@ -51,6 +51,10 @@
             android:name=".activities.FillOutProfileActivity"
             android:label="@string/title_activity_fill_out_profile" >
         </activity>
+        <activity
+            android:name=".activities.SeniorHomeActivity"
+            android:label="@string/title_activity_senior_home" >
+        </activity>
     </application>
 
 </manifest>

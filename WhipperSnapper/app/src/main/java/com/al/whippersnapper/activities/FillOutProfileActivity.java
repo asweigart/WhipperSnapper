@@ -19,10 +19,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.models.ParseWSUser;
 import com.al.whippersnapper.utils.Util;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -40,8 +46,10 @@ public class FillOutProfileActivity extends ActionBarActivity {
     private EditText etCityStateZip;
     private Button btnCreateProfile;
     private TextView tvForPrivacyLabel;
+    private ProgressBar pbCreatingProfile;
 
     private String userPhoneNumber;
+    byte[] photoBytes;
 
     private boolean isPhotoSet;
 
@@ -59,13 +67,21 @@ public class FillOutProfileActivity extends ActionBarActivity {
         etCityStateZip = (EditText) findViewById(R.id.etCityStateZip);
         btnCreateProfile = (Button) findViewById(R.id.btnCreateProfile);
         tvForPrivacyLabel = (TextView) findViewById(R.id.tvForPrivacyLabel);
+        pbCreatingProfile = (ProgressBar) findViewById(R.id.pbCreatingProfile);
+
+        pbCreatingProfile.setVisibility(View.INVISIBLE);
+        btnTakePhotoNow.setEnabled(true);
+        btnUploadPhoto.setEnabled(true);
+        etFullName.setEnabled(true);
+        etAddress.setEnabled(true);
+        etCityStateZip.setEnabled(true);
 
         isPhotoSet = false;
         setDoneButtonIfComplete();
 
         // obtain the phone number from the device
         TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        String userPhoneNumber = tMgr.getLine1Number();
+        userPhoneNumber = tMgr.getLine1Number();
 
         // add TextWatcher to Full Name field
         etFullName.addTextChangedListener(new TextWatcher() {
@@ -151,8 +167,69 @@ public class FillOutProfileActivity extends ActionBarActivity {
     }
 
     public void onCreateProfileClick(View v) {
-        // save the profile info into shared prefs and also create a user account on Parse
-        
+        // disable everything so the form can't be modified while creating the profile
+        pbCreatingProfile.setVisibility(View.VISIBLE);
+        btnTakePhotoNow.setEnabled(false);
+        btnUploadPhoto.setEnabled(false);
+        etFullName.setEnabled(false);
+        etAddress.setEnabled(false);
+        etCityStateZip.setEnabled(false);
+        btnCreateProfile.setText(getResources().getString(R.string.Creating_profile));
+        btnCreateProfile.setEnabled(false);
+
+        // create a user account on Parse
+        ParseWSUser thisUser = new ParseWSUser();
+        thisUser.setUsername(userPhoneNumber);
+        thisUser.setPassword("password"); // Super secret 1337 password, yo.
+        thisUser.setPhone(userPhoneNumber);
+        thisUser.setIsSenior(getIntent().getBooleanExtra("isSenior", true));
+        thisUser.setFullName(etFullName.getText().toString());
+        thisUser.setAddress(etAddress.getText().toString());
+        thisUser.setCityStateZip(etCityStateZip.getText().toString());
+        ParseFile profilePhotoFile = new ParseFile("profilePhoto.jpg", photoBytes);
+        thisUser.setPhoto(profilePhotoFile);
+
+        try {
+            // We're displaying the progress bar, so this is fine.
+            //long start = System.currentTimeMillis();
+            profilePhotoFile.save(); // Takes an estimated 1300 ms
+           // Log.e("XXXXXXXXXXXXX", String.valueOf(System.currentTimeMillis() - start));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(FillOutProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+
+            // enable everything so the user can retry
+            pbCreatingProfile.setVisibility(View.INVISIBLE);
+            btnTakePhotoNow.setEnabled(true);
+            btnUploadPhoto.setEnabled(true);
+            etFullName.setEnabled(true);
+            etAddress.setEnabled(true);
+            etCityStateZip.setEnabled(true);
+            setDoneButtonIfComplete();
+        }
+
+        thisUser.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Intent i = new Intent(FillOutProfileActivity.this, SeniorHomeActivity.class);
+                    startActivity(i);
+                    FillOutProfileActivity.this.finish();
+                } else {
+                    e.printStackTrace();
+                    Toast.makeText(FillOutProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+
+                    // enable everything so the user can retry
+                    pbCreatingProfile.setVisibility(View.INVISIBLE);
+                    btnTakePhotoNow.setEnabled(true);
+                    btnUploadPhoto.setEnabled(true);
+                    etFullName.setEnabled(true);
+                    etAddress.setEnabled(true);
+                    etCityStateZip.setEnabled(true);
+                    setDoneButtonIfComplete();
+                }
+            }
+        });
     }
 
     @Override
@@ -180,7 +257,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] photoBytes = stream.toByteArray();
+            photoBytes = stream.toByteArray();
             //Log.e("XXXXXXXXXXX", String.valueOf(photoBytes.length)); // confirmed that called createScaledBitmap signifcantly reduces the size.
             ivProfilePhoto.setImageBitmap(BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length));
 

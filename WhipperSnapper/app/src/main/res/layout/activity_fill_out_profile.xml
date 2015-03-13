@@ -111,4 +111,14 @@
         android:layout_alignParentBottom="true"
         android:onClick="onCreateProfileClick" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbCreatingProfile"
+        android:indeterminate="true"
+        android:layout_above="@+id/btnCreateProfile"
+        android:layout_alignRight="@+id/tvForPrivacyLabel"
+        android:layout_alignEnd="@+id/tvForPrivacyLabel" />
+
 </RelativeLayout>

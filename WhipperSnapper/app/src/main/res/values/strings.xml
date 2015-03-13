@@ -24,4 +24,8 @@
     <string name="Your_name_still_needs_to_be_entered">(Your name still needs to be entered.)</string>
     <string name="Your_address_still_needs_to_be_entered">(Your address still needs to be entered.)</string>
     <string name="Your_photo_is_still_needed">(Your photo is still needed.)</string>
+    <string name="Creating_profile">(Creating your profile...)</string>
+    <string name="title_activity_senior_home">SeniorHomeActivity</string>
+    <string name="This_is_the_home_screen">This is the home screen. You have no requests currently. You can request a task now, or close this app until you need a task done.</string>
+    <string name="Create_a_task_request">Create a Task Request</string>
 </resources>
