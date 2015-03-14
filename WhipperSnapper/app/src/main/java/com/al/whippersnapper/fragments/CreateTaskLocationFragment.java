@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.activities.CreateTaskActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -73,13 +74,13 @@ public class CreateTaskLocationFragment extends Fragment implements
             //mParam1 = getArguments().getString(ARG_PARAM1);
             //mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        setUpMapIfNeeded();
+
     }
 
     protected void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mapFragment == null) {
-            mapFragment = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map));
+            mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
 
             // Check if we were successful in obtaining the map.
             if (mapFragment != null) {
@@ -198,23 +199,23 @@ public class CreateTaskLocationFragment extends Fragment implements
         }
     }
 
-    /*
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
+        setUpMapIfNeeded();
         connectClient();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         // Disconnecting the client invalidates it.
         if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
         super.onStop();
     }
-    */
+
 
     private boolean isGooglePlayServicesAvailable() {
         // Check that Google Play services is available
