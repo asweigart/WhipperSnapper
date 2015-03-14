@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.al.whippersnapper.R;
@@ -20,6 +21,9 @@ import com.al.whippersnapper.adapters.CreateTaskFragmentPagerAdapter;
 import com.al.whippersnapper.fragments.CreateTaskDetailsFragment;
 import com.al.whippersnapper.fragments.CreateTaskLocationFragment;
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 

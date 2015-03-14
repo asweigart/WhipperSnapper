@@ -86,6 +86,7 @@ public class CreateTaskLocationFragment extends Fragment implements
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap map) {
+                        map.setMyLocationEnabled(true);
                         loadMap(map);
                     }
                 });
