@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.al.whippersnapper.fragments.FindTaskListViewFragment;
 import com.al.whippersnapper.fragments.FindTaskMapViewFragment;
-import com.al.whippersnapper.fragments.TaskDetailsFragment;
-import com.al.whippersnapper.fragments.TaskLocationFragment;
 
 /**
  * Created by Al on 3/13/2015.

@@ -19,7 +19,7 @@ import com.al.whippersnapper.R;
 import java.io.ByteArrayOutputStream;
 
 
-public class TaskDetailsFragment extends Fragment {
+public class CreateTaskDetailsFragment extends Fragment {
 
     private Spinner spTaskType;
     private EditText etTaskDetails;
@@ -34,8 +34,8 @@ public class TaskDetailsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
 
-    public static TaskDetailsFragment newInstance() {
-        TaskDetailsFragment fragment = new TaskDetailsFragment();
+    public static CreateTaskDetailsFragment newInstance() {
+        CreateTaskDetailsFragment fragment = new CreateTaskDetailsFragment();
         Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
         //args.putString(ARG_PARAM2, param2);
@@ -43,7 +43,7 @@ public class TaskDetailsFragment extends Fragment {
         return fragment;
     }
 
-    public TaskDetailsFragment() {
+    public CreateTaskDetailsFragment() {
         // Required empty public constructor
     }
 
@@ -60,7 +60,7 @@ public class TaskDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_task_details, container, false);
+        View v = inflater.inflate(R.layout.fragment_create_task_details, container, false);
 
 
         spTaskType = (Spinner) v.findViewById(R.id.spTaskType);

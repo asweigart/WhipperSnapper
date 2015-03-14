@@ -9,13 +9,13 @@ import android.view.MenuItem;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.adapters.CreateTaskFragmentPagerAdapter;
-import com.al.whippersnapper.fragments.TaskDetailsFragment;
-import com.al.whippersnapper.fragments.TaskLocationFragment;
+import com.al.whippersnapper.fragments.CreateTaskDetailsFragment;
+import com.al.whippersnapper.fragments.CreateTaskLocationFragment;
 import com.astuetz.PagerSlidingTabStrip;
 
 public class CreateTaskActivity extends FragmentActivity implements
-        TaskDetailsFragment.OnFragmentInteractionListener,
-        TaskLocationFragment.OnFragmentInteractionListener {
+        CreateTaskDetailsFragment.OnFragmentInteractionListener,
+        CreateTaskLocationFragment.OnFragmentInteractionListener {
 
 
 

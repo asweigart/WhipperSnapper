@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.al.whippersnapper.fragments.TaskDetailsFragment;
-import com.al.whippersnapper.fragments.TaskLocationFragment;
+import com.al.whippersnapper.fragments.CreateTaskDetailsFragment;
+import com.al.whippersnapper.fragments.CreateTaskLocationFragment;
 
 public class CreateTaskFragmentPagerAdapter extends FragmentPagerAdapter {
     public final int FRAGMENT_COUNT = 2;
@@ -23,8 +23,8 @@ public class CreateTaskFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return TaskDetailsFragment.newInstance();
-            case 1: return TaskLocationFragment.newInstance();
+            case 0: return CreateTaskDetailsFragment.newInstance();
+            case 1: return CreateTaskLocationFragment.newInstance();
             default: return null; // this will cause an error
         }
     }

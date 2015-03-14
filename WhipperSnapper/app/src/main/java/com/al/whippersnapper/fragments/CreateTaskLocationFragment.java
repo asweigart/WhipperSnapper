@@ -27,7 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.location.LocationListener;
 
-public class TaskLocationFragment extends Fragment implements
+public class CreateTaskLocationFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
@@ -53,8 +53,8 @@ public class TaskLocationFragment extends Fragment implements
     private OnFragmentInteractionListener mListener;
 
 
-    public static TaskLocationFragment newInstance() {
-        TaskLocationFragment fragment = new TaskLocationFragment();
+    public static CreateTaskLocationFragment newInstance() {
+        CreateTaskLocationFragment fragment = new CreateTaskLocationFragment();
         Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
         //args.putString(ARG_PARAM2, param2);
@@ -62,7 +62,7 @@ public class TaskLocationFragment extends Fragment implements
         return fragment;
     }
 
-    public TaskLocationFragment() {
+    public CreateTaskLocationFragment() {
         // Required empty public constructor
     }
 
@@ -97,7 +97,7 @@ public class TaskLocationFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task_location, container, false);
+        return inflater.inflate(R.layout.fragment_create_task_location, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
