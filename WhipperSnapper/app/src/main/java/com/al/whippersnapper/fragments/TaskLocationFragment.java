@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -28,7 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.location.LocationListener;
 
-public class TaskLocationDetails extends Fragment implements
+public class TaskLocationFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
@@ -54,8 +53,8 @@ public class TaskLocationDetails extends Fragment implements
     private OnFragmentInteractionListener mListener;
 
 
-    public static TaskLocationDetails newInstance() {
-        TaskLocationDetails fragment = new TaskLocationDetails();
+    public static TaskLocationFragment newInstance() {
+        TaskLocationFragment fragment = new TaskLocationFragment();
         Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
         //args.putString(ARG_PARAM2, param2);
@@ -63,7 +62,7 @@ public class TaskLocationDetails extends Fragment implements
         return fragment;
     }
 
-    public TaskLocationDetails() {
+    public TaskLocationFragment() {
         // Required empty public constructor
     }
 
@@ -89,7 +88,7 @@ public class TaskLocationDetails extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task_location_details, container, false);
+        return inflater.inflate(R.layout.fragment_task_location, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
