@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseException;
 
 public class CreateTaskLocationFragment extends Fragment implements
@@ -54,6 +55,7 @@ public class CreateTaskLocationFragment extends Fragment implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     private RadioButton rbMyHomeAddress;
+    private RadioButton rbMapLocation;
 
 
 
@@ -117,6 +119,8 @@ public class CreateTaskLocationFragment extends Fragment implements
         // add actual address to the radio button text
         rbMyHomeAddress = (RadioButton) v.findViewById(R.id.rbMyHomeAddress);
         rbMyHomeAddress.setText(getResources().getString(R.string.My_home_address) + thisUser.getAddress());
+
+        rbMapLocation = (RadioButton) v.findViewById(R.id.rbMapLocation);
 
         return v;
     }
@@ -197,10 +201,14 @@ public class CreateTaskLocationFragment extends Fragment implements
 
     @Override
     public void onMapLongClick(LatLng point) {
+        // TODO - should probably use an overlay on the map instead of long pressing to set spot.
         Toast.makeText(getActivity().getApplicationContext(), "Long Press", Toast.LENGTH_LONG).show();
-        // Custom code here...
-        // Display the alert dialog
-        //showAlertDialogForPoint(point);
+
+        rbMapLocation.setChecked(true); // setting map marker checks this radio button
+        map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them
+        map.addMarker(new MarkerOptions()
+                        .position(point)
+                        .draggable(true));
     }
 
 

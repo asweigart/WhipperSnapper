@@ -50,6 +50,6 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="I_need_the_task_done_at">I need the task done at:</string>
-    <string name="My_home_address">My home address,\s</string>
-    <string name="The_location_on_this_map">The location on this map:</string>
+    <string name="My_home_address">My home address:\s</string>
+    <string name="The_location_on_this_map">This location (long press on map to set):</string>
 </resources>
