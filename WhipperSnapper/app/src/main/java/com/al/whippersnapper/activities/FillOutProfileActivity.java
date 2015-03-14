@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -257,14 +259,14 @@ public class FillOutProfileActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
         }
-
+        //.e("XXXXXXXXXX", "Original size: " + photo.getWidth() + " " + photo.getHeight());
         if (photo != null) {
-            // depending on if the photo is wider or taller, scale it down proportionally to the ImageView
-            if (photo.getWidth() > photo.getHeight()) {
-                photo = Bitmap.createScaledBitmap(photo, ivProfilePhoto.getWidth(), (int)(ivProfilePhoto.getHeight() * ((float)(photo.getHeight()) / (float)(photo.getWidth()))), true);
-            } else {
-                photo = Bitmap.createScaledBitmap(photo, (int)(ivProfilePhoto.getWidth() * ((float)(photo.getWidth()) / (float)(photo.getHeight()))), ivProfilePhoto.getHeight(), true);
-            }
+
+            // Scale the photo
+            //Matrix m = new Matrix();
+            //m.setRectToRect(new RectF(0, 0, photo.getWidth(), photo.getHeight()), new RectF(0, 0, ivProfilePhoto.getWidth(), ivProfilePhoto.getHeight()), Matrix.ScaleToFit.CENTER);
+            //photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), m, true);
+            //Log.e("XXXXXXXXXX", "Scaled size: " + photo.getWidth() + " " + photo.getHeight());
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);

@@ -15,21 +15,26 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.activities.CreateTaskActivity;
 
 import java.io.ByteArrayOutputStream;
 
 
+
 public class CreateTaskDetailsFragment extends Fragment {
+    public interface onTaskPhotoClickListener {
+        public void onTaskPhotoClick();
+    }
 
     private Spinner spTaskType;
     private EditText etTaskDetails;
+
+    public ImageView getIvTaskPhoto() {
+        return ivTaskPhoto;
+    }
+
     private ImageView ivTaskPhoto;
-
-    private byte[] photoBytes;
-
-    public static final int TAKE_TASK_PHOTO = 2000;
-
-
+    private onTaskPhotoClickListener taskPhotoClickListener;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,6 +72,13 @@ public class CreateTaskDetailsFragment extends Fragment {
         etTaskDetails = (EditText) v.findViewById(R.id.etTaskDetails);
         ivTaskPhoto = (ImageView) v.findViewById(R.id.ivTaskPhoto);
 
+        ivTaskPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskPhotoClickListener.onTaskPhotoClick();
+            }
+        });
+
         return v;
     }
 
@@ -85,6 +97,10 @@ public class CreateTaskDetailsFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+
+        if (activity instanceof CreateTaskActivity) {
+            taskPhotoClickListener = (CreateTaskActivity) activity;
         }
     }
 
@@ -107,37 +123,5 @@ public class CreateTaskDetailsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
-    }
-
-
-
-
-
-    public void onTaskPhotoClick(View v) {
-        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(i, TAKE_TASK_PHOTO);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Bitmap photo = null;
-        if (requestCode == TAKE_TASK_PHOTO && resultCode == Activity.RESULT_OK) {
-            photo = (Bitmap) data.getExtras().get("data");
-        }
-
-        if (photo != null) {
-            // depending on if the photo is wider or taller, scale it down proportionally to the ImageView
-            if (photo.getWidth() > photo.getHeight()) {
-                photo = Bitmap.createScaledBitmap(photo, ivTaskPhoto.getWidth(), (int)(ivTaskPhoto.getHeight() * ((float)(photo.getHeight()) / (float)(photo.getWidth()))), true);
-            } else {
-                photo = Bitmap.createScaledBitmap(photo, (int)(ivTaskPhoto.getWidth() * ((float)(photo.getWidth()) / (float)(photo.getHeight()))), ivTaskPhoto.getHeight(), true);
-            }
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            photoBytes = stream.toByteArray();
-            //Log.e("XXXXXXXXXXX", String.valueOf(photoBytes.length)); // confirmed that called createScaledBitmap signifcantly reduces the size.
-            ivTaskPhoto.setImageBitmap(BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length));
-        }
     }
 }

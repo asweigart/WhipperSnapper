@@ -10,8 +10,13 @@ import com.al.whippersnapper.fragments.CreateTaskLocationFragment;
 public class CreateTaskFragmentPagerAdapter extends FragmentPagerAdapter {
     public final int FRAGMENT_COUNT = 2;
 
+    private CreateTaskDetailsFragment taskDetailsFragment;
+    private CreateTaskLocationFragment taskLocationFragment;
+
     public CreateTaskFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
+        taskDetailsFragment = CreateTaskDetailsFragment.newInstance();
+        taskLocationFragment = CreateTaskLocationFragment.newInstance();
     }
 
 
@@ -23,8 +28,8 @@ public class CreateTaskFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return CreateTaskDetailsFragment.newInstance();
-            case 1: return CreateTaskLocationFragment.newInstance();
+            case 0: return taskDetailsFragment;
+            case 1: return taskLocationFragment;
             default: return null; // this will cause an error
         }
     }
@@ -37,4 +42,14 @@ public class CreateTaskFragmentPagerAdapter extends FragmentPagerAdapter {
             default: return null; // this will cause an error
         }
     }
+
+
+    public CreateTaskDetailsFragment getTaskDetailsFragment() {
+        return taskDetailsFragment;
+    }
+
+    public CreateTaskLocationFragment getTaskLocationFragment() {
+        return taskLocationFragment;
+    }
+
 }

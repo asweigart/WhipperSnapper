@@ -20,26 +20,35 @@
             android:text="@string/I_need_the_task_done_at"
             android:id="@+id/tvTaskDoneAtLabel" />
 
-        <RadioButton
-            android:layout_width="wrap_content"
+
+        <RadioGroup
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/My_home_address"
-            android:id="@+id/rbMyHomeAddress"
+            android:id="@+id/radioGroup"
             android:layout_below="@+id/tvTaskDoneAtLabel"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:checked="false" />
+            android:layout_alignParentStart="true">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/The_location_on_this_map"
-            android:id="@+id/rbMapLocation"
-            android:layout_below="@+id/rbMyHomeAddress"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:checked="false" />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/My_home_address"
+                android:id="@+id/rbMyHomeAddress"
+                android:layout_below="@+id/tvTaskDoneAtLabel"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:checked="true" />
 
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/The_location_on_this_map"
+                android:id="@+id/rbMapLocation"
+                android:layout_below="@+id/rbMyHomeAddress"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:checked="false" />
+        </RadioGroup>
 
         <fragment
             android:id="@+id/map"
@@ -47,8 +56,9 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="#FF00FF"
-            android:layout_below="@+id/rbMapLocation"
+            android:layout_below="@+id/radioGroup"
             />
+
 
     </RelativeLayout>
 </FrameLayout>
