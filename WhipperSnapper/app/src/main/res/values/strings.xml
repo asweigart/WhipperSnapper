@@ -27,7 +27,7 @@
     <string name="title_activity_fill_out_profile">FillOutProfileActivity</string>
     <string name="Tell_us_your_information">Tell us your information:</string>
     <string name="Full_name">Full name</string>
-    <string name="For_privacy_your_name_will_appear_as">For privacy, your name will appear as: </string>
+    <string name="For_privacy_your_name_will_appear_as">For privacy, your name will appear as:\s</string>
     <string name="Street_address">Street address</string>
     <string name="City_State_Zip">City, State, ZIP</string>
     <string name="Your_address_will_only_be_shown">Your address will only be shown to WhipperSnapper volunteers you accept.</string>
@@ -45,10 +45,11 @@
     <string name="Additional_details">Additional details about the task:</string>
     <string name="Optional_take_photos">(Optional) Click to take a photo that can help WhipperSnapper volunteers understand the task:</string>
     <string name="Task_details_hint">Tell the WhipperSnapper volunteer if they need to bring something, when this task needs to be done, if the time flexible, and so on...</string>
+    <string name="Unable_to_get_data_from_the_database">Unable to get data from the database.</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="I_need_the_task_done_at">I need the task done at:</string>
-    <string name="My_home_address">My home address:</string>
+    <string name="My_home_address">My home address,\s</string>
     <string name="The_location_on_this_map">The location on this map:</string>
 </resources>

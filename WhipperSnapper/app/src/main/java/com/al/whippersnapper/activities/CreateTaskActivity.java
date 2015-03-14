@@ -1,6 +1,7 @@
 package com.al.whippersnapper.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,20 +11,29 @@ import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.adapters.CreateTaskFragmentPagerAdapter;
 import com.al.whippersnapper.fragments.CreateTaskDetailsFragment;
 import com.al.whippersnapper.fragments.CreateTaskLocationFragment;
+import com.al.whippersnapper.models.ParseTask;
+import com.al.whippersnapper.models.ParseWSUser;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 
@@ -98,9 +108,9 @@ public class CreateTaskActivity extends FragmentActivity implements
         Log.e("XXXXXXXXXX", "Original size: " + photo.getWidth() + " " + photo.getHeight());
         if (photo != null) {
             // Scale the photo
-            //Matrix m = new Matrix();
-            //m.setRectToRect(new RectF(0, 0, photo.getWidth(), photo.getHeight()), new RectF(0, 0, TASK_PHOTO_MAX_WIDTH, TASK_PHOTO_MAX_HEIGHT), Matrix.ScaleToFit.CENTER);
-            //photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), m, true);
+            Matrix m = new Matrix();
+            m.setRectToRect(new RectF(0, 0, photo.getWidth(), photo.getHeight()), new RectF(0, 0, TASK_PHOTO_MAX_WIDTH, TASK_PHOTO_MAX_HEIGHT), Matrix.ScaleToFit.CENTER);
+            photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), m, true);
 
             //Log.e("XXXXXXXXXX", "Scaled size: " + photo.getWidth() + " " + photo.getHeight());
 
@@ -109,7 +119,5 @@ public class CreateTaskActivity extends FragmentActivity implements
             photoBytes = stream.toByteArray();
             ivTaskPhoto.setImageBitmap(BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length));
         }
-
     }
-
 }

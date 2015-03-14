@@ -49,4 +49,18 @@ public class ParseWSUser extends ParseUser {
 
     public ParseFile getPhoto() { return getParseFile("Photo"); }
     public void setPhoto(ParseFile value) { put("Photo", value); }
+
+    public Number getLat() {
+        return getNumber("Lat");
+    }
+    public void setLat(Number value) {
+        put("Lat", value);
+    }
+
+    public Number getLng() {
+        return getNumber("Lng");
+    }
+    public void setLng(Number value) {
+        put("Lng", value);
+    }
 }

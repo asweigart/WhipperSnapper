@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -34,11 +36,16 @@ import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 public class FillOutProfileActivity extends ActionBarActivity {
     public static final int TAKE_PHOTO_NOW_REQUEST = 1000;
     public static final int UPLOAD_PHOTO_REQUEST = 1001;
+
+    public static final int PROFILE_PHOTO_MAX_WIDTH = 300;
+    public static final int PROFILE_PHOTO_MAX_HEIGHT = 300;
 
     private Button btnTakePhotoNow;
     private Button btnUploadPhoto;
@@ -173,6 +180,8 @@ public class FillOutProfileActivity extends ActionBarActivity {
         disableTheForm();
         btnCreateProfile.setText(getResources().getString(R.string.Creating_profile));
 
+        // TODO: Run all this in a background thread
+
         // create a user account on Parse
         ParseWSUser thisUser = new ParseWSUser();
         thisUser.setUsername(userPhoneNumber);
@@ -184,6 +193,17 @@ public class FillOutProfileActivity extends ActionBarActivity {
         thisUser.setCityStateZip(etCityStateZip.getText().toString());
         ParseFile profilePhotoFile = new ParseFile("profilePhoto.jpg", photoBytes);
         thisUser.setPhoto(profilePhotoFile);
+
+        // geocode the address, save the lat & lng
+        Address homeLatLng = new Address(Locale.ENGLISH); // 'murica!!
+        try {
+            Geocoder geocoder = new Geocoder(this);
+            homeLatLng = geocoder.getFromLocationName(etAddress.getText().toString() + ", " + etCityStateZip.getText().toString(), 1).get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        thisUser.setLat(homeLatLng.getLatitude()); // it's okay if lat & lng are null.
+        thisUser.setLng(homeLatLng.getLongitude());
 
         try {
             // We're displaying the progress bar, so this is fine.
@@ -263,9 +283,9 @@ public class FillOutProfileActivity extends ActionBarActivity {
         if (photo != null) {
 
             // Scale the photo
-            //Matrix m = new Matrix();
-            //m.setRectToRect(new RectF(0, 0, photo.getWidth(), photo.getHeight()), new RectF(0, 0, ivProfilePhoto.getWidth(), ivProfilePhoto.getHeight()), Matrix.ScaleToFit.CENTER);
-            //photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), m, true);
+            Matrix m = new Matrix();
+            m.setRectToRect(new RectF(0, 0, photo.getWidth(), photo.getHeight()), new RectF(0, 0, PROFILE_PHOTO_MAX_WIDTH, PROFILE_PHOTO_MAX_HEIGHT), Matrix.ScaleToFit.CENTER);
+            photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), m, true);
             //Log.e("XXXXXXXXXX", "Scaled size: " + photo.getWidth() + " " + photo.getHeight());
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();

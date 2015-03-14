@@ -2,19 +2,23 @@ package com.al.whippersnapper.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.activities.CreateTaskActivity;
+import com.al.whippersnapper.models.ParseWSUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.location.LocationListener;
+import com.parse.ParseException;
 
 public class CreateTaskLocationFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
@@ -47,6 +52,8 @@ public class CreateTaskLocationFragment extends Fragment implements
 	 * returned in Activity.onActivityResult
 	 */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+    private RadioButton rbMyHomeAddress;
 
 
 
@@ -82,7 +89,7 @@ public class CreateTaskLocationFragment extends Fragment implements
         if (mapFragment == null) {
             mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
 
-            // Check if we were successful in obtaining the map.
+        // Check if we were successful in obtaining the map.
             if (mapFragment != null) {
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override
@@ -99,7 +106,19 @@ public class CreateTaskLocationFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_task_location, container, false);
+        View v = inflater.inflate(R.layout.fragment_create_task_location, container, false);
+
+        // get the current user from parse
+        ParseWSUser thisUser = new ParseWSUser();
+        TelephonyManager tMgr = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        //thisUser.logIn(tMgr.getLine1Number(), "password"); // TODO: this assume the user is still logged on, test this assumption
+        thisUser = (ParseWSUser) ParseWSUser.getCurrentUser();
+
+        // add actual address to the radio button text
+        rbMyHomeAddress = (RadioButton) v.findViewById(R.id.rbMyHomeAddress);
+        rbMyHomeAddress.setText(getResources().getString(R.string.My_home_address) + thisUser.getAddress());
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
