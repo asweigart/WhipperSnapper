@@ -52,7 +52,19 @@
             android:layout_height="wrap_content"
             android:background="#FF00FF"
             android:layout_below="@+id/radioGroup"
+            android:layout_above="@+id/btnDone_FromMap"
             />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/All_done_Create_my_task_request"
+        android:id="@+id/btnDone_FromMap"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/map"
+        android:layout_alignEnd="@+id/map" />
 
-    </RelativeLayout>
+
+</RelativeLayout>

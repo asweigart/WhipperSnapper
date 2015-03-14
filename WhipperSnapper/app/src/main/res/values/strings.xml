@@ -52,4 +52,9 @@
     <string name="I_need_the_task_done_at">I need the task done at:</string>
     <string name="My_home_address">My home address:\s</string>
     <string name="The_location_on_this_map">This location (long press on map to set):</string>
+    <string name="All_done_Create_my_task_request">All done. Create my task request.</string>
+    <string name="title_activity_waiting_for_chat">WaitingForChatActivity</string>
+    <string name="All_set">All set!</string>
+    <string name="Waiting_message">Your task request has been posted. You can close this app for now. You will receive a notification when a WhipperSnapper volunteer offers to do your task.\n\nIf you no longer need this task done, you can click the Cancel button below.</string>
+    <string name="Cancel_this_task_request">Cancel this task request</string>
 </resources>

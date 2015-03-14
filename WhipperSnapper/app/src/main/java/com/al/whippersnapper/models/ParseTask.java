@@ -10,10 +10,17 @@ public class ParseTask extends ParseObject {
         super();
     }
 
-    public Number getTaskType() {
-        return getNumber("TaskType");
+    public String getSeniorUsername() {
+        return getString("SeniorUsername");
     }
-    public void setTaskType(Number value) {
+    public void setSeniorUsername(String value) {
+        put("SeniorUsername", value);
+    }
+
+    public String getTaskType() {
+        return getString("TaskType");
+    }
+    public void setTaskType(String value) {
         put("TaskType", value);
     }
 
@@ -43,5 +50,15 @@ public class ParseTask extends ParseObject {
     }
     public void setAvailable(boolean value) {
         put("Available", value);
+    }
+
+
+    // This column is totally redundant normalization, because this info could come from the owner's address. But it makes it easier to code, so there.
+    // Note that, unlike the ParseWSUser's address, this will have the address AND city/state/zip info in it.
+    public String getAddress() {
+        return getString("Address");
+    }
+    public void setAddress(String value) {
+        put("Address", value);
     }
 }

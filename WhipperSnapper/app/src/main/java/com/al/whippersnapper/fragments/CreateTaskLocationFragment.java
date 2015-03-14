@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -48,6 +49,25 @@ public class CreateTaskLocationFragment extends Fragment implements
     private long UPDATE_INTERVAL = 60000;  /* 60 secs */
     private long FASTEST_INTERVAL = 5000; /* 5 secs */
 
+    public LatLng getMarkerLocationOnMap() {
+        return markerLocationOnMap;
+    }
+
+    public RadioButton getRbMyHomeAddress() {
+        return rbMyHomeAddress;
+    }
+
+    public RadioButton getRbMapLocation() {
+        return rbMapLocation;
+    }
+
+    public GoogleApiClient getmGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
+
+    private LatLng markerLocationOnMap = null; // starts off null until first placement
+
     /*
 	 * Define a request code to send to Google Play services This code is
 	 * returned in Activity.onActivityResult
@@ -56,12 +76,18 @@ public class CreateTaskLocationFragment extends Fragment implements
 
     private RadioButton rbMyHomeAddress;
     private RadioButton rbMapLocation;
+    private Button btnDone_FromMap;
 
 
 
-
+    private onDoneFromMapClickListener doneFromMapClickListener;
     private OnFragmentInteractionListener mListener;
 
+
+
+    public interface onDoneFromMapClickListener {
+        public void onDoneFromMapClick();
+    }
 
     public static CreateTaskLocationFragment newInstance() {
         CreateTaskLocationFragment fragment = new CreateTaskLocationFragment();
@@ -122,6 +148,15 @@ public class CreateTaskLocationFragment extends Fragment implements
 
         rbMapLocation = (RadioButton) v.findViewById(R.id.rbMapLocation);
 
+        // set up click listener for All Done button.
+        btnDone_FromMap = (Button) v.findViewById(R.id.btnDone_FromMap);
+        btnDone_FromMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doneFromMapClickListener.onDoneFromMapClick();
+            }
+        });
+
         return v;
     }
 
@@ -140,6 +175,10 @@ public class CreateTaskLocationFragment extends Fragment implements
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+
+        if (activity instanceof CreateTaskActivity) {
+            doneFromMapClickListener = (CreateTaskActivity) activity;
         }
     }
 
@@ -209,6 +248,7 @@ public class CreateTaskLocationFragment extends Fragment implements
         map.addMarker(new MarkerOptions()
                         .position(point)
                         .draggable(true));
+        markerLocationOnMap = point;
     }
 
 

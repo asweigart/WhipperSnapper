@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -26,8 +27,15 @@ public class CreateTaskDetailsFragment extends Fragment {
         public void onTaskPhotoClick();
     }
 
+    public interface onDoneFromDetailsClickListener {
+        public void onDoneFromDetailsClick();
+    }
+
     private Spinner spTaskType;
     private EditText etTaskDetails;
+
+
+    private Button btnDone_FromDetails;
 
     public ImageView getIvTaskPhoto() {
         return ivTaskPhoto;
@@ -35,9 +43,19 @@ public class CreateTaskDetailsFragment extends Fragment {
 
     private ImageView ivTaskPhoto;
     private onTaskPhotoClickListener taskPhotoClickListener;
+    private onDoneFromDetailsClickListener doneFromDetailsClickListener;
 
     private OnFragmentInteractionListener mListener;
 
+
+
+    public EditText getEtTaskDetails() {
+        return etTaskDetails;
+    }
+
+    public Spinner getSpTaskType() {
+        return spTaskType;
+    }
 
     public static CreateTaskDetailsFragment newInstance() {
         CreateTaskDetailsFragment fragment = new CreateTaskDetailsFragment();
@@ -70,12 +88,22 @@ public class CreateTaskDetailsFragment extends Fragment {
 
         spTaskType = (Spinner) v.findViewById(R.id.spTaskType);
         etTaskDetails = (EditText) v.findViewById(R.id.etTaskDetails);
-        ivTaskPhoto = (ImageView) v.findViewById(R.id.ivTaskPhoto);
 
+        // set up click listener for photo
+        ivTaskPhoto = (ImageView) v.findViewById(R.id.ivTaskPhoto);
         ivTaskPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 taskPhotoClickListener.onTaskPhotoClick();
+            }
+        });
+
+        // set up click listener for All Done button.
+        btnDone_FromDetails = (Button) v.findViewById(R.id.btnDone_FromDetails);
+        btnDone_FromDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doneFromDetailsClickListener.onDoneFromDetailsClick();
             }
         });
 
@@ -101,6 +129,7 @@ public class CreateTaskDetailsFragment extends Fragment {
 
         if (activity instanceof CreateTaskActivity) {
             taskPhotoClickListener = (CreateTaskActivity) activity;
+            doneFromDetailsClickListener = (CreateTaskActivity) activity;
         }
     }
 
