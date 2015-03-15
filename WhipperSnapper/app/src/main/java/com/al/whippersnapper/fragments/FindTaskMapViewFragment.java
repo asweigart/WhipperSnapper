@@ -11,10 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.models.ParseTask;
+import com.al.whippersnapper.models.ParseWSUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,11 +31,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,7 +45,8 @@ import java.util.List;
 public class FindTaskMapViewFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        GoogleMap.OnMarkerClickListener {
 
 
     private SupportMapFragment mapFragment;
@@ -51,6 +58,13 @@ public class FindTaskMapViewFragment extends Fragment implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     public final static int MAX_RANGE = 10000; // 10km, TODO: this should depend on the map zoom level
+
+    private HashMap<Marker, ParseTask> markerTaskMap;
+    private ImageView ivFeatureSeniorPhoto;
+    private TextView tvFeatureSeniorName;
+    private TextView tvFeatureTaskType;
+    private TextView tvFeaturePostedOn;
+    private TextView tvFeatureDetails;
 
 
     private OnFragmentInteractionListener mListener;
@@ -75,13 +89,23 @@ public class FindTaskMapViewFragment extends Fragment implements
             //mParam1 = getArguments().getString(ARG_PARAM1);
             //mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        markerTaskMap = new HashMap<Marker, ParseTask>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_find_task_map_view, container, false);
+        View v = inflater.inflate(R.layout.fragment_find_task_map_view, container, false);
+
+        ivFeatureSeniorPhoto = (ImageView) v.findViewById(R.id.ivFeatureSeniorPhoto);
+        tvFeatureSeniorName = (TextView) v.findViewById(R.id.tvFeatureSeniorName);
+        tvFeatureTaskType = (TextView) v.findViewById(R.id.tvFeatureTaskType);
+        tvFeaturePostedOn = (TextView) v.findViewById(R.id.tvFeaturePostedOn);
+        tvFeatureDetails = (TextView) v.findViewById(R.id.tvFeatureDetails);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -139,6 +163,8 @@ public class FindTaskMapViewFragment extends Fragment implements
             @Override
             public void done(List<ParseTask> parseTasks, ParseException e) {
                 map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them
+                markerTaskMap.clear();
+
                 // go through all the returned tasks and filter out the far away ones
                 // adapted from https://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
                 for (Iterator<ParseTask> it = parseTasks.iterator(); it.hasNext();) {
@@ -151,8 +177,9 @@ public class FindTaskMapViewFragment extends Fragment implements
                 // create markers for each task
                 for (int i = 0; i < parseTasks.size(); i++) {
                     ParseTask task = parseTasks.get(i);
-                    map.addMarker(new MarkerOptions()
-                            .position(new LatLng((double)task.getLat(), (double)task.getLng())));
+                    Marker marker = map.addMarker(new MarkerOptions()
+                            .position(new LatLng((double) task.getLat(), (double) task.getLng())));
+                    markerTaskMap.put(marker, task);
                 }
             }
         });
@@ -203,6 +230,7 @@ public class FindTaskMapViewFragment extends Fragment implements
             Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             map.setMyLocationEnabled(true);
             //map.setOnMapLongClickListener(this);
+            map.setOnMarkerClickListener(this);
 
             // Now that map has loaded, let's get our location!
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -355,5 +383,31 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (!markerTaskMap.containsKey(marker)) {
+            Toast.makeText(getActivity(), "This marker has no task data associated with it.", Toast.LENGTH_LONG).show();
+            return true; // some error happened here.
+        }
 
+        // populate the bottom view info
+        ParseTask task = markerTaskMap.get(marker);
+        tvFeatureTaskType.setText(task.getTaskType());
+        tvFeaturePostedOn.setText(task.getCreatedAt().toString());
+        tvFeatureDetails.setText(task.getDetails());
+
+        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("ParseWSUser");
+        q.whereEqualTo("username", task.getSeniorUsername());
+        q.findInBackground(new FindCallback<ParseWSUser>() {
+            @Override
+            public void done(List<ParseWSUser> parseWSUsers, ParseException e) {
+                ParseWSUser user = parseWSUsers.get(0); // this should always work
+                // populate the bottom view info
+                tvFeatureSeniorName.setText(user.getFullName());
+                // TODO - get profile photo
+            }
+        });
+
+        return true;
+    }
 }

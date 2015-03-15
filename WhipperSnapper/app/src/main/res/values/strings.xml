@@ -58,4 +58,5 @@
     <string name="Waiting_message">Your task request has been posted. You can close this app for now. You will receive a notification when a WhipperSnapper volunteer offers to do your task.\n\nIf you no longer need this task done, you can click the Cancel button below.</string>
     <string name="Cancel_this_task_request">Cancel this task request</string>
     <string name="Your_task_request_has_been_canceled">Your task request has been canceled.</string>
+    <string name="To_view_details">(To view details, click on a task in the map.)</string>
 </resources>
