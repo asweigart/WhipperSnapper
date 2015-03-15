@@ -1,5 +1,7 @@
 package com.al.whippersnapper.activities;
 
+import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,19 +11,26 @@ import android.view.MenuItem;
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.adapters.CreateTaskFragmentPagerAdapter;
 import com.al.whippersnapper.adapters.FindTaskFragmentPagerAdapter;
+import com.al.whippersnapper.fragments.FindTaskListViewFragment;
+import com.al.whippersnapper.fragments.FindTaskMapViewFragment;
 import com.astuetz.PagerSlidingTabStrip;
 
-public class FindTaskActivity extends ActionBarActivity {
+public class FindTaskActivity extends FragmentActivity implements
+        FindTaskMapViewFragment.OnFragmentInteractionListener,
+        FindTaskListViewFragment.OnFragmentInteractionListener {
+    private FindTaskFragmentPagerAdapter pagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_task);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new FindTaskFragmentPagerAdapter(getSupportFragmentManager()));
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpagerFindTask);
+        pagerAdapter = new FindTaskFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
 
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabsFindTask);
         tabsStrip.setViewPager(viewPager);
     }
 
@@ -47,4 +56,7 @@ public class FindTaskActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) { }
 }

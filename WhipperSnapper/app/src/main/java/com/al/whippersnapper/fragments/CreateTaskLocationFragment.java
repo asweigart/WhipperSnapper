@@ -366,8 +366,8 @@ public class CreateTaskLocationFragment extends Fragment implements
 
     @Override
     public void onLocationChanged(Location location) {
-        int lat = (int) location.getLatitude();
-        int lon = (int) location.getLongitude();
+        //int lat = (int) location.getLatitude();
+        //int lon = (int) location.getLongitude();
         //latitudeField.setText(String.valueOf(lat));
         //longitudeField.setText(String.valueOf(lon));
     }

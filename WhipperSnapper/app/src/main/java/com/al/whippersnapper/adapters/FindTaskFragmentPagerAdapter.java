@@ -12,9 +12,14 @@ import com.al.whippersnapper.fragments.FindTaskMapViewFragment;
  */
 public class FindTaskFragmentPagerAdapter extends FragmentPagerAdapter {
     public final int FRAGMENT_COUNT = 2;
+    private FindTaskMapViewFragment mapViewFragment;
+    private FindTaskListViewFragment listViewFragment;
+
 
     public FindTaskFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
+        mapViewFragment = FindTaskMapViewFragment.newInstance();
+        listViewFragment = FindTaskListViewFragment.newInstance();
     }
 
 
@@ -26,8 +31,8 @@ public class FindTaskFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return FindTaskMapViewFragment.newInstance();
-            case 1: return FindTaskListViewFragment.newInstance();
+            case 0: return mapViewFragment;
+            case 1: return listViewFragment;
             default: return null; // this will cause an error
         }
     }

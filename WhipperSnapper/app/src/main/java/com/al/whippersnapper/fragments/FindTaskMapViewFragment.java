@@ -1,17 +1,56 @@
 package com.al.whippersnapper.fragments;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.IntentSender;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.models.ParseTask;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
+import java.util.Iterator;
+import java.util.List;
 
 
-public class FindTaskMapViewFragment extends Fragment {
+public class FindTaskMapViewFragment extends Fragment implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
+
+
+    private SupportMapFragment mapFragment;
+    private GoogleMap map;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private long UPDATE_INTERVAL = 60000;  /* 60 secs */
+    private long FASTEST_INTERVAL = 5000; /* 5 secs */
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+    public final static int MAX_RANGE = 10000; // 10km, TODO: this should depend on the map zoom level
 
 
     private OnFragmentInteractionListener mListener;
@@ -83,5 +122,238 @@ public class FindTaskMapViewFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+
+
+
+
+
+
+
+    public void fetchAndSetMarkersForArea(final LatLng position) {
+        ParseQuery<ParseTask> q = ParseQuery.getQuery("Task");
+        q.whereEqualTo("Available", true);
+
+        // TODO: horrible hack: We'll download the entire database of tasks, then filter based on distance between the Lat/Lng.
+        q.findInBackground(new FindCallback<ParseTask>() {
+            @Override
+            public void done(List<ParseTask> parseTasks, ParseException e) {
+                map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them
+                // go through all the returned tasks and filter out the far away ones
+                // adapted from https://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
+                for (Iterator<ParseTask> it = parseTasks.iterator(); it.hasNext();) {
+                    ParseTask task = it.next();
+                    if (distance(position.latitude, (double)task.getLat(), position.longitude, (double)task.getLng()) > MAX_RANGE) {
+                        it.remove();
+                    }
+                }
+
+                // create markers for each task
+                for (int i = 0; i < parseTasks.size(); i++) {
+                    ParseTask task = parseTasks.get(i);
+                    map.addMarker(new MarkerOptions()
+                            .position(new LatLng((double)task.getLat(), (double)task.getLng())));
+                }
+            }
+        });
+    }
+
+    // Copied from https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude-what-am-i-doi
+    public static double distance(double lat1, double lat2, double lon1, double lon2) {
+        final int R = 6371; // Radius of the earth
+
+        Double latDistance = deg2rad(lat2 - lat1);
+        Double lonDistance = deg2rad(lon2 - lon1);
+        Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c * 1000; // convert to meters
+    }
+
+    // Copied from https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude-what-am-i-doi
+    public static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+
+    protected void setUpMapIfNeeded() {
+        // Do a null check to confirm that we have not already instantiated the map.
+        if (mapFragment == null) {
+            mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFindTasks));
+
+            // Check if we were successful in obtaining the map.
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap map) {
+                        map.setMyLocationEnabled(true);
+                        loadMap(map);
+                    }
+                });
+            }
+        }
+    }
+
+
+    protected void loadMap(GoogleMap googleMap) {
+        map = googleMap;
+        if (map != null) {
+            // Map is ready
+            Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+            map.setMyLocationEnabled(true);
+            //map.setOnMapLongClickListener(this);
+
+            // Now that map has loaded, let's get our location!
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).build();
+
+            connectClient();
+        } else {
+            Toast.makeText(getActivity(), "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    public void onMove(View v) {
+        LatLng latLng = new LatLng(49, -122);
+        CameraUpdate camUpdate = CameraUpdateFactory.newLatLng(latLng);
+        map.animateCamera(camUpdate);
+    }
+
+    protected void connectClient() {
+        // Connect the client.
+        if (isGooglePlayServicesAvailable() && mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setUpMapIfNeeded();
+        connectClient();
+    }
+
+    @Override
+    public void onStop() {
+        // Disconnecting the client invalidates it.
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+
+
+    private boolean isGooglePlayServicesAvailable() {
+        // Check that Google Play services is available
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+        // If Google Play services is available
+        if (ConnectionResult.SUCCESS == resultCode) {
+            // In debug mode, log the status
+            Log.d("Location Updates", "Google Play services is available.");
+            return true;
+        } else {
+            // Get the error dialog from Google Play services
+            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(),
+                    CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
+            // If Google Play services can provide an error dialog
+            if (errorDialog != null) {
+                // Create a new DialogFragment for the error dialog
+                //ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+                //errorFragment.setDialog(errorDialog);
+                //errorFragment.show(getSupportFragmentManager(), "Location Updates");
+            }
+
+            return false;
+        }
+    }
+
+
+    /*
+ * Called by Location Services if the connection to the location client
+ * drops because of an error.
+ */
+    @Override
+    public void onConnectionSuspended(int i) {
+        if (i == CAUSE_SERVICE_DISCONNECTED) {
+            Toast.makeText(getActivity(), "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
+        } else if (i == CAUSE_NETWORK_LOST) {
+            Toast.makeText(getActivity(), "Network lost. Please re-connect.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*
+     * Called by Location Services if the attempt to Location Services fails.
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+		/*
+		 * Google Play services can resolve some errors it detects. If the error
+		 * has a resolution, try sending an Intent to start a Google Play
+		 * services activity that can resolve error.
+		 */
+        if (connectionResult.hasResolution()) {
+            try {
+                // Start an Activity that tries to resolve the error
+                connectionResult.startResolutionForResult(getActivity(),
+                        CONNECTION_FAILURE_RESOLUTION_REQUEST);
+				/*
+				 * Thrown if Google Play services canceled the original
+				 * PendingIntent
+				 */
+            } catch (IntentSender.SendIntentException e) {
+                // Log the error
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Sorry. Location services not available to you", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //int lat = (int) location.getLatitude();
+        //int lon = (int) location.getLongitude();
+        //latitudeField.setText(String.valueOf(lat));
+        //longitudeField.setText(String.valueOf(lon));
+    }
+
+    /*
+     * Called by Location Services when the request to connect the client
+     * finishes successfully. At this point, you can request the current
+     * location or start periodic updates
+     */
+    @Override
+    public void onConnected(Bundle dataBundle) {
+        // Display the connection status
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (location != null) {
+            Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+            map.animateCamera(cameraUpdate);
+            fetchAndSetMarkersForArea(latLng);
+            startLocationUpdates();
+        } else {
+            Toast.makeText(getActivity(), "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected void startLocationUpdates() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, this);
+
+    }
+
 
 }
