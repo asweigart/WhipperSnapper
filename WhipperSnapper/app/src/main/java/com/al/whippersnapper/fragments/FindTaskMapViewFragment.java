@@ -421,7 +421,7 @@ public class FindTaskMapViewFragment extends Fragment implements
 
         tvInfoTaskType.setText(markerUserMapping.get(marker).getTaskType());
         tvInfoTaskDetails.setText(markerUserMapping.get(marker).getTaskDetails());
-        tvInfoSeniorName.setText(markerUserMapping.get(marker).getFullName());
+        tvInfoSeniorName.setText(Util.getAnonymizedName(markerUserMapping.get(marker).getFullName()));
 
         return infoWindow;
     }
