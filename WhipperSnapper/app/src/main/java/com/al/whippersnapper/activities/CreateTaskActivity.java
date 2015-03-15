@@ -28,6 +28,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -155,7 +156,8 @@ public class CreateTaskActivity extends FragmentActivity implements
         theUser.setTaskDetails(pagerAdapter.getTaskDetailsFragment().getEtTaskDetails().getText().toString()); // Have I mentioned that I don't care for Java?
         theUser.setTaskType(pagerAdapter.getTaskDetailsFragment().getSpTaskType().getSelectedItem().toString());
         theUser.setTaskPostedOn(new Date());
-        // TODO - set task photo
+        ParseFile taskPhotoFile = new ParseFile("taskPhoto.jpg", photoBytes);
+        theUser.setTaskPhoto(taskPhotoFile);
 
         // figure out the final lat lng
         if (pagerAdapter.getTaskLocationFragment().getRbMyHomeAddress().isChecked()) {

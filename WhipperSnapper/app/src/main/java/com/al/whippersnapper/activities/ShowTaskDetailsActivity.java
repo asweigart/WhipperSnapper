@@ -1,5 +1,6 @@
 package com.al.whippersnapper.activities;
 
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,7 +31,10 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
         tvTaskDetailsPostedOn = (TextView) findViewById(R.id.tvTaskDetailsPostedOn);
 
         // get the task info from the intent
-        // TODO - photo
+        byte[] taskPhotoBytes = getIntent().getByteArrayExtra("taskPhoto");
+        if (taskPhotoBytes != null) {
+            ivTaskDetailsProfilePhoto.setImageBitmap(BitmapFactory.decodeByteArray(taskPhotoBytes, 0, taskPhotoBytes.length));
+        }
         tvTaskDetailsSeniorName.setText(getIntent().getStringExtra("seniorName"));
         tvTaskDetailsType.setText(getIntent().getStringExtra("taskType"));
         tvTaskDetailsDetails.setText(getIntent().getStringExtra("taskDetails"));

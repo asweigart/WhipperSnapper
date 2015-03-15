@@ -2,6 +2,7 @@ package com.al.whippersnapper.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,8 @@ import com.al.whippersnapper.activities.FindTaskActivity;
 import com.al.whippersnapper.activities.ShowTaskDetailsActivity;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.al.whippersnapper.utils.Util;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +68,23 @@ public class FindTaskListViewFragment extends Fragment {
                 // Launch the Show Task Details activity
                 ParseWSUser user = ((FindTaskActivity) getActivity()).getLvAdapter().getItem(position);
 
+                // get the task photo's bytes
+                byte[] taskPhotoBytes = null;
+                try {
+                    ParseFile taskPhotoFile = user.getTaskPhoto();
+                    if (taskPhotoFile != null) {
+                        taskPhotoBytes = taskPhotoFile.getData();
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 Intent i = new Intent(getActivity(), ShowTaskDetailsActivity.class);
                 i.putExtra("seniorName", Util.getAnonymizedName(user.getFullName())); // TODO - use constants instead of "seniorName"
                 i.putExtra("taskType", user.getTaskType());
                 i.putExtra("taskDetails", user.getTaskDetails());
                 i.putExtra("postedOn", Util.getRelativeTimeAgo(user.getTaskPostedOn().toString())); // TODO - might want to reformat this date, or have a relative "9 minutes ago" string
+                i.putExtra("taskPhoto", taskPhotoBytes);
                 startActivity(i);
             }
         });
@@ -101,18 +116,8 @@ public class FindTaskListViewFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

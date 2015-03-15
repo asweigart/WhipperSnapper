@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -435,11 +436,23 @@ public class FindTaskMapViewFragment extends Fragment implements
     public void onInfoWindowClick(Marker marker) {
         ParseWSUser user = markerUserMapping.get(marker);
 
+        // get the task photo's bytes
+        byte[] taskPhotoBytes = null;
+        try {
+            ParseFile taskPhotoFile = user.getTaskPhoto();
+            if (taskPhotoFile != null) {
+                taskPhotoBytes = taskPhotoFile.getData();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Intent i = new Intent(getActivity(), ShowTaskDetailsActivity.class);
         i.putExtra("seniorName", Util.getAnonymizedName(user.getFullName())); // TODO - use constants instead of "seniorName"
         i.putExtra("taskType", user.getTaskType());
         i.putExtra("taskDetails", user.getTaskDetails());
         i.putExtra("postedOn", Util.getRelativeTimeAgo(user.getTaskPostedOn().toString())); // TODO - might want to reformat this date, or have a relative "9 minutes ago" string
+        i.putExtra("taskPhoto", taskPhotoBytes);
         startActivity(i);
     }
 }
