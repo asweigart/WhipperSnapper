@@ -28,5 +28,6 @@
         android:layout_height="wrap_content"
         android:text="@string/Cancel_this_task_request"
         android:id="@+id/btnCancelThisTask"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:onClick="onCancelTaskClick" />
 </LinearLayout>

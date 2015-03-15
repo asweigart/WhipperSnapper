@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -77,6 +78,7 @@ public class CreateTaskLocationFragment extends Fragment implements
     private RadioButton rbMyHomeAddress;
     private RadioButton rbMapLocation;
     private Button btnDone_FromMap;
+    private ProgressBar pbInLocationFrag;
 
 
 
@@ -130,6 +132,14 @@ public class CreateTaskLocationFragment extends Fragment implements
         }
     }
 
+    public ProgressBar getPbInLocationFrag() {
+        return pbInLocationFrag;
+    }
+
+    public Button getBtnDone_FromMap() {
+        return btnDone_FromMap;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -156,6 +166,8 @@ public class CreateTaskLocationFragment extends Fragment implements
                 doneFromMapClickListener.onDoneFromMapClick();
             }
         });
+
+        pbInLocationFrag = (ProgressBar) v.findViewById(R.id.pbInDetailsFrag);
 
         return v;
     }

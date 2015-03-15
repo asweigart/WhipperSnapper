@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -137,7 +139,24 @@ public class CreateTaskActivity extends FragmentActivity implements
     }
 
     public void onDone() {
-        // TODO: add progress bars
+        // make progress bar visible and disable submit button
+        ProgressBar pbLocation = pagerAdapter.getTaskLocationFragment().getPbInLocationFrag();
+        ProgressBar pbDetails = pagerAdapter.getTaskDetailsFragment().getPbInDetailsFrag();
+        if (pbLocation != null) {
+            pbLocation.setVisibility(View.INVISIBLE);
+        }
+        if (pbDetails != null) {
+            pbDetails.setVisibility(View.INVISIBLE);
+        }
+        Button btnLocation = pagerAdapter.getTaskLocationFragment().getBtnDone_FromMap();
+        Button btnDetails = pagerAdapter.getTaskDetailsFragment().getBtnDone_FromDetails();
+        if (btnLocation != null) {
+            btnLocation.setEnabled(false);
+        }
+        if (btnDetails != null) {
+            btnDetails.setEnabled(false);
+        }
+
 
         ParseWSUser theUser = (ParseWSUser) ParseWSUser.getCurrentUser();
 
@@ -178,7 +197,10 @@ public class CreateTaskActivity extends FragmentActivity implements
              @Override
              public void done(ParseException e) {
                  // go to Waiting activity
-                 startActivity(new Intent(CreateTaskActivity.this, WaitingForChatActivity.class));
+                 Intent i = new Intent(CreateTaskActivity.this, WaitingForChatActivity.class);
+                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                 startActivity(i);
+                 finish();
              }
          });
 

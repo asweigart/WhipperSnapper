@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.al.whippersnapper.R;
@@ -34,6 +35,11 @@ public class CreateTaskDetailsFragment extends Fragment {
     private Spinner spTaskType;
     private EditText etTaskDetails;
 
+    public ProgressBar getPbInDetailsFrag() {
+        return pbInDetailsFrag;
+    }
+
+    private ProgressBar pbInDetailsFrag;
 
     private Button btnDone_FromDetails;
 
@@ -79,6 +85,10 @@ public class CreateTaskDetailsFragment extends Fragment {
         }
     }
 
+    public Button getBtnDone_FromDetails() {
+        return btnDone_FromDetails;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -106,6 +116,8 @@ public class CreateTaskDetailsFragment extends Fragment {
                 doneFromDetailsClickListener.onDoneFromDetailsClick();
             }
         });
+
+        pbInDetailsFrag = (ProgressBar) v.findViewById(R.id.pbInDetailsFrag);
 
         return v;
     }
