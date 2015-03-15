@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.net.LinkAddress;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -60,6 +62,7 @@ public class FindTaskMapViewFragment extends Fragment implements
     private long UPDATE_INTERVAL = 60000;  /* 60 secs */
     private long FASTEST_INTERVAL = 5000; /* 5 secs */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private LatLng lastCameraPosition;
 
     public final static int MAX_RANGE = 10000; // 10km, TODO: this should depend on the map zoom level
 
@@ -232,6 +235,22 @@ public class FindTaskMapViewFragment extends Fragment implements
             map.setOnMarkerClickListener(this);
             map.setInfoWindowAdapter(this);
             map.setOnInfoWindowClickListener(this);
+            lastCameraPosition = map.getCameraPosition().target;
+            map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                @Override
+                public void onCameraChange(CameraPosition cameraPosition) {
+                    double distanceMoved = distance(lastCameraPosition.latitude, cameraPosition.target.latitude,
+                            lastCameraPosition.longitude, cameraPosition.target.longitude);
+                    Toast.makeText(getActivity(), "Distance moved: " + distanceMoved, Toast.LENGTH_SHORT).show();
+                    if (distanceMoved > (MAX_RANGE / 4)) {
+                        // camera has moved far enough (a quarter of MAX_RANGE) that we should refresh the markers
+                        lastCameraPosition = cameraPosition.target;
+                        setMarkersForNearbyTasks(cameraPosition.target);
+                        Toast.makeText(getActivity(), "Camera moved, updated markers", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
 
             // Now that map has loaded, let's get our location!
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -245,13 +264,6 @@ public class FindTaskMapViewFragment extends Fragment implements
         }
     }
 
-
-
-    public void onMove(View v) {
-        LatLng latLng = new LatLng(49, -122);
-        CameraUpdate camUpdate = CameraUpdateFactory.newLatLng(latLng);
-        map.animateCamera(camUpdate);
-    }
 
     protected void connectClient() {
         // Connect the client.
@@ -365,6 +377,7 @@ public class FindTaskMapViewFragment extends Fragment implements
         if (location != null) {
             Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            lastCameraPosition = latLng;
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             map.animateCamera(cameraUpdate);
             setMarkersForNearbyTasks(latLng);
