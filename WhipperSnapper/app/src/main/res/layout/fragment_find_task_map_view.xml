@@ -8,62 +8,9 @@
         android:id="@+id/mapFindTasks"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#FF00FF"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/ivFeatureSeniorPhoto" />
+        android:layout_alignParentTop="true" />
 
-
-    <ImageView
-        android:layout_width="@dimen/profile_photo_in_find_tasks"
-        android:layout_height="@dimen/profile_photo_in_find_tasks"
-        android:id="@+id/ivFeatureSeniorPhoto"
-        android:src="@mipmap/ic_launcher"
-        android:layout_above="@+id/tvFeatureDetails"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvFeatureDetails"
-        android:lines="3"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvFeatureSeniorName"
-        android:layout_alignTop="@+id/ivFeatureSeniorPhoto"
-        android:layout_toRightOf="@+id/ivFeatureSeniorPhoto"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="@string/To_view_details" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvFeatureTaskType"
-        android:layout_below="@+id/tvFeatureSeniorName"
-        android:layout_alignRight="@+id/tvFeaturePostedOn"
-        android:layout_alignEnd="@+id/tvFeaturePostedOn"
-        android:layout_toRightOf="@+id/ivFeatureSeniorPhoto"
-        android:layout_toEndOf="@+id/ivFeatureSeniorPhoto" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvFeaturePostedOn"
-        android:layout_below="@+id/tvFeatureTaskType"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/ivFeatureSeniorPhoto"
-        android:layout_toRightOf="@+id/ivFeatureSeniorPhoto" />
 
 </RelativeLayout>

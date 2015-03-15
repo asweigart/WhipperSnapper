@@ -152,7 +152,8 @@ public class CreateTaskActivity extends FragmentActivity implements
 
         // Create the parse task
         ParseTask theTask = new ParseTask();
-        theTask.setSeniorUsername(theUser.getUsername());
+        theTask.setSeniorUsername(theUser.getUsername()); // bad db habit here, I know
+        theTask.setSeniorFullName(theUser.getFullName()); // bad db habit here, I know
         theTask.setAvailable(true);
         theTask.setDetails(pagerAdapter.getTaskDetailsFragment().getEtTaskDetails().getText().toString()); // Have I mentioned that I don't care for Java?
         theTask.setTaskType(pagerAdapter.getTaskDetailsFragment().getSpTaskType().getSelectedItem().toString());

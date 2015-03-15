@@ -46,7 +46,8 @@ public class FindTaskMapViewFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
-        GoogleMap.OnMarkerClickListener {
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.InfoWindowAdapter {
 
 
     private SupportMapFragment mapFragment;
@@ -60,11 +61,7 @@ public class FindTaskMapViewFragment extends Fragment implements
     public final static int MAX_RANGE = 10000; // 10km, TODO: this should depend on the map zoom level
 
     private HashMap<Marker, ParseTask> markerTaskMap;
-    private ImageView ivFeatureSeniorPhoto;
-    private TextView tvFeatureSeniorName;
-    private TextView tvFeatureTaskType;
-    private TextView tvFeaturePostedOn;
-    private TextView tvFeatureDetails;
+    private LayoutInflater mInflater;
 
 
     private OnFragmentInteractionListener mListener;
@@ -98,13 +95,7 @@ public class FindTaskMapViewFragment extends Fragment implements
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_find_task_map_view, container, false);
-
-        ivFeatureSeniorPhoto = (ImageView) v.findViewById(R.id.ivFeatureSeniorPhoto);
-        tvFeatureSeniorName = (TextView) v.findViewById(R.id.tvFeatureSeniorName);
-        tvFeatureTaskType = (TextView) v.findViewById(R.id.tvFeatureTaskType);
-        tvFeaturePostedOn = (TextView) v.findViewById(R.id.tvFeaturePostedOn);
-        tvFeatureDetails = (TextView) v.findViewById(R.id.tvFeatureDetails);
-
+        mInflater = inflater;
         return v;
     }
 
@@ -385,29 +376,44 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (!markerTaskMap.containsKey(marker)) {
-            Toast.makeText(getActivity(), "This marker has no task data associated with it.", Toast.LENGTH_LONG).show();
-            return true; // some error happened here.
-        }
-
-        // populate the bottom view info
-        ParseTask task = markerTaskMap.get(marker);
-        tvFeatureTaskType.setText(task.getTaskType());
-        tvFeaturePostedOn.setText(task.getCreatedAt().toString());
-        tvFeatureDetails.setText(task.getDetails());
-
-        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("ParseWSUser");
-        q.whereEqualTo("username", task.getSeniorUsername());
-        q.findInBackground(new FindCallback<ParseWSUser>() {
-            @Override
-            public void done(List<ParseWSUser> parseWSUsers, ParseException e) {
-                ParseWSUser user = parseWSUsers.get(0); // this should always work
-                // populate the bottom view info
-                tvFeatureSeniorName.setText(user.getFullName());
-                // TODO - get profile photo
-            }
-        });
+        // TODO
 
         return true;
+    }
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        if (!markerTaskMap.containsKey(marker)) {
+            Toast.makeText(getActivity(), "This marker has no task data associated with it.", Toast.LENGTH_LONG).show();
+            return null; // some error happened here, this should never happen
+        }
+
+        // gather the data for this info window
+        ParseTask task = markerTaskMap.get(marker);
+        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("ParseWSUser");
+        q.whereEqualTo("username", task.getSeniorUsername());
+        List<ParseWSUser> results = null;
+        try {
+            results = q.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ParseWSUser user = results.get(0); // this should always work if the database is correctly set up
+
+        // set the text
+        View infoWindow = mInflater.inflate(R.layout.infowindow_task, null);
+        TextView tvInfoTaskType = (TextView) infoWindow.findViewById(R.id.tvInfoTaskType);
+        TextView tvInfoSeniorName = (TextView) infoWindow.findViewById(R.id.tvInfoSeniorName);
+        TextView tvInfoTaskDetails = (TextView) infoWindow.findViewById(R.id.tvInfoTaskDetails);
+
+        tvInfoTaskDetails.setText(markerTaskMap.get(marker).getTaskType());
+        tvInfoTaskDetails.setText(markerTaskMap.get(marker).getDetails());
+
+        return infoWindow;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        return null;
     }
 }

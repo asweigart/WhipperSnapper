@@ -58,7 +58,11 @@ public class ParseTask extends ParseObject {
     public String getAddress() {
         return getString("Address");
     }
-    public void setAddress(String value) {
-        put("Address", value);
+    public void setAddress(String value) { put("Address", value); }
+
+    // Also redundant. In fact, since seniors can only have one task up at a time, there's no reason users and task should be separate tables.
+    public String getSeniorFullName() { return getString("SeniorFullName"); }
+    public void setSeniorFullName(String value) {
+        put("SeniorFullName", value);
     }
 }
