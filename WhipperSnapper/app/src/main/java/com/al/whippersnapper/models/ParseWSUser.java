@@ -5,6 +5,8 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.util.Date;
+
 @ParseClassName("_User")
 public class ParseWSUser extends ParseUser {
 
@@ -107,5 +109,8 @@ public class ParseWSUser extends ParseUser {
 
     public ParseFile getTaskPhoto() { return getParseFile("TaskPhoto"); }
     public void setTaskPhoto(ParseFile value) { put("TaskPhoto", value); }
+
+    public Date getTaskPostedOn() { return getDate("TaskPostedOn"); }
+    public void setTaskPostedOn(Date value) { put("TaskPostedOn", value); }
 
 }

@@ -2,6 +2,7 @@ package com.al.whippersnapper.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.net.Uri;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.activities.ShowTaskDetailsActivity;
 import com.al.whippersnapper.models.ParseWSUser;
+import com.al.whippersnapper.utils.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -58,7 +61,7 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     public final static int MAX_RANGE = 10000; // 10km, TODO: this should depend on the map zoom level
 
-    private HashMap<Marker, ParseWSUser> markerUserMap;
+    private HashMap<Marker, ParseWSUser> markerUserMapping;
     private LayoutInflater mInflater;
 
 
@@ -85,7 +88,7 @@ public class FindTaskMapViewFragment extends Fragment implements
             //mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        markerUserMap = new HashMap<Marker, ParseWSUser>();
+        markerUserMapping = new HashMap<Marker, ParseWSUser>();
     }
 
     @Override
@@ -152,7 +155,7 @@ public class FindTaskMapViewFragment extends Fragment implements
             @Override
             public void done(List<ParseWSUser> parseWSUsers, ParseException e) {
                 map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them
-                markerUserMap.clear();
+                markerUserMapping.clear();
 
                 // go through all the returned tasks and filter out the far away ones
                 // adapted from https://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
@@ -168,7 +171,7 @@ public class FindTaskMapViewFragment extends Fragment implements
                     ParseWSUser user = parseWSUsers.get(i);
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(new LatLng((double) user.getTaskLat(), (double) user.getTaskLng())));
-                    markerUserMap.put(marker, user);
+                    markerUserMapping.put(marker, user);
                 }
             }
         });
@@ -382,13 +385,13 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     @Override
     public View getInfoWindow(Marker marker) {
-        if (!markerUserMap.containsKey(marker)) {
+        if (!markerUserMapping.containsKey(marker)) {
             Toast.makeText(getActivity(), "This marker has no task data associated with it.", Toast.LENGTH_LONG).show();
             return null; // some error happened here, this should never happen
         }
 
         // gather the data for this info window
-        ParseWSUser user = markerUserMap.get(marker);
+        ParseWSUser user = markerUserMapping.get(marker);
 
         // set the text
         View infoWindow = mInflater.inflate(R.layout.infowindow_task, null);
@@ -396,9 +399,9 @@ public class FindTaskMapViewFragment extends Fragment implements
         TextView tvInfoSeniorName = (TextView) infoWindow.findViewById(R.id.tvInfoSeniorName);
         TextView tvInfoTaskDetails = (TextView) infoWindow.findViewById(R.id.tvInfoTaskDetails);
 
-        tvInfoTaskType.setText(markerUserMap.get(marker).getTaskType());
-        tvInfoTaskDetails.setText(markerUserMap.get(marker).getTaskDetails());
-        tvInfoSeniorName.setText(markerUserMap.get(marker).getFullName());
+        tvInfoTaskType.setText(markerUserMapping.get(marker).getTaskType());
+        tvInfoTaskDetails.setText(markerUserMapping.get(marker).getTaskDetails());
+        tvInfoSeniorName.setText(markerUserMapping.get(marker).getFullName());
 
         return infoWindow;
     }
@@ -410,6 +413,13 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        // TODO
+        ParseWSUser user = markerUserMapping.get(marker);
+
+        Intent i = new Intent(getActivity(), ShowTaskDetailsActivity.class);
+        i.putExtra("seniorName", Util.getAnonymizedName(user.getFullName())); // TODO - use constants instead of "seniorName"
+        i.putExtra("taskType", user.getTaskType());
+        i.putExtra("taskDetails", user.getTaskDetails());
+        i.putExtra("postedOn", Util.getRelativeTimeAgo(user.getTaskPostedOn().toString())); // TODO - might want to reformat this date, or have a relative "9 minutes ago" string
+        startActivity(i);
     }
 }

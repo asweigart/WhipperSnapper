@@ -67,6 +67,10 @@
             android:name=".activities.WaitingForChatActivity"
             android:label="@string/title_activity_waiting_for_chat" >
         </activity>
+        <activity
+            android:name=".activities.ShowTaskDetailsActivity"
+            android:label="@string/title_activity_show_task_details" >
+        </activity>
     </application>
 
 </manifest>

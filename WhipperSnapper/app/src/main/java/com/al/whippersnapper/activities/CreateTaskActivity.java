@@ -31,6 +31,7 @@ import com.parse.ParseException;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 
 public class CreateTaskActivity extends FragmentActivity implements
         CreateTaskDetailsFragment.OnFragmentInteractionListener,
@@ -153,6 +154,8 @@ public class CreateTaskActivity extends FragmentActivity implements
         theUser.setTaskAvailable(true);
         theUser.setTaskDetails(pagerAdapter.getTaskDetailsFragment().getEtTaskDetails().getText().toString()); // Have I mentioned that I don't care for Java?
         theUser.setTaskType(pagerAdapter.getTaskDetailsFragment().getSpTaskType().getSelectedItem().toString());
+        theUser.setTaskPostedOn(new Date());
+        // TODO - set task photo
 
         // figure out the final lat lng
         if (pagerAdapter.getTaskLocationFragment().getRbMyHomeAddress().isChecked()) {

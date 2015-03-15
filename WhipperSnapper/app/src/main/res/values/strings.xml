@@ -59,4 +59,7 @@
     <string name="Cancel_this_task_request">Cancel this task request</string>
     <string name="Your_task_request_has_been_canceled">Your task request has been canceled.</string>
     <string name="To_view_details">(To view details, click on a task in the map.)</string>
+    <string name="title_activity_show_task_details">ShowTaskDetailsActivity</string>
+    <string name="Offer_to_do_this_task">Offer to do this task.</string>
+    <string name="Posted_on">Posted on:\s</string>
 </resources>
