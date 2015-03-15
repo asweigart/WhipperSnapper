@@ -3,7 +3,6 @@ package com.al.whippersnapper.applications;
 
 import android.app.Application;
 
-import com.al.whippersnapper.models.ParseTask;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -14,7 +13,6 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(ParseWSUser.class);
-        ParseObject.registerSubclass(ParseTask.class);
 
         // Add your initialization code here
         Parse.enableLocalDatastore(this);

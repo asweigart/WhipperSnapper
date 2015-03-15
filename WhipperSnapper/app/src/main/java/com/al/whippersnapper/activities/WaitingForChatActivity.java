@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
-import com.al.whippersnapper.models.ParseTask;
+import com.al.whippersnapper.models.ParseWSUser;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -49,28 +52,27 @@ public class WaitingForChatActivity extends ActionBarActivity {
     }
 
     public void onCancelTaskClick(View v) {
-        ParseQuery<ParseTask> q = ParseQuery.getQuery("Task");
+        ParseWSUser theUser = (ParseWSUser) ParseWSUser.getCurrentUser();
+        /*theUser.setTaskAddress(JSONObject.NULL);
+        theUser.setTaskAvailable(JSONObject.NULL);
+        theUser.setTaskDetails(JSONObject.NULL);
+        theUser.setTaskLat(JSONObject.NULL);
+        theUser.setTaskLng(JSONObject.NULL);
+        theUser.setTaskType(JSONObject.NULL);
+        theUser.setTaskPhoto(JSONObject.NULL);*/ // Instead of setting every column to null, just set TaskType to "" and TaskAvailable to false
+        theUser.setTaskType("");
+        theUser.setTaskAvailable(false);
 
-        // TODO - kind of a hack, but we'll just use the phone number as the username value here.
-        // obtain the phone number from the device
-        TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        String userPhoneNumber = tMgr.getLine1Number();
+        theUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Toast.makeText(WaitingForChatActivity.this, getResources().getString(R.string.Your_task_request_has_been_canceled), Toast.LENGTH_LONG).show();
 
-        q.whereContains("SeniorUsername", userPhoneNumber);
-        List<ParseTask> results = null;
-        try {
-            results = q.find();
-            ParseTask theTask = results.get(0); // this should always exist
-            theTask.deleteEventually();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Toast.makeText(this, getResources().getString(R.string.Your_task_request_has_been_canceled), Toast.LENGTH_LONG).show();
-
-        Intent i = new Intent(this, SeniorHomeActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
-        startActivity(i);
-        finish();
+                Intent i = new Intent(WaitingForChatActivity.this, SeniorHomeActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                startActivity(i);
+                finish();
+            }
+        });
     }
 }

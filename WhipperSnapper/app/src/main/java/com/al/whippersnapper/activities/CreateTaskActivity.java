@@ -23,7 +23,6 @@ import com.al.whippersnapper.R;
 import com.al.whippersnapper.adapters.CreateTaskFragmentPagerAdapter;
 import com.al.whippersnapper.fragments.CreateTaskDetailsFragment;
 import com.al.whippersnapper.fragments.CreateTaskLocationFragment;
-import com.al.whippersnapper.models.ParseTask;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.location.LocationServices;
@@ -150,18 +149,15 @@ public class CreateTaskActivity extends FragmentActivity implements
 
         ParseWSUser theUser = (ParseWSUser) ParseWSUser.getCurrentUser();
 
-        // Create the parse task
-        ParseTask theTask = new ParseTask();
-        theTask.setSeniorUsername(theUser.getUsername()); // bad db habit here, I know
-        theTask.setSeniorFullName(theUser.getFullName()); // bad db habit here, I know
-        theTask.setAvailable(true);
-        theTask.setDetails(pagerAdapter.getTaskDetailsFragment().getEtTaskDetails().getText().toString()); // Have I mentioned that I don't care for Java?
-        theTask.setTaskType(pagerAdapter.getTaskDetailsFragment().getSpTaskType().getSelectedItem().toString());
+        // Set the task columns in the database
+        theUser.setTaskAvailable(true);
+        theUser.setTaskDetails(pagerAdapter.getTaskDetailsFragment().getEtTaskDetails().getText().toString()); // Have I mentioned that I don't care for Java?
+        theUser.setTaskType(pagerAdapter.getTaskDetailsFragment().getSpTaskType().getSelectedItem().toString());
 
         // figure out the final lat lng
         if (pagerAdapter.getTaskLocationFragment().getRbMyHomeAddress().isChecked()) {
             // use the user's home address
-            setAddressIfNoLatLng(theUser, theTask);
+            setAddressIfNoLatLng(theUser);
         } else {
             // the "use this place on the map" is set
             LatLng markerLocationOnMap = pagerAdapter.getTaskLocationFragment().getMarkerLocationOnMap();
@@ -171,20 +167,20 @@ public class CreateTaskActivity extends FragmentActivity implements
                 if (location != null) {
                     // was able to get current location
                     LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    theTask.setLat(currentLocation.latitude);
-                    theTask.setLng(currentLocation.longitude);
+                    theUser.setTaskLat(currentLocation.latitude);
+                    theUser.setTaskLng(currentLocation.longitude);
                 } else {
                     // wasn't able to get location, use the user's address instead
-                    setAddressIfNoLatLng(theUser, theTask);
+                    setAddressIfNoLatLng(theUser);
                 }
             } else {
                 // use the location of the set marker
-                theTask.setLat(markerLocationOnMap.latitude);
-                theTask.setLng(markerLocationOnMap.longitude);
+                theUser.setTaskLat(markerLocationOnMap.latitude);
+                theUser.setTaskLng(markerLocationOnMap.longitude);
             }
         }
 
-        theTask.saveInBackground(new SaveCallback() {
+        theUser.saveInBackground(new SaveCallback() {
              @Override
              public void done(ParseException e) {
                  // go to Waiting activity
@@ -194,19 +190,18 @@ public class CreateTaskActivity extends FragmentActivity implements
                  finish();
              }
          });
-
     }
 
-    public void setAddressIfNoLatLng(ParseWSUser user, ParseTask task) {
+    public void setAddressIfNoLatLng(ParseWSUser user) {
         if (user.getLat() == null || user.getLng() == null) {
             // Just use the address since there is no lat/lng info
-            task.setAddress(user.getAddress() + ", " + user.getCityStateZip());
+            user.setTaskAddress(user.getAddress() + ", " + user.getCityStateZip());
             //task.setLat(null); // TODO - parse doesn't like null values. Come up with something to put here.
             //task.setLng(null); // TODO - parse doesn't like null values. Come up with something to put here.
         } else {
             // use the (more precise) lat/lng instead.
-            task.setLat(user.getLat());
-            task.setLng(user.getLng());
+            user.setTaskLat(user.getLat());
+            user.setTaskLng(user.getLng());
             //task.setAddress(null); // TODO - parse doesn't like null values. Come up with something to put here.
         }
     }

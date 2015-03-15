@@ -11,13 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
-import com.al.whippersnapper.models.ParseTask;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -60,7 +57,7 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     public final static int MAX_RANGE = 10000; // 10km, TODO: this should depend on the map zoom level
 
-    private HashMap<Marker, ParseTask> markerTaskMap;
+    private HashMap<Marker, ParseWSUser> markerUserMap;
     private LayoutInflater mInflater;
 
 
@@ -87,7 +84,7 @@ public class FindTaskMapViewFragment extends Fragment implements
             //mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        markerTaskMap = new HashMap<Marker, ParseTask>();
+        markerUserMap = new HashMap<Marker, ParseWSUser>();
     }
 
     @Override
@@ -146,31 +143,31 @@ public class FindTaskMapViewFragment extends Fragment implements
 
 
     public void fetchAndSetMarkersForArea(final LatLng position) {
-        ParseQuery<ParseTask> q = ParseQuery.getQuery("Task");
+        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("_User");
         q.whereEqualTo("Available", true);
 
         // TODO: horrible hack: We'll download the entire database of tasks, then filter based on distance between the Lat/Lng.
-        q.findInBackground(new FindCallback<ParseTask>() {
+        q.findInBackground(new FindCallback<ParseWSUser>() {
             @Override
-            public void done(List<ParseTask> parseTasks, ParseException e) {
+            public void done(List<ParseWSUser> parseWSUsers, ParseException e) {
                 map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them
-                markerTaskMap.clear();
+                markerUserMap.clear();
 
                 // go through all the returned tasks and filter out the far away ones
                 // adapted from https://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
-                for (Iterator<ParseTask> it = parseTasks.iterator(); it.hasNext();) {
-                    ParseTask task = it.next();
-                    if (distance(position.latitude, (double)task.getLat(), position.longitude, (double)task.getLng()) > MAX_RANGE) {
+                for (Iterator<ParseWSUser> it = parseWSUsers.iterator(); it.hasNext();) {
+                    ParseWSUser user = it.next();
+                    if (distance(position.latitude, (double)user.getTaskLat(), position.longitude, (double)user.getTaskLng()) > MAX_RANGE) {
                         it.remove();
                     }
                 }
 
                 // create markers for each task
-                for (int i = 0; i < parseTasks.size(); i++) {
-                    ParseTask task = parseTasks.get(i);
+                for (int i = 0; i < parseWSUsers.size(); i++) {
+                    ParseWSUser user = parseWSUsers.get(i);
                     Marker marker = map.addMarker(new MarkerOptions()
-                            .position(new LatLng((double) task.getLat(), (double) task.getLng())));
-                    markerTaskMap.put(marker, task);
+                            .position(new LatLng((double) user.getTaskLat(), (double) user.getTaskLng())));
+                    markerUserMap.put(marker, user);
                 }
             }
         });
@@ -383,22 +380,13 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     @Override
     public View getInfoWindow(Marker marker) {
-        if (!markerTaskMap.containsKey(marker)) {
+        if (!markerUserMap.containsKey(marker)) {
             Toast.makeText(getActivity(), "This marker has no task data associated with it.", Toast.LENGTH_LONG).show();
             return null; // some error happened here, this should never happen
         }
 
         // gather the data for this info window
-        ParseTask task = markerTaskMap.get(marker);
-        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("ParseWSUser");
-        q.whereEqualTo("username", task.getSeniorUsername());
-        List<ParseWSUser> results = null;
-        try {
-            results = q.find();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ParseWSUser user = results.get(0); // this should always work if the database is correctly set up
+        ParseWSUser user = markerUserMap.get(marker);
 
         // set the text
         View infoWindow = mInflater.inflate(R.layout.infowindow_task, null);
@@ -406,8 +394,9 @@ public class FindTaskMapViewFragment extends Fragment implements
         TextView tvInfoSeniorName = (TextView) infoWindow.findViewById(R.id.tvInfoSeniorName);
         TextView tvInfoTaskDetails = (TextView) infoWindow.findViewById(R.id.tvInfoTaskDetails);
 
-        tvInfoTaskDetails.setText(markerTaskMap.get(marker).getTaskType());
-        tvInfoTaskDetails.setText(markerTaskMap.get(marker).getDetails());
+        tvInfoTaskType.setText(markerUserMap.get(marker).getTaskType());
+        tvInfoTaskDetails.setText(markerUserMap.get(marker).getTaskDetails());
+        tvInfoSeniorName.setText(markerUserMap.get(marker).getFullName());
 
         return infoWindow;
     }
