@@ -44,7 +44,8 @@ public class FindTaskMapViewFragment extends Fragment implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         GoogleMap.OnMarkerClickListener,
-        GoogleMap.InfoWindowAdapter {
+        GoogleMap.InfoWindowAdapter,
+        GoogleMap.OnInfoWindowClickListener {
 
 
     private SupportMapFragment mapFragment;
@@ -142,9 +143,9 @@ public class FindTaskMapViewFragment extends Fragment implements
 
 
 
-    public void fetchAndSetMarkersForArea(final LatLng position) {
+    public void setMarkersForNearbyTasks(final LatLng position) {
         ParseQuery<ParseWSUser> q = ParseQuery.getQuery("_User");
-        q.whereEqualTo("Available", true);
+        q.whereEqualTo("TaskAvailable", true); // TODO change this and other db strings to constants
 
         // TODO: horrible hack: We'll download the entire database of tasks, then filter based on distance between the Lat/Lng.
         q.findInBackground(new FindCallback<ParseWSUser>() {
@@ -219,6 +220,8 @@ public class FindTaskMapViewFragment extends Fragment implements
             map.setMyLocationEnabled(true);
             //map.setOnMapLongClickListener(this);
             map.setOnMarkerClickListener(this);
+            map.setInfoWindowAdapter(this);
+            map.setOnInfoWindowClickListener(this);
 
             // Now that map has loaded, let's get our location!
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -354,7 +357,7 @@ public class FindTaskMapViewFragment extends Fragment implements
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             map.animateCamera(cameraUpdate);
-            fetchAndSetMarkersForArea(latLng);
+            setMarkersForNearbyTasks(latLng);
             startLocationUpdates();
         } else {
             Toast.makeText(getActivity(), "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
@@ -373,8 +376,7 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        // TODO
-
+        marker.showInfoWindow();
         return true;
     }
 
@@ -404,5 +406,10 @@ public class FindTaskMapViewFragment extends Fragment implements
     @Override
     public View getInfoContents(Marker marker) {
         return null;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        // TODO
     }
 }
