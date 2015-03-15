@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.activities.FindTaskActivity;
 import com.al.whippersnapper.activities.ShowTaskDetailsActivity;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.al.whippersnapper.utils.Util;
@@ -37,6 +39,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +52,6 @@ public class FindTaskMapViewFragment extends Fragment implements
         GoogleMap.OnMarkerClickListener,
         GoogleMap.InfoWindowAdapter,
         GoogleMap.OnInfoWindowClickListener {
-
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -156,6 +158,7 @@ public class FindTaskMapViewFragment extends Fragment implements
             public void done(List<ParseWSUser> parseWSUsers, ParseException e) {
                 map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them
                 markerUserMapping.clear();
+                ((FindTaskActivity)getActivity()).getTaskItems().clear();
 
                 // go through all the returned tasks and filter out the far away ones
                 // adapted from https://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
@@ -172,7 +175,11 @@ public class FindTaskMapViewFragment extends Fragment implements
                     Marker marker = map.addMarker(new MarkerOptions()
                             .position(new LatLng((double) user.getTaskLat(), (double) user.getTaskLng())));
                     markerUserMapping.put(marker, user);
+
+                    // add the user object to the arraylist so that the List View fragment can access it
+                    ((FindTaskActivity)getActivity()).getTaskItems().add(user);
                 }
+                ((FindTaskActivity)getActivity()).getLvAdapter().notifyDataSetChanged();
             }
         });
     }

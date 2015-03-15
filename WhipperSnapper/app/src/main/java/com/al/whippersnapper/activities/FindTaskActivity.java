@@ -7,18 +7,38 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.adapters.CreateTaskFragmentPagerAdapter;
 import com.al.whippersnapper.adapters.FindTaskFragmentPagerAdapter;
+import com.al.whippersnapper.adapters.TaskAdapter;
 import com.al.whippersnapper.fragments.FindTaskListViewFragment;
 import com.al.whippersnapper.fragments.FindTaskMapViewFragment;
+import com.al.whippersnapper.models.ParseWSUser;
 import com.astuetz.PagerSlidingTabStrip;
+
+import java.util.ArrayList;
 
 public class FindTaskActivity extends FragmentActivity implements
         FindTaskMapViewFragment.OnFragmentInteractionListener,
         FindTaskListViewFragment.OnFragmentInteractionListener {
+
     private FindTaskFragmentPagerAdapter pagerAdapter;
+
+
+    private ArrayAdapter<ParseWSUser> lvAdapter;
+    private ArrayList<ParseWSUser> taskItems;
+
+
+
+    public ArrayAdapter<ParseWSUser> getLvAdapter() {
+        return lvAdapter;
+    }
+
+    public ArrayList<ParseWSUser> getTaskItems() {
+        return taskItems;
+    }
 
 
     @Override
@@ -32,6 +52,9 @@ public class FindTaskActivity extends FragmentActivity implements
 
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabsFindTask);
         tabsStrip.setViewPager(viewPager);
+
+        taskItems = new ArrayList<ParseWSUser>();
+        lvAdapter = new TaskAdapter(this, taskItems); // TODO - not sure if getActivity() will work here
     }
 
 
