@@ -24,6 +24,8 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     public static int INVALID_LOGIN_CREDENTIAL = 101; // Odd. This constant doesn't seem to exist in Parse
+    public static final boolean DEBUG_USE_REAL_PHONE_NUMBER = false;
+    public static final String DEBUG_FAKE_PHONE_NUMBER = "12125550002";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +34,8 @@ public class MainActivity extends ActionBarActivity {
         boolean creatingProfile = false;
 
         ParseWSUser thisUser = null;
-        TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         try {
-            thisUser.logIn(tMgr.getLine1Number(), "password");
+            thisUser.logIn(getThisDevicePhoneNumber(), "password");
             thisUser = (ParseWSUser) ParseWSUser.getCurrentUser();
         } catch (ParseException e) {
             if (e.getCode() == INVALID_LOGIN_CREDENTIAL) {
@@ -133,5 +134,17 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // TODO used for debugging, and apparently I have to copy/paste this function into every
+    // Activity class I want to use it from since getApplicationContext() can't be called from
+    // a static method.
+    public String getThisDevicePhoneNumber() {
+        if (MainActivity.DEBUG_USE_REAL_PHONE_NUMBER) {
+            TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+            return tMgr.getLine1Number();
+        } else {
+            return MainActivity.DEBUG_FAKE_PHONE_NUMBER;
+        }
     }
 }

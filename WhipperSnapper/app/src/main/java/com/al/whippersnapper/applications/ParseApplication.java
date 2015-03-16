@@ -6,6 +6,7 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.al.whippersnapper.activities.MainActivity;
 import com.al.whippersnapper.models.ParseChatRooms;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.parse.Parse;
@@ -28,8 +29,7 @@ public class ParseApplication extends Application {
         Parse.initialize(this, "h87Y27Wi43OUVGkYzUp8qEoJGxfrTgSYk5rMoQbN", "nwHzNf7lytl5FGkwm5DQtyXisBoCCnEnuEvYVuM2");
 
         // obtain the phone number from the device
-        TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        final String channelName = "c" +  tMgr.getLine1Number();
+        final String channelName = "c" +  getThisDevicePhoneNumber();
 
         // unsubscribe first, because if we uninstall and reinstall the app, the device will receive 2 pushes and show 2 system notifications
         ParsePush.unsubscribeInBackground(channelName, new SaveCallback() {
@@ -48,5 +48,17 @@ public class ParseApplication extends Application {
 
             }
         });
+    }
+
+    // TODO used for debugging, and apparently I have to copy/paste this function into every
+    // Activity class I want to use it from since getApplicationContext() can't be called from
+    // a static method.
+    public String getThisDevicePhoneNumber() {
+        if (MainActivity.DEBUG_USE_REAL_PHONE_NUMBER) {
+            TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+            return tMgr.getLine1Number();
+        } else {
+            return MainActivity.DEBUG_FAKE_PHONE_NUMBER;
+        }
     }
 }

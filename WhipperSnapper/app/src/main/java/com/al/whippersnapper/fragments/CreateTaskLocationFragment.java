@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.activities.CreateTaskActivity;
+import com.al.whippersnapper.activities.MainActivity;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -148,8 +149,7 @@ public class CreateTaskLocationFragment extends Fragment implements
 
         // get the current user from parse
         ParseWSUser thisUser = new ParseWSUser();
-        TelephonyManager tMgr = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        //thisUser.logIn(tMgr.getLine1Number(), "password"); // TODO: this assume the user is still logged on, test this assumption
+        //thisUser.logIn(getThisDevicePhoneNumber(), "password"); // TODO: this assume the user is still logged on, test this assumption
         thisUser = (ParseWSUser) ParseWSUser.getCurrentUser();
 
         // add actual address to the radio button text
@@ -402,4 +402,15 @@ public class CreateTaskLocationFragment extends Fragment implements
 
     }
 
+    // TODO used for debugging, and apparently I have to copy/paste this function into every
+    // Activity class I want to use it from since getApplicationContext() can't be called from
+    // a static method.
+    public String getThisDevicePhoneNumber() {
+        if (MainActivity.DEBUG_USE_REAL_PHONE_NUMBER) {
+            TelephonyManager tMgr = (TelephonyManager) getActivity().getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+            return tMgr.getLine1Number();
+        } else {
+            return MainActivity.DEBUG_FAKE_PHONE_NUMBER;
+        }
+    }
 }

@@ -89,8 +89,8 @@ public class FillOutProfileActivity extends ActionBarActivity {
         setDoneButtonIfComplete();
 
         // obtain the phone number from the device
-        TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        userPhoneNumber = tMgr.getLine1Number();
+        userPhoneNumber = getThisDevicePhoneNumber();
+
 
         // add TextWatcher to Full Name field
         etFullName.addTextChangedListener(new TextWatcher() {
@@ -318,6 +318,18 @@ public class FillOutProfileActivity extends ActionBarActivity {
         } else {
             btnCreateProfile.setText(getResources().getString(R.string.All_done));
             btnCreateProfile.setEnabled(true);
+        }
+    }
+
+    // TODO used for debugging, and apparently I have to copy/paste this function into every
+    // Activity class I want to use it from since getApplicationContext() can't be called from
+    // a static method.
+    public String getThisDevicePhoneNumber() {
+        if (MainActivity.DEBUG_USE_REAL_PHONE_NUMBER) {
+            TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+            return tMgr.getLine1Number();
+        } else {
+            return MainActivity.DEBUG_FAKE_PHONE_NUMBER;
         }
     }
 }

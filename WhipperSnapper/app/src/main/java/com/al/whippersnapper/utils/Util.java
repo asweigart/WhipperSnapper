@@ -1,5 +1,7 @@
 package com.al.whippersnapper.utils;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 
 import java.text.ParseException;
