@@ -25,7 +25,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
     public static int INVALID_LOGIN_CREDENTIAL = 101; // Odd. This constant doesn't seem to exist in Parse
     public static final boolean DEBUG_USE_REAL_PHONE_NUMBER = false;
-    public static final String DEBUG_FAKE_PHONE_NUMBER = "12125550002";
+    public static final String DEBUG_FAKE_PHONE_NUMBER = "12125550007";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +114,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -135,6 +136,7 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    */
 
     // TODO used for debugging, and apparently I have to copy/paste this function into every
     // Activity class I want to use it from since getApplicationContext() can't be called from
