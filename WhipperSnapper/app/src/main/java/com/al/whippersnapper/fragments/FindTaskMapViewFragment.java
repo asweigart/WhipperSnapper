@@ -230,7 +230,7 @@ public class FindTaskMapViewFragment extends Fragment implements
         map = googleMap;
         if (map != null) {
             // Map is ready
-            Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             map.setMyLocationEnabled(true);
             //map.setOnMapLongClickListener(this);
             map.setOnMarkerClickListener(this);
@@ -242,12 +242,12 @@ public class FindTaskMapViewFragment extends Fragment implements
                 public void onCameraChange(CameraPosition cameraPosition) {
                     double distanceMoved = distance(lastCameraPosition.latitude, cameraPosition.target.latitude,
                             lastCameraPosition.longitude, cameraPosition.target.longitude);
-                    Toast.makeText(getActivity(), "Distance moved: " + distanceMoved, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Distance moved: " + distanceMoved, Toast.LENGTH_SHORT).show();
                     if (distanceMoved > (MAX_RANGE / 4)) {
                         // camera has moved far enough (a quarter of MAX_RANGE) that we should refresh the markers
                         lastCameraPosition = cameraPosition.target;
                         setMarkersForNearbyTasks(cameraPosition.target);
-                        Toast.makeText(getActivity(), "Camera moved, updated markers", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "Camera moved, updated markers", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -261,7 +261,7 @@ public class FindTaskMapViewFragment extends Fragment implements
 
             connectClient();
         } else {
-            Toast.makeText(getActivity(), "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
     }
 
