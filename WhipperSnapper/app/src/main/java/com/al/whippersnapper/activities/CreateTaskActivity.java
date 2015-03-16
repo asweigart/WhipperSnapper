@@ -134,10 +134,10 @@ public class CreateTaskActivity extends FragmentActivity implements
         ProgressBar pbLocation = pagerAdapter.getTaskLocationFragment().getPbInLocationFrag();
         ProgressBar pbDetails = pagerAdapter.getTaskDetailsFragment().getPbInDetailsFrag();
         if (pbLocation != null) {
-            pbLocation.setVisibility(View.INVISIBLE);
+            pbLocation.setVisibility(View.VISIBLE);
         }
         if (pbDetails != null) {
-            pbDetails.setVisibility(View.INVISIBLE);
+            pbDetails.setVisibility(View.VISIBLE);
         }
         Button btnLocation = pagerAdapter.getTaskLocationFragment().getBtnDone_FromMap();
         Button btnDetails = pagerAdapter.getTaskDetailsFragment().getBtnDone_FromDetails();

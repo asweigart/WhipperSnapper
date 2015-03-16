@@ -65,7 +65,7 @@ public class TaskAdapter extends ArrayAdapter<ParseWSUser> {
             vh.ivFeatureSeniorPhoto.setImageBitmap(BitmapFactory.decodeByteArray(taskPhotoBytes, 0, taskPhotoBytes.length));
         }
 
-        // set the other task details.
+        // set the other task text views.
         vh.tvFeatureDetails.setText(user.getTaskDetails());
         vh.tvFeatureTaskType.setText(user.getTaskType());
         vh.tvFeatureSeniorName.setText(Util.getAnonymizedName(user.getFullName()));

@@ -226,10 +226,12 @@ public class FillOutProfileActivity extends ActionBarActivity {
                         // This is a senior, start the Senior Home activity
                         Intent i = new Intent(FillOutProfileActivity.this, SeniorHomeActivity.class);
                         startActivity(i);
+                        finish();
                     } else {
                         // This is a volunteer, start the Find Task activity
                         Intent i = new Intent(FillOutProfileActivity.this, FindTaskActivity.class);
                         startActivity(i);
+                        finish();
                     }
                     FillOutProfileActivity.this.finish();
                 } else {
