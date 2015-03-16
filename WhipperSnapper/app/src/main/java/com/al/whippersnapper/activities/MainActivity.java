@@ -25,7 +25,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         boolean creatingProfile = false;
 
-        ParseWSUser thisUser = new ParseWSUser();
+        ParseWSUser thisUser = null;
         TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         try {
             thisUser.logIn(tMgr.getLine1Number(), "password");
@@ -34,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
             if (e.getCode() == INVALID_LOGIN_CREDENTIAL) {
                 // bad login means the account does not exist, so launch the profile creation activity
                 Intent i = new Intent(MainActivity.this, UserTypePickerActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
                 startActivity(i);
                 creatingProfile = true;
             } else {
@@ -43,15 +44,29 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
+        final ParseWSUser finalUser = thisUser; // used so we can reference this in the callback
+
         if (!creatingProfile) {
             // logged in, so go to the appropriate senior/volunteer activity
             if (thisUser.getIsSenior()) {
-                // seniors go to the senior home activity
-                Intent i = new Intent(MainActivity.this, SeniorHomeActivity.class);
+                // handle seniors user
+                Intent i = null;
+                if (thisUser.getTaskType() == null || thisUser.getTaskType().equals("")) {
+                    // go to the senior home activity
+                    i = new Intent(MainActivity.this, SeniorHomeActivity.class);
+                } else {
+                    // go to the waiting activity
+                    i = new Intent(MainActivity.this, WaitingForChatActivity.class);
+                    i.putExtra("taskType", finalUser.getTaskType());
+                    i.putExtra("taskDetails", finalUser.getTaskDetails());
+                    i.putExtra("postedOn", finalUser.getTaskPostedOn());
+                }
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
                 startActivity(i);
             } else {
                 // volunteers go to the Find Task activity
                 Intent i = new Intent(MainActivity.this, FindTaskActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
                 startActivity(i);
             }
         }

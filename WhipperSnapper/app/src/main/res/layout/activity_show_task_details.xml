@@ -28,18 +28,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTaskDetailsType"
-        android:layout_below="@+id/ivTaskDetailsProfilePhoto"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/tvTaskDetailsSeniorName"
+        android:layout_alignLeft="@+id/tvTaskDetailsSeniorName"
+        android:layout_alignStart="@+id/tvTaskDetailsSeniorName"
+        android:layout_alignRight="@+id/tvTaskDetailsSeniorName"
+        android:layout_alignEnd="@+id/tvTaskDetailsSeniorName" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTaskDetailsDetails"
-        android:layout_below="@+id/tvTaskDetailsType"
+        android:layout_below="@+id/ivTaskDetailsProfilePhoto"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/tvTaskDetailsSeniorName"
-        android:layout_alignEnd="@+id/tvTaskDetailsSeniorName" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -57,10 +60,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTaskDetailsPostedOn"
-        android:layout_below="@+id/tvTaskDetailsDetails"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvTaskDetailsType"
+        android:layout_toRightOf="@+id/ivTaskDetailsProfilePhoto"
         android:layout_alignRight="@+id/tvTaskDetailsDetails"
-        android:layout_alignEnd="@+id/tvTaskDetailsDetails"
-        android:text="@string/Posted_on" />
+        android:layout_alignEnd="@+id/tvTaskDetailsDetails" />
 </RelativeLayout>

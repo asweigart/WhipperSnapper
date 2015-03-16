@@ -8,24 +8,39 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.models.ParseWSUser;
+import com.al.whippersnapper.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.List;
 
 public class WaitingForChatActivity extends ActionBarActivity {
+    private TextView tvWaitingTaskType;
+    private TextView tvWaitingTaskDetails;
+    private TextView tvWaitingTaskPostedOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_for_chat);
+
+        tvWaitingTaskType = (TextView) findViewById(R.id.tvWaitingTaskType);
+        tvWaitingTaskDetails = (TextView) findViewById(R.id.tvWaitingTaskDetails);
+        tvWaitingTaskPostedOn = (TextView) findViewById(R.id.tvWaitingTaskPostedOn);
+
+        // load task details into ui from the intent
+        tvWaitingTaskType.setText(getIntent().getStringExtra("taskType"));
+        tvWaitingTaskDetails.setText(getIntent().getStringExtra("taskDetails"));
+        tvWaitingTaskPostedOn.setText(Util.getRelativeTimeAgo(((Date)getIntent().getSerializableExtra("postedOn")).toString()));
     }
 
 
@@ -59,7 +74,7 @@ public class WaitingForChatActivity extends ActionBarActivity {
         theUser.setTaskLat(JSONObject.NULL);
         theUser.setTaskLng(JSONObject.NULL);
         theUser.setTaskType(JSONObject.NULL);
-        theUser.setTaskPhoto(JSONObject.NULL);*/ // Instead of setting every column to null, just set TaskType to "" and TaskAvailable to false
+        theUser.setTaskPhoto(JSONObject.NULL);*/ // Instead of setting every column to null, just set TaskType to null and TaskAvailable to false
         theUser.setTaskType("");
         theUser.setTaskAvailable(false);
 

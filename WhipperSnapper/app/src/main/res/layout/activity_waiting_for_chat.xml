@@ -30,4 +30,25 @@
         android:id="@+id/btnCancelThisTask"
         android:layout_gravity="center_horizontal"
         android:onClick="onCancelTaskClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Your_task_request"
+        android:id="@+id/tvYourTaskLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWaitingTaskType" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWaitingTaskDetails" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWaitingTaskPostedOn" />
 </LinearLayout>

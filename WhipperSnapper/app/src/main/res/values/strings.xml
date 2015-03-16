@@ -62,4 +62,5 @@
     <string name="title_activity_show_task_details">ShowTaskDetailsActivity</string>
     <string name="Offer_to_do_this_task">Offer to do this task.</string>
     <string name="Posted_on">Posted on:\s</string>
+    <string name="Your_task_request">Your task request:</string>
 </resources>

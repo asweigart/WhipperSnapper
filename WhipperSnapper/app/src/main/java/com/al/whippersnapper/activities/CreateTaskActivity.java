@@ -104,7 +104,7 @@ public class CreateTaskActivity extends FragmentActivity implements
         }
 
         ImageView ivTaskPhoto = pagerAdapter.getTaskDetailsFragment().getIvTaskPhoto(); // Did I mention that I don't like Java?
-        Log.e("XXXXXXXXXX", "Original size: " + photo.getWidth() + " " + photo.getHeight());
+        //Log.e("XXXXXXXXXX", "Original size: " + photo.getWidth() + " " + photo.getHeight());
         if (photo != null) {
             // Scale the photo
             Matrix m = new Matrix();
@@ -149,15 +149,17 @@ public class CreateTaskActivity extends FragmentActivity implements
         }
 
 
-        ParseWSUser theUser = (ParseWSUser) ParseWSUser.getCurrentUser();
+        final ParseWSUser theUser = (ParseWSUser) ParseWSUser.getCurrentUser();
 
         // Set the task columns in the database
         theUser.setTaskAvailable(true);
         theUser.setTaskDetails(pagerAdapter.getTaskDetailsFragment().getEtTaskDetails().getText().toString()); // Have I mentioned that I don't care for Java?
         theUser.setTaskType(pagerAdapter.getTaskDetailsFragment().getSpTaskType().getSelectedItem().toString());
         theUser.setTaskPostedOn(new Date());
-        ParseFile taskPhotoFile = new ParseFile("taskPhoto.jpg", photoBytes);
-        theUser.setTaskPhoto(taskPhotoFile);
+        if (photoBytes != null) {
+            ParseFile taskPhotoFile = new ParseFile("taskPhoto.jpg", photoBytes);
+            theUser.setTaskPhoto(taskPhotoFile);
+        }
 
         // figure out the final lat lng
         if (pagerAdapter.getTaskLocationFragment().getRbMyHomeAddress().isChecked()) {
@@ -191,6 +193,9 @@ public class CreateTaskActivity extends FragmentActivity implements
                  // go to Waiting activity
                  Intent i = new Intent(CreateTaskActivity.this, WaitingForChatActivity.class);
                  i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                 i.putExtra("taskType", theUser.getTaskType());
+                 i.putExtra("taskDetails", theUser.getTaskDetails());
+                 i.putExtra("postedOn", theUser.getTaskPostedOn());
                  startActivity(i);
                  finish();
              }
