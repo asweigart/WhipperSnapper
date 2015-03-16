@@ -7,4 +7,5 @@
     <dimen name="profile_photo_on_signup_size">130dp</dimen>
     <dimen name="task_photo_size">80dp</dimen>
     <dimen name="profile_photo_in_find_tasks">80dp</dimen>
+    <dimen name="AcceptDeclineButtonHeight">40dp</dimen>
 </resources>

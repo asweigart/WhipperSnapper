@@ -6,6 +6,7 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.al.whippersnapper.models.ParseChatRooms;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -20,6 +21,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(ParseWSUser.class);
+        ParseObject.registerSubclass(ParseChatRooms.class);
 
         // Add your initialization code here
         Parse.enableLocalDatastore(this);
@@ -27,16 +29,23 @@ public class ParseApplication extends Application {
 
         // obtain the phone number from the device
         TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        String channelName = "c" +  tMgr.getLine1Number();
+        final String channelName = "c" +  tMgr.getLine1Number();
 
-        ParsePush.subscribeInBackground(channelName, new SaveCallback() { // channel must start with a letter, so I chose "c"
+        // unsubscribe first, because if we uninstall and reinstall the app, the device will receive 2 pushes and show 2 system notifications
+        ParsePush.unsubscribeInBackground(channelName, new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null) {
-                    Log.e("XXXXXXXXcom.parse.push", "successfully subscribed to the broadcast channel.");
-                } else {
-                    Log.e("XXXXXXXXcom.parse.push", "failed to subscribe for push", e);
-                }
+                ParsePush.subscribeInBackground(channelName, new SaveCallback() { // channel must start with a letter, so I chose "c"
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.e("XXXXXXXXcom.parse.push", "successfully subscribed to the broadcast channel.");
+                        } else {
+                            Log.e("XXXXXXXXcom.parse.push", "failed to subscribe for push", e);
+                        }
+                    }
+                });
+
             }
         });
     }

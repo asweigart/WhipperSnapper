@@ -453,6 +453,7 @@ public class FindTaskMapViewFragment extends Fragment implements
         i.putExtra("taskDetails", user.getTaskDetails());
         i.putExtra("postedOn", Util.getRelativeTimeAgo(user.getTaskPostedOn().toString())); // TODO - might want to reformat this date, or have a relative "9 minutes ago" string
         i.putExtra("taskPhoto", taskPhotoBytes);
+        i.putExtra("seniorUsername", user.getUsername());
         startActivity(i);
     }
 }

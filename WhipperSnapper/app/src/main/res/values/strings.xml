@@ -63,4 +63,7 @@
     <string name="Offer_to_do_this_task">Offer to do this task.</string>
     <string name="Posted_on">Posted on:\s</string>
     <string name="Your_task_request">Your task request:</string>
+    <string name="Send">Send</string>
+    <string name="Say_something">Say something...</string>
+    <string name="You_are_chatting_with">You are chatting with:</string>
 </resources>

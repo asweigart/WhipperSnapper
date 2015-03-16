@@ -11,9 +11,15 @@ import android.view.MenuItem;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.applications.ParseApplication;
+import com.al.whippersnapper.models.ParseChatRooms;
 import com.al.whippersnapper.models.ParseWSUser;
+import com.al.whippersnapper.utils.Util;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -48,27 +54,59 @@ public class MainActivity extends ActionBarActivity {
 
         if (!creatingProfile) {
             // logged in, so go to the appropriate senior/volunteer activity
+
+            // First check if the user is in a chatroom
+            ParseQuery<ParseChatRooms> q = ParseQuery.getQuery("ChatRooms");
             if (thisUser.getIsSenior()) {
-                // handle seniors user
-                Intent i = null;
-                if (thisUser.getTaskType() == null || thisUser.getTaskType().equals("")) {
-                    // go to the senior home activity
-                    i = new Intent(MainActivity.this, SeniorHomeActivity.class);
-                } else {
-                    // go to the waiting activity
-                    i = new Intent(MainActivity.this, WaitingForChatActivity.class);
-                    i.putExtra("taskType", finalUser.getTaskType());
-                    i.putExtra("taskDetails", finalUser.getTaskDetails());
-                    i.putExtra("postedOn", finalUser.getTaskPostedOn());
-                }
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
-                startActivity(i);
+                q.whereEqualTo("SeniorUsername", thisUser.getUsername());
             } else {
-                // volunteers go to the Find Task activity
-                Intent i = new Intent(MainActivity.this, FindTaskActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
-                startActivity(i);
+                q.whereEqualTo("VolunteerUsername", thisUser.getUsername());
             }
+            q.findInBackground(new FindCallback<ParseChatRooms>() {
+                @Override
+                public void done(List<ParseChatRooms> parseChatRoomses, ParseException e) {
+                    Intent i = null;
+                    boolean inChatRoom = parseChatRoomses.size() > 0; // TODO - this should only ever be 0 or 1
+
+                    if (finalUser.getIsSenior()) {
+
+                        // handle senior users
+                        if (inChatRoom) {
+                            // go to the Chat Room activity
+                            i = new Intent(MainActivity.this, ChatActivity.class);
+                            i.putExtra("otherUsername", parseChatRoomses.get(0).getVolunteerUsername());
+                            i.putExtra("otherUserFullName", parseChatRoomses.get(0).getVolunteerFullName());
+                        } else if (finalUser.getTaskType() == null || finalUser.getTaskType().equals("")) {
+                            // go to the Senior Home activity
+                            i = new Intent(MainActivity.this, SeniorHomeActivity.class);
+                        } else {
+                            // go to the Waiting activity
+                            i = new Intent(MainActivity.this, WaitingForChatActivity.class);
+                            i.putExtra("taskType", finalUser.getTaskType());
+                            i.putExtra("taskDetails", finalUser.getTaskDetails());
+                            i.putExtra("postedOn", finalUser.getTaskPostedOn());
+                        }
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                        startActivity(i);
+                    } else {
+
+                        // handle volunteer users
+                        if (inChatRoom) {
+                            // go to the Chat Room activity
+                            i = new Intent(MainActivity.this, ChatActivity.class);
+                            i.putExtra("otherUsername", parseChatRoomses.get(0).getSeniorUsername());
+                            i.putExtra("otherUserFullName", Util.getAnonymizedName(parseChatRoomses.get(0).getSeniorFullName()));
+                        } else {
+                            // go to the Find Task activity
+                            i = new Intent(MainActivity.this, FindTaskActivity.class);
+                        }
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                        startActivity(i);
+                    }
+                }
+            });
+
+
         }
 
 

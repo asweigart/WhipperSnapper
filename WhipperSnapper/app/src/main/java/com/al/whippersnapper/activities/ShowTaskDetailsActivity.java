@@ -1,5 +1,6 @@
 package com.al.whippersnapper.activities;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.models.ParseChatRooms;
+import com.al.whippersnapper.models.ParseWSUser;
+import com.al.whippersnapper.utils.Util;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.List;
 
 public class ShowTaskDetailsActivity extends ActionBarActivity {
 
@@ -18,6 +29,7 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
     private TextView tvTaskDetailsType;
     private TextView tvTaskDetailsDetails;
     private TextView tvTaskDetailsPostedOn;
+    private String seniorUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +51,7 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
         tvTaskDetailsType.setText(getIntent().getStringExtra("taskType"));
         tvTaskDetailsDetails.setText(getIntent().getStringExtra("taskDetails"));
         tvTaskDetailsPostedOn.setText(getIntent().getStringExtra("postedOn"));
+        seniorUsername = getIntent().getStringExtra("seniorUsername");
     }
 
 
@@ -65,6 +78,47 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
     }
 
     public void onOfferClick(View v) {
-        // TODO
+        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("_User");
+        q.whereEqualTo("username", seniorUsername);
+        q.findInBackground(new FindCallback<ParseWSUser>() {
+            @Override
+            public void done(List<ParseWSUser> parseWSUsers, ParseException e) {
+                if (e == null) {
+                    ParseWSUser thisUser = (ParseWSUser) ParseUser.getCurrentUser();
+                    ParseWSUser senior = parseWSUsers.get(0); // TODO this shouldn't possible fail, there should always be 1 senior unless the db is incoherent
+
+                    // add chat room to the db
+                    ParseChatRooms chatRoom = new ParseChatRooms();
+                    chatRoom.setSeniorUsername(senior.getUsername());
+                    chatRoom.setSeniorFullName(senior.getFullName());
+                    chatRoom.setVolunteerUsername(thisUser.getUsername());
+                    chatRoom.setVolunteerFullName(thisUser.getFullName());
+
+                    try {
+                        chatRoom.save();
+                    } catch (ParseException e2) {
+                        e2.printStackTrace();
+                    }
+
+                    // send push to the senior
+                    ParsePush push = new ParsePush();
+                    push.setChannel(senior.getUsername());
+                    push.setMessage(thisUser.getFullName() + " has offered to do this task for you. Click to open chat.");
+                    try {
+                        push.send();
+                    } catch (ParseException e3) {
+                        e3.printStackTrace();
+                    }
+
+                    // start the chat activity
+                    Intent i = new Intent(ShowTaskDetailsActivity.this, ChatActivity.class);
+                    i.putExtra("otherUsername", senior.getUsername());
+                    i.putExtra("otherUserFullName", Util.getAnonymizedName(senior.getFullName()));
+                    startActivity(i);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

@@ -6,7 +6,70 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.al.whippersnapper.activities.ChatActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/AcceptDeclineButtonHeight"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/decline"
+            android:id="@+id/btnDeclineOffer"
+            android:layout_weight="1"
+            android:onClick="onDeclineOfferClick" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/accept"
+            android:id="@+id/btnAcceptOffer"
+            android:layout_weight="1"
+            android:onClick="onAcceptOfferClick" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvChat"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/etMessageToSend"
+        android:layout_below="@+id/tvOtherUserName" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etMessageToSend"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/btnSend"
+        android:layout_toStartOf="@+id/btnSend"
+        android:layout_alignTop="@+id/btnSend"
+        android:hint="@string/Say_something" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Send"
+        android:id="@+id/btnSend"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onSendClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvOtherUserName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/lvChat"
+        android:layout_alignEnd="@+id/lvChat" />
 </RelativeLayout>

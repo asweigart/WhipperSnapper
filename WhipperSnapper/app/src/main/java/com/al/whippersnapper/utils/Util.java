@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public final class Util {
+    public static String CHAT_ROOM_SEPARATOR = "|||";
+
     public static String getAnonymizedName(String fullName) {
         int firstSpace = fullName.indexOf(" ");
         if ((firstSpace == -1) || (fullName.length() == firstSpace + 1)) {
