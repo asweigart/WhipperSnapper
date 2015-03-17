@@ -9,7 +9,26 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
+        android:id="@+id/pbMainProgressBar"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="@dimen/no_internet_size"
+        android:layout_height="@dimen/no_internet_size"
+        android:id="@+id/ivNoInternet"
+        android:visibility="gone"
+        android:src="@mipmap/ic_no_internet"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Theres_no_internet_connection_right_now"
+        android:id="@+id/tvNoInternetLabel"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 </RelativeLayout>

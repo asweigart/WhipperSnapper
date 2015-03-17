@@ -8,6 +8,11 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.applications.ParseApplication;
@@ -49,6 +54,17 @@ public class MainActivity extends ActionBarActivity {
                 // TODO - do airplane mode test here
                 e.printStackTrace();
             }
+        }
+        if (thisUser == null) {
+            // there's no internet access
+            // hide the progress bar and show the "no internet" image.
+            ProgressBar pbMainProgressBar = (ProgressBar) findViewById(R.id.pbMainProgressBar);
+            pbMainProgressBar.setVisibility(View.GONE);
+            ImageView ivNoInterent = (ImageView) findViewById(R.id.ivNoInternet);
+            ivNoInterent.setVisibility(View.VISIBLE);
+            TextView tvNoInternetLabel = (TextView) findViewById(R.id.tvNoInternetLabel);
+            tvNoInternetLabel.setVisibility(View.VISIBLE);
+            return;
         }
 
         final ParseWSUser finalUser = thisUser; // used so we can reference this in the callback
