@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Whippersnapper</string>
+    <string name="app_name">WhipperSnapper</string>
 
     <string-array name="taskTypes">
         <item>Outdoor, Gardening</item>
