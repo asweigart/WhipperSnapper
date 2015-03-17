@@ -152,7 +152,6 @@ public class CreateTaskActivity extends FragmentActivity implements
         final ParseWSUser theUser = (ParseWSUser) ParseWSUser.getCurrentUser();
 
         // Set the task columns in the database
-        theUser.setTaskAvailable(true);
         theUser.setTaskDetails(pagerAdapter.getTaskDetailsFragment().getEtTaskDetails().getText().toString()); // Have I mentioned that I don't care for Java?
         theUser.setTaskType(pagerAdapter.getTaskDetailsFragment().getSpTaskType().getSelectedItem().toString());
         theUser.setTaskPostedOn(new Date());

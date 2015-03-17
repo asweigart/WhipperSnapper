@@ -77,7 +77,8 @@ public class MainActivity extends ActionBarActivity {
                             i = new Intent(MainActivity.this, ChatActivity.class);
                             i.putExtra("otherUsername", parseChatRoomses.get(0).getVolunteerUsername());
                             i.putExtra("otherUserFullName", parseChatRoomses.get(0).getVolunteerFullName());
-                        } else if (finalUser.getTaskType() == null || finalUser.getTaskType().equals("")) {
+                            i.putExtra("fromShowTaskDetailsActivity", false); // don't add the task summary chat message
+                        } else if (finalUser.getTaskType() == null || finalUser.getTaskType().equals("")) { // a blank task type is a "deleted" (non-existent, unset) task.
                             // go to the Senior Home activity
                             i = new Intent(MainActivity.this, SeniorHomeActivity.class);
                         } else {
@@ -97,6 +98,7 @@ public class MainActivity extends ActionBarActivity {
                             i = new Intent(MainActivity.this, ChatActivity.class);
                             i.putExtra("otherUsername", parseChatRoomses.get(0).getSeniorUsername());
                             i.putExtra("otherUserFullName", Util.getAnonymizedName(parseChatRoomses.get(0).getSeniorFullName()));
+                            i.putExtra("fromShowTaskDetailsActivity", false); // don't add the task summary chat message
                         } else {
                             // go to the Find Task activity
                             i = new Intent(MainActivity.this, FindTaskActivity.class);

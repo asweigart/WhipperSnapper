@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.adapters.ChatListAdapter;
 import com.al.whippersnapper.models.ChatMessage;
+import com.al.whippersnapper.models.ParseChatRooms;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.al.whippersnapper.utils.Util;
 import com.parse.FindCallback;
@@ -34,6 +35,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatActivity extends ActionBarActivity {
+    // messages to send for chat events
+    public final static String SENIOR_DECLINE = "SENIOR_DECLINE";
+    public final static String SENIOR_ACCEPT = "SENIOR_ACCEPT";
+    public final static String VOLUNTEER_DECLINE = "VOLUNTEER_DECLINE";
+    public final static String END = "END"; // needed because pubnub can't clear history for a channel
+
     private ParseWSUser otherUser;
     private TextView tvOtherUserName;
     private Button btnAccept;
@@ -61,6 +68,7 @@ public class ChatActivity extends ActionBarActivity {
 
         String otherUsername = getIntent().getStringExtra("otherUsername");
         String otherUserFullName = getIntent().getStringExtra("otherUserFullName");
+        boolean fromShowTaskDetailsActivity = getIntent().getBooleanExtra("fromShowTaskDetailsActivity", false);
 
         // hide the accept button if this is the volunteer
         if (!thisUser.getIsSenior()) {
@@ -79,8 +87,12 @@ public class ChatActivity extends ActionBarActivity {
 
 
 
+
         pubnub = new Pubnub("pub-c-b441d296-3edc-4025-b178-97c45e8f92aa", "sub-c-e2a329fa-cc25-11e4-8a92-02ee2ddab7fe");
         subscribeToChannel();
+        if (fromShowTaskDetailsActivity) {
+            // the volunteer has offered to help
+        }
         refreshAndPopulateFromHistory();
     }
 
@@ -175,6 +187,7 @@ public class ChatActivity extends ActionBarActivity {
         // and search for this. If END is found, we ignore all the previous messages.
         Callback callback = new Callback() {
             public void successCallback(String channel, Object response) {
+                super.successCallback(channel, response);
                 Log.e("XXXXXXXXXXXX", "SUCCESS HISTORY " + response.toString());
                 try {
                     // search for an "END" message, starting from the end.
@@ -229,16 +242,75 @@ public class ChatActivity extends ActionBarActivity {
 
 
     public void onDeclineOfferClick(View v) {
-        Intent i = new Intent();
-        i.putExtra("offerResponse", "decline");
-        setResult(RESULT_OK, i);
-        finish();
+        if (thisUser.getIsSenior()) {
+            endChat(SENIOR_DECLINE);
+        } else {
+            endChat(VOLUNTEER_DECLINE);
+        }
     }
 
     public void onAcceptOfferClick(View v) {
-        Intent i = new Intent();
-        i.putExtra("offerResponse", "accept");
-        setResult(RESULT_OK, i);
-        finish();
+        endChat(SENIOR_ACCEPT); // only seniors should have access to an accept button
+    }
+
+    public void endChat(final String messageType) {
+        final String seniorUsername; // uhg. to avoid having to do a lookup in the db, let's just pass whatever username we have tp  deleteChatRoom()
+        final String volunteerUsername;
+        if (thisUser.getIsSenior()) {
+            seniorUsername = thisUser.getUsername();
+            volunteerUsername = "";
+        } else {
+            seniorUsername = "";
+            volunteerUsername = thisUser.getUsername();
+        }
+        pubnub.publish(chatRoomName, messageType, new Callback() {
+            @Override
+            public void successCallback(String channel, Object response) {
+                super.successCallback(channel, response);
+                Log.e("XXXXXXXXXXXX", response.toString());
+                pubnub.publish(chatRoomName, END, new Callback() {
+                    @Override
+                    public void successCallback(String channel, Object response2) {
+                        super.successCallback(channel, response2);
+                        Log.e("XXXXXXXXXXXX",response2.toString());
+
+                        // delete the chat room
+                        deleteChatRoom(seniorUsername, volunteerUsername);
+
+                        // if this is an accept, also delete the task
+                        if (messageType.equals(SENIOR_ACCEPT)) {
+                            thisUser.setTaskType(""); // setting task type to blank is enough to "delete" it.
+                            thisUser.saveInBackground(); // nothing else needs to be done after this, so we don't need a callback here.
+                        }
+
+                    }
+                });
+            }
+        });
+        finish(); // TODO - test that this goes back to SeniorHome/FindTask activity
+    }
+
+    public void deleteChatRoom(String seniorUsername, String volunteerUsername) {
+        // one of seniorUsername and volunteerUsername will be blank. This is fine since we only need one since a user can only be in one chat room at a time.
+        ParseQuery<ParseChatRooms> q = ParseQuery.getQuery("ChatRooms");
+        List<ParseChatRooms> results = null;
+        try {
+            results = q.find(); // this is only called from background threads already, so no need to do in background
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        ParseChatRooms chatRoom = null;
+        for (int i = 0; i < results.size(); i++) {
+            chatRoom = results.get(i);
+            if (chatRoom.getSeniorUsername() == seniorUsername) {
+                try {
+                    chatRoom.delete();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                break; // technically, there should only ever be at most one chat room in the db at a time, so we can break here.
+            }
+        }
     }
 }

@@ -12,8 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.models.ParseChatRooms;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.al.whippersnapper.utils.Util;
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
@@ -76,18 +79,46 @@ public class WaitingForChatActivity extends ActionBarActivity {
         theUser.setTaskType(JSONObject.NULL);
         theUser.setTaskPhoto(JSONObject.NULL);*/ // Instead of setting every column to null, just set TaskType to null and TaskAvailable to false
         theUser.setTaskType("");
-        theUser.setTaskAvailable(false);
 
-        theUser.saveInBackground(new SaveCallback() {
+        // NOTE: Still need to delete the chat room, since it could have been started by a volunteer while the senior is still on this activity.
+        // post an SENIOR_CANCEL and END message TODO - actually, this is an edge case and I'll leave it unfixed for now.
+        // TODO - also, if the user has cancel without posting the END message, if this volunteer does a task for the senior again, the old chat messages will appear. Could fix this by adding a random task id to the ParseWSUser table and the chat room name.
+
+        // delete this chat
+        final ParseWSUser finalUser = theUser;
+        ParseQuery<ParseChatRooms> q = new ParseQuery("ChatRooms");
+        q.findInBackground(new FindCallback<ParseChatRooms>() {
             @Override
-            public void done(ParseException e) {
-                Toast.makeText(WaitingForChatActivity.this, getResources().getString(R.string.Your_task_request_has_been_canceled), Toast.LENGTH_LONG).show();
+            public void done(List<ParseChatRooms> parseChatRoomses, ParseException e) {
+                for (int i = 0; i < parseChatRoomses.size(); i++) {
+                    // find the chat room with this senior in it.
+                    if (parseChatRoomses.get(i).getSeniorUsername().equals(finalUser.getUsername())) {
+                        parseChatRoomses.get(i).deleteInBackground(new DeleteCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                // update the ParseWSUser changes after the delete has completed
+                                finalUser.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        Toast.makeText(WaitingForChatActivity.this, getResources().getString(R.string.Your_task_request_has_been_canceled), Toast.LENGTH_LONG).show();
 
-                Intent i = new Intent(WaitingForChatActivity.this, SeniorHomeActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
-                startActivity(i);
-                finish();
+                                        Intent i = new Intent(WaitingForChatActivity.this, SeniorHomeActivity.class);
+                                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                });
+                            }
+                        }); // delete this chat room
+
+                        break; // done looking for the chat room to delete, so break
+                    }
+                }
+
+
             }
         });
+
+
     }
 }

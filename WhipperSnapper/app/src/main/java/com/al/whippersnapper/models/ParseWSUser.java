@@ -95,13 +95,6 @@ public class ParseWSUser extends ParseUser {
         put("TaskDetails", value);
     }
 
-    public boolean getTaskAvailable() {
-        return getBoolean("TaskAvailable");
-    }
-    public void setTaskAvailable(boolean value) {
-        put("TaskAvailable", value);
-    }
-
     public String getTaskAddress() {
         return getString("TaskAddress");
     }
