@@ -34,17 +34,21 @@ public class ParseApplication extends Application {
         // unsubscribe first, because if we uninstall and reinstall the app, the device will receive 2 pushes and show 2 system notifications
         ParsePush.unsubscribeInBackground(channelName, new SaveCallback() {
             @Override
-            public void done(ParseException e) {
-                ParsePush.subscribeInBackground(channelName, new SaveCallback() { // channel must start with a letter, so I chose "c"
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Log.e("XXXXXXXXcom.parse.push", "successfully subscribed to the broadcast channel.");
-                        } else {
-                            Log.e("XXXXXXXXcom.parse.push", "failed to subscribe for push", e);
+            public void done(ParseException e1) {
+                if (e1 == null) {
+                    ParsePush.subscribeInBackground(channelName, new SaveCallback() { // channel must start with a letter, so I chose "c"
+                        @Override
+                        public void done(ParseException e2) {
+                            if (e2 == null) {
+                                Log.e("XXXXXXXXcom.parse.push", "successfully subscribed to the broadcast channel.");
+                            } else {
+                                Log.e("XXXXXXXXcom.parse.push", "failed to subscribe for push", e2);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    e1.printStackTrace();
+                }
 
             }
         });

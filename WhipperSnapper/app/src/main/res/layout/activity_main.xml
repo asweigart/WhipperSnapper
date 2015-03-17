@@ -11,17 +11,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/pbMainProgressBar"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="visible" />
 
     <ImageView
         android:layout_width="@dimen/no_internet_size"
         android:layout_height="@dimen/no_internet_size"
         android:id="@+id/ivNoInternet"
-        android:visibility="gone"
         android:src="@mipmap/ic_no_internet"
-        android:layout_centerVertical="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:layout_above="@+id/tvNoInternetLabel"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,5 +31,5 @@
         android:id="@+id/tvNoInternetLabel"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 </RelativeLayout>
