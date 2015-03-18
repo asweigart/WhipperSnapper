@@ -428,4 +428,8 @@ public class ChatActivity extends ActionBarActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
         startActivity(i);
     }
+
+    public void onCallClick() {
+
+    }
 }

@@ -382,7 +382,7 @@ public class CreateTaskLocationFragment extends Fragment implements
         // Display the connection status
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location != null) {
-            Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             map.animateCamera(cameraUpdate);

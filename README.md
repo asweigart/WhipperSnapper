@@ -5,21 +5,20 @@ WhipperSnapper is an app that connects senior citizens with volunteers to help t
 
 Required stories:
 
- * [X] Seniors and users can create profiles of their contact information.
- * [ ] Seniors can posts tasks to the server.
- * [ ] Volunteers can use a map interface to find tasks near them.
- * [ ] Seniors and volunteers can enter a chat with each other for exchanging questions and details.
- * [ ] Seniors receive a system notification when a volunteer offers help for a task.
- * [ ] Users can modify their profile details.
- * [ ] Users can upload a personal photo or use the phone's camera.
- * [ ] GPS will locate the user as a starting point for searches/task posts.
- * [ ] Seniors can press a button in chat to have their phone call the volunteer.
+ * [X] Users can create profiles of their contact information.
+ * [X] User can attach/take a photo to their profile.
+ * [X] Seniors can posts tasks to the server.
+ * [X] Seniors can attach/take a photo to their task.
+ * [X] Volunteers can use a map interface to find tasks near them.
+ * [X] Volunteers can use a list view to find nearby tasks.
+ * [X] Seniors and volunteers can enter a chat with each other for exchanging questions and details.
+ * [X] Seniors receive a system notification when a volunteer offers help for a task.
+ * [X] Seniors can accept or decline an offer of help. Volunteers can decline their help offer.
+ * [X] GPS will locate the user as a starting point for searches/task posts.
 
+# Demo:
 
-Optional stories:
-
- * [ ] Users can sign in with their Facebook profile.
- * [ ] Users can provide feedback about their experience for each task.
+ ![Demo](demo.gif)
 
 # Wireframes:
 
