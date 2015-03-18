@@ -34,7 +34,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
     public static int INVALID_LOGIN_CREDENTIAL = 101; // Odd. This constant doesn't seem to exist in Parse
     public static final boolean DEBUG_USE_REAL_PHONE_NUMBER = false;
-    public static String DEBUG_FAKE_PHONE_NUMBER = "12125550004";
+    public static String DEBUG_FAKE_PHONE_NUMBER = "12125550007";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,21 +90,26 @@ public class MainActivity extends ActionBarActivity {
                     Intent i = null;
                     boolean inChatRoom = parseChatRoomses.size() > 0; // TODO - this should only ever be 0 or 1
 
-                    if (finalUser.getIsSenior()) {
-                        // get profile photo info of both users if chat activity will be launched
-                        if (inChatRoom) {
-                            try {
-                                ParseQuery<ParseWSUser> q2 = ParseQuery.getQuery("User");
+                    // get profile photo info of both users if chat activity will be launched
+                    if (inChatRoom) {
+                        try {
+                            // get the user object of the other user
+                            ParseQuery<ParseWSUser> q2 = ParseQuery.getQuery("_User");
+                            if (finalUser.getIsSenior()) {
                                 q2.whereEqualTo("username", parseChatRoomses.get(0).getVolunteerUsername());
-                                List<ParseWSUser> results = q2.find();
-
-                                thisUserPhotoBytes = finalUser.getPhoto().getData(); // assume that senior is "theUser", we'll swap it if that's not the case.
-                                otherUserPhotoBytes = results.get(0).getPhoto().getData();
-                            } catch (ParseException e2) {
-                                e2.printStackTrace();
+                            } else {
+                                q2.whereEqualTo("username", parseChatRoomses.get(0).getSeniorUsername());
                             }
-                        }
+                            List<ParseWSUser> results = q2.find();
 
+                            thisUserPhotoBytes = finalUser.getPhoto().getData();
+                            otherUserPhotoBytes = results.get(0).getPhoto().getData();
+                        } catch (ParseException e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+
+                    if (finalUser.getIsSenior()) {
                         // handle senior users
                         if (inChatRoom) {
                             // go to the Chat Room activity
@@ -135,8 +140,8 @@ public class MainActivity extends ActionBarActivity {
                             i.putExtra("otherUsername", parseChatRoomses.get(0).getSeniorUsername());
                             i.putExtra("otherUserFullName", Util.getAnonymizedName(parseChatRoomses.get(0).getSeniorFullName()));
                             i.putExtra("fromShowTaskDetailsActivity", false); // don't add the task summary chat message
-                            i.putExtra("thisUserPhoto", otherUserPhotoBytes); // swapping, since the senior profile photo is stored in "thisUserPhotoBytes"
-                            i.putExtra("otherUserPhoto", thisUserPhotoBytes);
+                            i.putExtra("thisUserPhoto", thisUserPhotoBytes);
+                            i.putExtra("otherUserPhoto", otherUserPhotoBytes);
                         } else {
                             // go to the Find Task activity
                             i = new Intent(MainActivity.this, FindTaskActivity.class);

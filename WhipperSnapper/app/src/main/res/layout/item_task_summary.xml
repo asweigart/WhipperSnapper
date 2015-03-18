@@ -6,7 +6,7 @@
     <ImageView
         android:layout_width="@dimen/profile_photo_in_find_tasks"
         android:layout_height="@dimen/profile_photo_in_find_tasks"
-        android:id="@+id/ivFeatureSeniorPhoto"
+        android:id="@+id/ivFeatureTaskPhoto"
         android:src="@mipmap/ic_launcher"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -20,7 +20,7 @@
         android:maxLines="2"
         android:ellipsize="end"
         android:layout_below="@+id/tvFeaturePostedOn"
-        android:layout_toRightOf="@+id/ivFeatureSeniorPhoto"
+        android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvFeatureSeniorName"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ivFeatureSeniorPhoto"
+        android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -40,8 +40,8 @@
         android:layout_below="@+id/tvFeatureSeniorName"
         android:layout_alignRight="@+id/tvFeaturePostedOn"
         android:layout_alignEnd="@+id/tvFeaturePostedOn"
-        android:layout_toRightOf="@+id/ivFeatureSeniorPhoto"
-        android:layout_toEndOf="@+id/ivFeatureSeniorPhoto" />
+        android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
+        android:layout_toEndOf="@+id/ivFeatureTaskPhoto" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
         android:id="@+id/tvFeaturePostedOn"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/tvFeatureTaskType"
-        android:layout_toRightOf="@+id/ivFeatureSeniorPhoto"
-        android:layout_toEndOf="@+id/ivFeatureSeniorPhoto" />
+        android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
+        android:layout_toEndOf="@+id/ivFeatureTaskPhoto" />
 
 </RelativeLayout>

@@ -78,7 +78,7 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
     }
 
     public void onOfferClick(View v) {
-        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("User");
+        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("_User");
         q.whereEqualTo("username", seniorUsername);
         q.findInBackground(new FindCallback<ParseWSUser>() {
             @Override

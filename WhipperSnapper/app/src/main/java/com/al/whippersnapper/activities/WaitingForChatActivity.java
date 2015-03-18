@@ -81,7 +81,7 @@ public class WaitingForChatActivity extends ActionBarActivity {
                                 if (inChatRoom) {
                                     // load the profile photo bytes of both users
                                     try {
-                                        ParseQuery<ParseWSUser> q2 = ParseQuery.getQuery("User");
+                                        ParseQuery<ParseWSUser> q2 = ParseQuery.getQuery("_User");
                                         q2.whereEqualTo("username", parseChatRoomses.get(0).getVolunteerUsername());
                                         List<ParseWSUser> results = q2.find();
 

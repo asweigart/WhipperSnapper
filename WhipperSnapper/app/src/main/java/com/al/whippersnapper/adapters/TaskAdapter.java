@@ -23,7 +23,7 @@ public class TaskAdapter extends ArrayAdapter<ParseWSUser> {
     }
 
     private static class ViewHolder {
-        ImageView ivFeatureSeniorPhoto;
+        ImageView ivFeatureTaskPhoto;
         TextView tvFeatureDetails;
         TextView tvFeatureSeniorName;
         TextView tvFeatureTaskType;
@@ -38,7 +38,7 @@ public class TaskAdapter extends ArrayAdapter<ParseWSUser> {
         if (convertView == null) {
             vh = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_task_summary, parent, false);
-            vh.ivFeatureSeniorPhoto = (ImageView) convertView.findViewById(R.id.ivFeatureSeniorPhoto);
+            vh.ivFeatureTaskPhoto = (ImageView) convertView.findViewById(R.id.ivFeatureTaskPhoto);
             vh.tvFeatureDetails = (TextView) convertView.findViewById(R.id.tvFeatureDetails);
             vh.tvFeatureSeniorName = (TextView) convertView.findViewById(R.id.tvFeatureSeniorName);
             vh.tvFeatureTaskType = (TextView) convertView.findViewById(R.id.tvFeatureTaskType);
@@ -59,7 +59,7 @@ public class TaskAdapter extends ArrayAdapter<ParseWSUser> {
             e.printStackTrace();
         }
         if (taskPhotoBytes != null) { // only set the image if there is an image
-            vh.ivFeatureSeniorPhoto.setImageBitmap(BitmapFactory.decodeByteArray(taskPhotoBytes, 0, taskPhotoBytes.length));
+            vh.ivFeatureTaskPhoto.setImageBitmap(BitmapFactory.decodeByteArray(taskPhotoBytes, 0, taskPhotoBytes.length));
         }
 
         // set the other task text views.
