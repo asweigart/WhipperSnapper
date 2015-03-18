@@ -3,14 +3,19 @@ package com.al.whippersnapper.activities;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.adapters.ChatListAdapter;
@@ -46,6 +51,7 @@ public class ChatActivity extends ActionBarActivity {
     private Button btnAccept;
     private Button btnDecline;
     private EditText etMessageToSend;
+    private Button btnSend;
 
     private String chatRoomName; // name of the chat channel, made from the two usernames.
     private Pubnub pubnub;
@@ -63,6 +69,7 @@ public class ChatActivity extends ActionBarActivity {
         btnDecline = (Button) findViewById(R.id.btnDeclineOffer);
         tvOtherUserName = (TextView) findViewById(R.id.tvOtherUserName);
         etMessageToSend = (EditText) findViewById(R.id.etMessageToSend);
+        btnSend = (Button) findViewById(R.id.btnSend);
 
         thisUser = (ParseWSUser) ParseUser.getCurrentUser();
 
@@ -230,8 +237,31 @@ public class ChatActivity extends ActionBarActivity {
             public void run() {
                 String username;
                 String text;
-                username = msg.substring(0, msg.indexOf(Util.CHAT_ROOM_SEPARATOR));
-                text = msg.substring(msg.indexOf(Util.CHAT_ROOM_SEPARATOR) + Util.CHAT_ROOM_SEPARATOR.length());
+
+                if ( msg.equals(END)) {
+                    return; // do nothing
+                } else if (msg.equals(VOLUNTEER_DECLINE)) {
+                    username = "";
+                    if (thisUser.getIsSenior()) {
+                        text = getResources().getString(R.string.The_other_person_has_left_the_chat_room);
+                    } else {
+                        text = getResources().getString(R.string.You_have_declined);
+                    }
+                } else if (msg.equals(SENIOR_DECLINE)) {
+                    username = "";
+                    if (!thisUser.getIsSenior()) {
+                        text = getResources().getString(R.string.The_other_person_has_left_the_chat_room);
+                    } else {
+                        text = getResources().getString(R.string.You_have_declined);
+                    }
+                } else if (msg.equals(SENIOR_ACCEPT)) {
+                    username = "";
+                    text = getResources().getString(R.string.The_help_offer_for_this_task_has_been_accepted);
+                    btnSend.setEnabled(false);
+                } else {
+                    username = msg.substring(0, msg.indexOf(Util.CHAT_ROOM_SEPARATOR));
+                    text = msg.substring(msg.indexOf(Util.CHAT_ROOM_SEPARATOR) + Util.CHAT_ROOM_SEPARATOR.length());
+                }
 
                 mMessages.add(new ChatMessage(username, text));
                 mAdapter.notifyDataSetChanged();
@@ -242,6 +272,9 @@ public class ChatActivity extends ActionBarActivity {
 
 
     public void onDeclineOfferClick(View v) {
+        if (!(etMessageToSend.getText().toString().equals(""))) {
+            onSendClick(null); // send the last message (onSendClick doesn't use the view argument so we can pass null here)
+        }
         if (thisUser.getIsSenior()) {
             endChat(SENIOR_DECLINE);
         } else {
@@ -250,6 +283,9 @@ public class ChatActivity extends ActionBarActivity {
     }
 
     public void onAcceptOfferClick(View v) {
+        if (!(etMessageToSend.getText().toString().equals(""))) {
+            onSendClick(null); // send the last message (onSendClick doesn't use the view argument so we can pass null here)
+        }
         endChat(SENIOR_ACCEPT); // only seniors should have access to an accept button
     }
 
@@ -280,14 +316,18 @@ public class ChatActivity extends ActionBarActivity {
                         // if this is an accept, also delete the task
                         if (messageType.equals(SENIOR_ACCEPT)) {
                             thisUser.setTaskType(""); // setting task type to blank is enough to "delete" it.
-                            thisUser.saveInBackground(); // nothing else needs to be done after this, so we don't need a callback here.
+                            try {
+                                thisUser.save(); // nothing else needs to be done after this, so we don't need a callback here.
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        //finish(); // actually, don't quit this activity, let them navigate away from it when they are done.
 
                     }
                 });
             }
         });
-        finish(); // TODO - test that this goes back to SeniorHome/FindTask activity
     }
 
     public void deleteChatRoom(String seniorUsername, String volunteerUsername) {
@@ -303,7 +343,7 @@ public class ChatActivity extends ActionBarActivity {
         ParseChatRooms chatRoom = null;
         for (int i = 0; i < results.size(); i++) {
             chatRoom = results.get(i);
-            if (chatRoom.getSeniorUsername() == seniorUsername) {
+            if (chatRoom.getSeniorUsername().equals(seniorUsername) || chatRoom.getVolunteerUsername().equals(volunteerUsername)) {
                 try {
                     chatRoom.delete();
                 } catch (ParseException e) {
@@ -312,5 +352,13 @@ public class ChatActivity extends ActionBarActivity {
                 break; // technically, there should only ever be at most one chat room in the db at a time, so we can break here.
             }
         }
+    }
+
+    public void onBackPressed() {
+        // when back is clicked to close the chat, renavigate to the main activity to be routed correctly.
+        // TODO - unless chat hasn't ended, in which case, offer to close chat? Also, don't we only have to do this for seniors?
+        Intent i = new Intent(this, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+        startActivity(i);
     }
 }

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import com.al.whippersnapper.R;
+import com.al.whippersnapper.activities.ChatActivity;
 import com.al.whippersnapper.models.ChatMessage;
 
 public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
@@ -48,11 +49,15 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
         final ChatMessage message = (ChatMessage)getItem(position);
         final ViewHolder holder = (ViewHolder)convertView.getTag();
 
-
         final boolean isMe = message.getUser().equals(thisUsername);
         // Show-hide image based on the logged-in user.
         // Display the profile image to the right for our user, left for other users.
-        if (isMe) {
+        if (thisUsername.equals("")) {
+            // system chat messages have a blank username, don't show either photo
+            holder.imageRight.setVisibility(View.GONE);
+            holder.imageLeft.setVisibility(View.GONE);
+            holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        } else if (isMe) {
             holder.imageRight.setVisibility(View.VISIBLE);
             holder.imageLeft.setVisibility(View.GONE);
             holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);

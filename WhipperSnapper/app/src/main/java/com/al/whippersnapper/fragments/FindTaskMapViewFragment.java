@@ -154,7 +154,8 @@ public class FindTaskMapViewFragment extends Fragment implements
 
     public void setMarkersForNearbyTasks(final LatLng position) {
         ParseQuery<ParseWSUser> q = ParseQuery.getQuery("_User");
-        q.whereEqualTo("TaskAvailable", true); // TODO change this and other db strings to constants
+        q.whereNotEqualTo("TaskType", ""); // TODO change this and other db strings to constants
+        //q.whereNotEqualTo("TaskType", null); // TODO not sure if this will work or we must pass JSONObject.NULL
 
         // TODO: horrible hack: We'll download the entire database of tasks, then filter based on distance between the Lat/Lng.
         q.findInBackground(new FindCallback<ParseWSUser>() {
@@ -166,12 +167,15 @@ public class FindTaskMapViewFragment extends Fragment implements
 
                 // go through all the returned tasks and filter out the far away ones
                 // adapted from https://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
+                int DEBUG_originalUsersLength = parseWSUsers.size();
                 for (Iterator<ParseWSUser> it = parseWSUsers.iterator(); it.hasNext();) {
                     ParseWSUser user = it.next();
                     if (distance(position.latitude, (double)user.getTaskLat(), position.longitude, (double)user.getTaskLng()) > MAX_RANGE) {
                         it.remove();
                     }
                 }
+
+                Log.e("XXXXXXXX", "setMarkersForNearbyTasks: Showing" + parseWSUsers.size() + " of " + DEBUG_originalUsersLength);
 
                 // create markers for each task
                 for (int i = 0; i < parseWSUsers.size(); i++) {

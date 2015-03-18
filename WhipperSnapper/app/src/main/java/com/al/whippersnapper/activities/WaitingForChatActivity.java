@@ -2,6 +2,7 @@ package com.al.whippersnapper.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -25,11 +26,15 @@ import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WaitingForChatActivity extends ActionBarActivity {
     private TextView tvWaitingTaskType;
     private TextView tvWaitingTaskDetails;
     private TextView tvWaitingTaskPostedOn;
+    private ParseWSUser thisUser;
+    private static boolean activityVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +49,64 @@ public class WaitingForChatActivity extends ActionBarActivity {
         tvWaitingTaskType.setText(getIntent().getStringExtra("taskType"));
         tvWaitingTaskDetails.setText(getIntent().getStringExtra("taskDetails"));
         tvWaitingTaskPostedOn.setText(Util.getRelativeTimeAgo(((Date)getIntent().getSerializableExtra("postedOn")).toString()));
+
+        thisUser = (ParseWSUser) ParseWSUser.getCurrentUser();
+        final ParseWSUser finalUser = thisUser; // used so we can reference this in the callback
+
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+
+                //use a handler to run a toast that shows the current timestamp
+                handler.post(new Runnable() {
+                    public void run() {
+                        if (!activityVisible) {
+                            return; // don't check if the activity isn't visible
+                        }
+
+                        //Toast.makeText(WaitingForChatActivity.this, "Checking for chat", Toast.LENGTH_SHORT).show();
+
+                        ParseQuery<ParseChatRooms> q = ParseQuery.getQuery("ChatRooms");
+                        q.whereEqualTo("SeniorUsername", thisUser.getUsername());
+                        q.findInBackground(new FindCallback<ParseChatRooms>() {
+                            @Override
+                            public void done(List<ParseChatRooms> parseChatRoomses, ParseException e) {
+                                Intent i = null;
+                                boolean inChatRoom = parseChatRoomses.size() > 0; // TODO - this should only ever be 0 or 1
+
+                                // handle senior users
+                                if (inChatRoom) {
+                                    // go to the Chat Room activity
+                                    i = new Intent(WaitingForChatActivity.this, ChatActivity.class);
+                                    i.putExtra("otherUsername", parseChatRoomses.get(0).getVolunteerUsername());
+                                    i.putExtra("otherUserFullName", parseChatRoomses.get(0).getVolunteerFullName());
+                                    i.putExtra("fromShowTaskDetailsActivity", false); // don't add the task summary chat message
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                                    startActivity(i);
+                                }
+                            }
+                        });
+
+
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask, 5000, 5000); // TODO - this will keep running even when the app is not focused!
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activityVisible = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        activityVisible = false;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,53 +133,45 @@ public class WaitingForChatActivity extends ActionBarActivity {
     public void onCancelTaskClick(View v) {
         ParseWSUser theUser = (ParseWSUser) ParseWSUser.getCurrentUser();
         /*theUser.setTaskAddress(JSONObject.NULL);
-        theUser.setTaskAvailable(JSONObject.NULL);
         theUser.setTaskDetails(JSONObject.NULL);
         theUser.setTaskLat(JSONObject.NULL);
         theUser.setTaskLng(JSONObject.NULL);
         theUser.setTaskType(JSONObject.NULL);
-        theUser.setTaskPhoto(JSONObject.NULL);*/ // Instead of setting every column to null, just set TaskType to null and TaskAvailable to false
+        theUser.setTaskPhoto(JSONObject.NULL);*/ // Instead of setting every column to null, just set TaskType to null
         theUser.setTaskType("");
 
-        // NOTE: Still need to delete the chat room, since it could have been started by a volunteer while the senior is still on this activity.
         // post an SENIOR_CANCEL and END message TODO - actually, this is an edge case and I'll leave it unfixed for now.
         // TODO - also, if the user has cancel without posting the END message, if this volunteer does a task for the senior again, the old chat messages will appear. Could fix this by adding a random task id to the ParseWSUser table and the chat room name.
 
-        // delete this chat
+        // delete a chat room (in the unlikely event it exists)
         final ParseWSUser finalUser = theUser;
         ParseQuery<ParseChatRooms> q = new ParseQuery("ChatRooms");
+        q.whereEqualTo("SeniorUsername", thisUser.getUsername());
         q.findInBackground(new FindCallback<ParseChatRooms>() {
             @Override
             public void done(List<ParseChatRooms> parseChatRoomses, ParseException e) {
-                for (int i = 0; i < parseChatRoomses.size(); i++) {
-                    // find the chat room with this senior in it.
-                    if (parseChatRoomses.get(i).getSeniorUsername().equals(finalUser.getUsername())) {
-                        parseChatRoomses.get(i).deleteInBackground(new DeleteCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                // update the ParseWSUser changes after the delete has completed
-                                finalUser.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        Toast.makeText(WaitingForChatActivity.this, getResources().getString(R.string.Your_task_request_has_been_canceled), Toast.LENGTH_LONG).show();
-
-                                        Intent i = new Intent(WaitingForChatActivity.this, SeniorHomeActivity.class);
-                                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
-                                        startActivity(i);
-                                        finish();
-                                    }
-                                });
-                            }
-                        }); // delete this chat room
-
-                        break; // done looking for the chat room to delete, so break
+                if (parseChatRoomses.size() != 0) {
+                    try {
+                        parseChatRoomses.get(0).delete(); // delete a chat room (if there is one)
+                    } catch (ParseException e2) {
+                        e2.printStackTrace();
                     }
                 }
 
+                // update deleting the task type
+                try {
+                    finalUser.save();
+                } catch (ParseException e3) {
+                    e3.printStackTrace();
+                }
 
+                Toast.makeText(WaitingForChatActivity.this, getResources().getString(R.string.Your_task_request_has_been_canceled), Toast.LENGTH_LONG).show();
+                Intent i = new Intent(WaitingForChatActivity.this, SeniorHomeActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
+                startActivity(i);
+                finish();
+                return;
             }
         });
-
-
     }
 }

@@ -24,13 +24,15 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.apache.http.Header;
+
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
     public static int INVALID_LOGIN_CREDENTIAL = 101; // Odd. This constant doesn't seem to exist in Parse
     public static final boolean DEBUG_USE_REAL_PHONE_NUMBER = false;
-    public static final String DEBUG_FAKE_PHONE_NUMBER = "12125550007";
+    public static String DEBUG_FAKE_PHONE_NUMBER = "12125550004";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

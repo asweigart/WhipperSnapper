@@ -193,6 +193,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
         thisUser.setCityStateZip(etCityStateZip.getText().toString());
         ParseFile profilePhotoFile = new ParseFile("profilePhoto.jpg", photoBytes);
         thisUser.setPhoto(profilePhotoFile);
+        thisUser.setTaskType("");
 
         // geocode the address, save the lat & lng
         Address homeLatLng = new Address(Locale.ENGLISH); // 'murica!!

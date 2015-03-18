@@ -17,9 +17,6 @@ import com.parse.ParseFile;
 
 import java.util.ArrayList;
 
-/**
- * Created by Al on 3/15/2015.
- */
 public class TaskAdapter extends ArrayAdapter<ParseWSUser> {
     public TaskAdapter(Context context, ArrayList<ParseWSUser> users) {
         super(context, 0, users);

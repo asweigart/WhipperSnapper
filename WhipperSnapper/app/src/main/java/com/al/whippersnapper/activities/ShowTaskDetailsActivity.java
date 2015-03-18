@@ -103,7 +103,7 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
                     // send push to the senior
                     ParsePush push = new ParsePush();
                     push.setChannel(senior.getUsername());
-                    push.setMessage(thisUser.getFullName() + " has offered to do this task for you. Click to open chat.");
+                    push.setMessage(thisUser.getFullName() + getResources().getString(R.string.has_offered_to_do_this_task_for_you));
                     try {
                         push.send();
                     } catch (ParseException e3) {

@@ -67,4 +67,8 @@
     <string name="Say_something">Say something...</string>
     <string name="You_are_chatting_with">You are chatting with:</string>
     <string name="Theres_no_internet_connection_right_now">There\'s no internet connection right now.\nPlease try again after connecting to the internet.</string>
+    <string name="The_other_person_has_left_the_chat_room">The other person has left the chat room.</string>
+    <string name="The_help_offer_for_this_task_has_been_accepted">The help offer for this task has been accepted. You can now close this chat room.</string>
+    <string name="has_offered_to_do_this_task_for_you">\shas offered to do this task for you. Click to open chat."</string>
+    <string name="You_have_declined">You have declined. You can now close this chat room.</string>
 </resources>
