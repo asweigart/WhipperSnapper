@@ -1,7 +1,7 @@
 # WhipperSnapper
 Project for CodePath Android class.
 
-WhipperSnapper is an app that connects senior citizens with volunteers to help them with tasks. Whether it's moving furniture, tech support, or just having a card-playing partner, WhipperSnapper provides individual help to enable seniors to live comfortably without expensive caretakers. WhipperSnapper is a TaskRabbit app powered by the good will of the community. Volunteers can help as frequently as they want according to their own availability, without the entrance barrier of long-term commitment.
+WhipperSnapper is an app that connects senior citizens with volunteers to help them with everyday tasks. Whether it's moving furniture, tech support, or just having a card-playing partner, WhipperSnapper provides individual help to enable seniors to live comfortably without expensive caretakers. WhipperSnapper is a TaskRabbit app powered by the good will of the community. Volunteers can help as frequently as they want according to their own availability, without the entrance barrier of long-term commitment.
 
 Required stories:
 
@@ -9,6 +9,7 @@ Required stories:
  * [X] User can attach/take a photo to their profile.
  * [X] Seniors can posts tasks to the server.
  * [X] Seniors can attach/take a photo to their task.
+ * [X] Seniors can cancel task requests.
  * [X] Volunteers can use a map interface to find tasks near them.
  * [X] Volunteers can use a list view to find nearby tasks.
  * [X] Seniors and volunteers can enter a chat with each other for exchanging questions and details.
