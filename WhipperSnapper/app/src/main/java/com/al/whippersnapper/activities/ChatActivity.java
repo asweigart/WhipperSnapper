@@ -60,6 +60,8 @@ public class ChatActivity extends ActionBarActivity {
     private ChatListAdapter mAdapter;
     private ParseWSUser thisUser;
 
+    private String taskAddress = null;
+
     private byte[] thisUserProfilePhoto;
     private byte[] otherUserProfilePhoto;
 
@@ -79,6 +81,7 @@ public class ChatActivity extends ActionBarActivity {
         String otherUsername = getIntent().getStringExtra("otherUsername");
         String otherUserFullName = getIntent().getStringExtra("otherUserFullName");
         boolean fromShowTaskDetailsActivity = getIntent().getBooleanExtra("fromShowTaskDetailsActivity", false);
+
 
         // hide the accept button if this is the volunteer
         if (!thisUser.getIsSenior()) {
@@ -212,6 +215,28 @@ public class ChatActivity extends ActionBarActivity {
                         endIndex = 0; // if no "END" message was found, start at the first message like normal
                     }
 
+                    // Display the task details at the top of the chat room
+                    ParseChatRooms chatRoom = getChatRoomAUserIsIn(thisUser.getUsername(), thisUser.getUsername()); // works if this user is either senior or volunteer
+                    try {
+                        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("_User");
+                        q.whereEqualTo("username", chatRoom.getSeniorUsername());
+                        List<ParseWSUser> results = q.find();
+                        taskAddress = results.get(0).getTaskAddress();
+                        if (taskAddress == null) {
+                            taskAddress = results.get(0).getAddress(); // if there is no task address, the task's address is the senior's address.
+                        }
+                        if (taskAddress == null) {
+                            // if there is still no address, use the latlng of the user.
+                            taskAddress = "Lat " + results.get(0).getLat() + " Lon " + results.get(0).getLng(); // TODO - this is a really ugly failure case
+                        }
+                        String messageText = results.get(0).getTaskType() + "\n" + results.get(0).getTaskDetails();
+                        mMessages.add(new ChatMessage("", messageText));
+                        mAdapter.notifyDataSetChanged();
+
+                    } catch (ParseException e2) {
+                        e2.printStackTrace();
+                    }
+
                     // add the chat messages from the history
                     for (int i = endIndex; i < ((JSONArray) response).getJSONArray(0).length(); i++) {
                         String message = ((JSONArray) response).getJSONArray(0).getString(i);
@@ -238,8 +263,8 @@ public class ChatActivity extends ActionBarActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String username;
-                String text;
+                String username = null;
+                String text = null;
 
                 if ( msg.equals(END)) {
                     return; // do nothing
@@ -250,6 +275,7 @@ public class ChatActivity extends ActionBarActivity {
                     } else {
                         text = getResources().getString(R.string.You_have_declined);
                     }
+                    disableChatButtons();
                 } else if (msg.equals(SENIOR_DECLINE)) {
                     username = "";
                     if (!thisUser.getIsSenior()) {
@@ -257,13 +283,17 @@ public class ChatActivity extends ActionBarActivity {
                     } else {
                         text = getResources().getString(R.string.You_have_declined);
                     }
+                    disableChatButtons();
                 } else if (msg.equals(SENIOR_ACCEPT)) {
                     username = "";
                     text = getResources().getString(R.string.The_help_offer_for_this_task_has_been_accepted);
-                    btnSend.setEnabled(false);
-                } else {
+                    disableChatButtons();
+                } else if (msg.indexOf(Util.CHAT_ROOM_SEPARATOR) != -1) {
                     username = msg.substring(0, msg.indexOf(Util.CHAT_ROOM_SEPARATOR));
                     text = msg.substring(msg.indexOf(Util.CHAT_ROOM_SEPARATOR) + Util.CHAT_ROOM_SEPARATOR.length());
+                } else {
+                    username = "";
+                    text = msg;
                 }
 
                 mMessages.add(new ChatMessage(username, text));
@@ -271,6 +301,13 @@ public class ChatActivity extends ActionBarActivity {
                 lvChat.invalidate(); // redraw listview
             }
         });
+    }
+
+
+    public void disableChatButtons() {
+        btnSend.setEnabled(false);
+        btnAccept.setEnabled(false);
+        btnDecline.setEnabled(false);
     }
 
 
@@ -307,33 +344,64 @@ public class ChatActivity extends ActionBarActivity {
             public void successCallback(String channel, Object response) {
                 super.successCallback(channel, response);
                 Log.e("XXXXXXXXXXXX", response.toString());
-                pubnub.publish(chatRoomName, END, new Callback() {
-                    @Override
-                    public void successCallback(String channel, Object response2) {
-                        super.successCallback(channel, response2);
-                        Log.e("XXXXXXXXXXXX",response2.toString());
 
-                        // delete the chat room
-                        deleteChatRoom(seniorUsername, volunteerUsername);
-
-                        // if this is an accept, also delete the task
-                        if (messageType.equals(SENIOR_ACCEPT)) {
-                            thisUser.setTaskType(""); // setting task type to blank is enough to "delete" it.
-                            try {
-                                thisUser.save(); // nothing else needs to be done after this, so we don't need a callback here.
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                // if the senior has accepted, display the accept message then the end message
+                if (messageType.equals(SENIOR_ACCEPT)) {
+                    // give the address for the task in the chat
+                    pubnub.publish(chatRoomName, getResources().getString(R.string.The_address_for_this_task_is) + " " + taskAddress, new Callback() {
+                        @Override
+                        public void successCallback(String channel3, Object response3) {
+                            super.successCallback(channel3, response3);
+                            sendEndSystemChatMessage(seniorUsername, volunteerUsername, messageType);
                         }
-                        //finish(); // actually, don't quit this activity, let them navigate away from it when they are done.
+                    });
+                } else {
+                    // if senior hasn't accept, just display the end message
+                    sendEndSystemChatMessage(seniorUsername, volunteerUsername, messageType);
+                }
+            }
+        });
+    }
 
+    public void sendEndSystemChatMessage(final String seniorUsername, final String volunteerUsername, final String messageType) {
+        pubnub.publish(chatRoomName, END, new Callback() {
+            @Override
+            public void successCallback(String channel2, Object response2) {
+                super.successCallback(channel2, response2);
+                Log.e("XXXXXXXXXXXX",response2.toString());
+
+                // delete the chat room
+                deleteChatRoom(seniorUsername, volunteerUsername);
+
+                // if the offer to do the task has been accepted...
+                if (messageType.equals(SENIOR_ACCEPT)) {
+                    // give the address for the task in the chat
+                    //pubnub.publish(chatRoomName, getResources().getString(R.string.The_address_for_this_task_is) + taskAddress, new Callback() {});
+
+                    thisUser.setTaskType(""); // setting task type to blank is enough to "delete" it.
+
+                    try {
+                        thisUser.save(); // nothing else needs to be done after this, so we don't need a callback here.
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+                //finish(); // actually, don't quit this activity, let them navigate away from it when they are done.
+
             }
         });
     }
 
     public void deleteChatRoom(String seniorUsername, String volunteerUsername) {
+        ParseChatRooms chatRoom = getChatRoomAUserIsIn(seniorUsername, volunteerUsername);
+        try {
+            chatRoom.delete();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ParseChatRooms getChatRoomAUserIsIn(String seniorUsername, String volunteerUsername) {
         // one of seniorUsername and volunteerUsername will be blank. This is fine since we only need one since a user can only be in one chat room at a time.
         ParseQuery<ParseChatRooms> q = ParseQuery.getQuery("ChatRooms");
         List<ParseChatRooms> results = null;
@@ -347,14 +415,10 @@ public class ChatActivity extends ActionBarActivity {
         for (int i = 0; i < results.size(); i++) {
             chatRoom = results.get(i);
             if (chatRoom.getSeniorUsername().equals(seniorUsername) || chatRoom.getVolunteerUsername().equals(volunteerUsername)) {
-                try {
-                    chatRoom.delete();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                break; // technically, there should only ever be at most one chat room in the db at a time, so we can break here.
+                return chatRoom; // technically, there should only ever be at most one chat room in the db at a time, so we can break here.
             }
         }
+        return null; // this should never happen
     }
 
     public void onBackPressed() {

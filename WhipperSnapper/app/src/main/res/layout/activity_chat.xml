@@ -38,6 +38,7 @@
         android:id="@+id/lvChat"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:transcriptMode="alwaysScroll"
         android:layout_above="@+id/etMessageToSend"
         android:layout_below="@+id/tvOtherUserName" />
 

@@ -46,6 +46,9 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
         byte[] taskPhotoBytes = getIntent().getByteArrayExtra("taskPhoto");
         if (taskPhotoBytes != null) {
             ivTaskDetailsProfilePhoto.setImageBitmap(BitmapFactory.decodeByteArray(taskPhotoBytes, 0, taskPhotoBytes.length));
+        } else {
+            // use default image if there is no task photo
+            ivTaskDetailsProfilePhoto.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_no_task_photo));
         }
         tvTaskDetailsSeniorName.setText(getIntent().getStringExtra("seniorName"));
         tvTaskDetailsType.setText(getIntent().getStringExtra("taskType"));

@@ -3,6 +3,7 @@ package com.al.whippersnapper.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,28 +58,32 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
 
         // Show-hide image based on the logged-in user.
         // Display the profile image to the right for our user, left for other users.
-        if (thisUsername.equals("")) {
-            // system chat messages have a blank username, don't show either photo
-            holder.imageRight.setVisibility(View.GONE);
-            holder.imageLeft.setVisibility(View.GONE);
-            holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-        } else if (message.getUser().equals(thisUsername)) {
-            // message came from this user
-            holder.imageRight.setVisibility(View.VISIBLE);
-            holder.imageLeft.setVisibility(View.GONE);
-            holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-            if (thisUserPhoto != null)
-                holder.imageRight.setImageBitmap(BitmapFactory.decodeByteArray(thisUserPhoto, 0, thisUserPhoto.length));
-        } else {
-            // message came from other user
-            holder.imageLeft.setVisibility(View.VISIBLE);
-            holder.imageRight.setVisibility(View.GONE);
-            holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-            if (otherUserPhoto != null)
-                holder.imageLeft.setImageBitmap(BitmapFactory.decodeByteArray(otherUserPhoto, 0, otherUserPhoto.length));
-        }
+        if (message.getUser() != null) {
+            if (message.getUser().equals("")) { // TODO for some reason, after I added the final task address message, sometimes this value would be null.
+                // system chat messages have a blank username, don't show either photo
+                holder.imageRight.setVisibility(View.GONE);
+                holder.imageLeft.setVisibility(View.GONE);
+                holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            } else if (message.getUser().equals(thisUsername)) {
+                // message came from this user
+                holder.imageRight.setVisibility(View.VISIBLE);
+                holder.imageLeft.setVisibility(View.GONE);
+                holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+                //if (thisUserPhoto != null)
+                    holder.imageRight.setImageBitmap(BitmapFactory.decodeByteArray(thisUserPhoto, 0, thisUserPhoto.length));
+            } else {
+                // message came from other user
+                holder.imageLeft.setVisibility(View.VISIBLE);
+                holder.imageRight.setVisibility(View.GONE);
+                holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+                //if (otherUserPhoto != null)
+                    holder.imageLeft.setImageBitmap(BitmapFactory.decodeByteArray(otherUserPhoto, 0, otherUserPhoto.length));
+            }
 
-        holder.text.setText(message.getMessage());
+            holder.text.setText(message.getMessage());
+        } else {
+            Log.e("XXXXXXXXX", "message was null in ChatListAdapter.java");
+        }
         return convertView;
     }
 

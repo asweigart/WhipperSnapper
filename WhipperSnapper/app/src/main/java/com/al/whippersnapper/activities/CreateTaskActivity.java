@@ -31,6 +31,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SaveCallback;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
@@ -158,6 +160,8 @@ public class CreateTaskActivity extends FragmentActivity implements
         if (photoBytes != null) {
             ParseFile taskPhotoFile = new ParseFile("taskPhoto.jpg", photoBytes);
             theUser.setTaskPhoto(taskPhotoFile);
+        } else {
+            theUser.setTaskPhoto(null);
         }
 
         // figure out the final lat lng
