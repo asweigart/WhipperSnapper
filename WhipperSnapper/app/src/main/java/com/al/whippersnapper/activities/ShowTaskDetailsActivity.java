@@ -78,11 +78,14 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
     }
 
     public void onOfferClick(View v) {
-        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("_User");
+        ParseQuery<ParseWSUser> q = ParseQuery.getQuery("User");
         q.whereEqualTo("username", seniorUsername);
         q.findInBackground(new FindCallback<ParseWSUser>() {
             @Override
             public void done(List<ParseWSUser> parseWSUsers, ParseException e) {
+                byte[] thisUserPhotoBytes = null;
+                byte[] otherUserPhotoBytes = null;
+
                 if (e == null) {
                     ParseWSUser thisUser = (ParseWSUser) ParseUser.getCurrentUser();
                     ParseWSUser senior = parseWSUsers.get(0); // TODO this shouldn't possible fail, there should always be 1 senior unless the db is incoherent
@@ -93,7 +96,6 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
                     chatRoom.setSeniorFullName(senior.getFullName());
                     chatRoom.setVolunteerUsername(thisUser.getUsername());
                     chatRoom.setVolunteerFullName(thisUser.getFullName());
-
                     try {
                         chatRoom.save();
                     } catch (ParseException e2) {
@@ -110,10 +112,21 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
                         e3.printStackTrace();
                     }
 
+                    // load the profile photo bytes of both users
+                    try {
+                        thisUserPhotoBytes = thisUser.getPhoto().getData(); // assume that senior is "theUser", we'll swap it if that's not the case.
+                        otherUserPhotoBytes = senior.getPhoto().getData();
+                    } catch (ParseException e2) {
+                        e2.printStackTrace();
+                    }
+
                     // start the chat activity
                     Intent i = new Intent(ShowTaskDetailsActivity.this, ChatActivity.class);
                     i.putExtra("otherUsername", senior.getUsername());
                     i.putExtra("otherUserFullName", Util.getAnonymizedName(senior.getFullName()));
+                    i.putExtra("fromShowTaskDetailsActivity", true); // don't add the task summary chat message
+                    i.putExtra("thisUserPhoto", thisUserPhotoBytes);
+                    i.putExtra("otherUserPhoto", otherUserPhotoBytes);
                     startActivity(i);
                 } else {
                     e.printStackTrace();

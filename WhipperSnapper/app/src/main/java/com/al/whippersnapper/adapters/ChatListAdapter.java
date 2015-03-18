@@ -1,6 +1,8 @@
 package com.al.whippersnapper.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +31,14 @@ import com.al.whippersnapper.models.ChatMessage;
 
 public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
     private String thisUsername;
+    private byte[] thisUserPhoto;
+    private byte[] otherUserPhoto;
 
-    public ChatListAdapter(Context context, String thisUsername, List<ChatMessage> messages) {
+    public ChatListAdapter(Context context, String thisUsername, List<ChatMessage> messages, byte[] thisUserPhoto, byte[] otherUserPhoto) {
         super(context, 0, messages);
         this.thisUsername = thisUsername;
+        this.thisUserPhoto = thisUserPhoto;
+        this.otherUserPhoto = otherUserPhoto;
     }
 
     @Override
@@ -49,7 +55,6 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
         final ChatMessage message = (ChatMessage)getItem(position);
         final ViewHolder holder = (ViewHolder)convertView.getTag();
 
-        final boolean isMe = message.getUser().equals(thisUsername);
         // Show-hide image based on the logged-in user.
         // Display the profile image to the right for our user, left for other users.
         if (thisUsername.equals("")) {
@@ -57,17 +62,22 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
             holder.imageRight.setVisibility(View.GONE);
             holder.imageLeft.setVisibility(View.GONE);
             holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-        } else if (isMe) {
+        } else if (message.getUser().equals(thisUsername)) {
+            // message came from this user
             holder.imageRight.setVisibility(View.VISIBLE);
             holder.imageLeft.setVisibility(View.GONE);
             holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            if (thisUserPhoto != null)
+                holder.imageRight.setImageBitmap(BitmapFactory.decodeByteArray(thisUserPhoto, 0, thisUserPhoto.length));
         } else {
+            // message came from other user
             holder.imageLeft.setVisibility(View.VISIBLE);
             holder.imageRight.setVisibility(View.GONE);
             holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            if (otherUserPhoto != null)
+                holder.imageLeft.setImageBitmap(BitmapFactory.decodeByteArray(otherUserPhoto, 0, otherUserPhoto.length));
         }
-        final ImageView profileView = isMe ? holder.imageRight : holder.imageLeft;
-        //Picasso.with(getContext()).load("http://i.imgur.com/mRsY9dN.png").into(profileView); // TODO - populate with user's photo
+
         holder.text.setText(message.getMessage());
         return convertView;
     }

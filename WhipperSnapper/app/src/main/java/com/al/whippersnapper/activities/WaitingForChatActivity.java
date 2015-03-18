@@ -72,16 +72,32 @@ public class WaitingForChatActivity extends ActionBarActivity {
                         q.findInBackground(new FindCallback<ParseChatRooms>() {
                             @Override
                             public void done(List<ParseChatRooms> parseChatRoomses, ParseException e) {
+                                byte[] thisUserPhotoBytes = null;
+                                byte[] otherUserPhotoBytes = null;
                                 Intent i = null;
                                 boolean inChatRoom = parseChatRoomses.size() > 0; // TODO - this should only ever be 0 or 1
 
-                                // handle senior users
+                                // go to the ChatActivity
                                 if (inChatRoom) {
-                                    // go to the Chat Room activity
+                                    // load the profile photo bytes of both users
+                                    try {
+                                        ParseQuery<ParseWSUser> q2 = ParseQuery.getQuery("User");
+                                        q2.whereEqualTo("username", parseChatRoomses.get(0).getVolunteerUsername());
+                                        List<ParseWSUser> results = q2.find();
+
+                                        thisUserPhotoBytes = finalUser.getPhoto().getData(); // assume that senior is "theUser", we'll swap it if that's not the case.
+                                        otherUserPhotoBytes = results.get(0).getPhoto().getData();
+                                    } catch (ParseException e2) {
+                                        e2.printStackTrace();
+                                    }
+
+                                    // launch ChatActivity
                                     i = new Intent(WaitingForChatActivity.this, ChatActivity.class);
                                     i.putExtra("otherUsername", parseChatRoomses.get(0).getVolunteerUsername());
                                     i.putExtra("otherUserFullName", parseChatRoomses.get(0).getVolunteerFullName());
                                     i.putExtra("fromShowTaskDetailsActivity", false); // don't add the task summary chat message
+                                    i.putExtra("thisUserPhoto", thisUserPhotoBytes);
+                                    i.putExtra("otherUserPhoto", otherUserPhotoBytes);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back stack
                                     startActivity(i);
                                 }

@@ -20,7 +20,9 @@ import com.al.whippersnapper.models.ParseChatRooms;
 import com.al.whippersnapper.models.ParseWSUser;
 import com.al.whippersnapper.utils.Util;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -73,7 +75,6 @@ public class MainActivity extends ActionBarActivity {
 
         if (!creatingProfile) {
             // logged in, so go to the appropriate senior/volunteer activity
-
             // First check if the user is in a chatroom
             ParseQuery<ParseChatRooms> q = ParseQuery.getQuery("ChatRooms");
             if (thisUser.getIsSenior()) {
@@ -84,10 +85,25 @@ public class MainActivity extends ActionBarActivity {
             q.findInBackground(new FindCallback<ParseChatRooms>() {
                 @Override
                 public void done(List<ParseChatRooms> parseChatRoomses, ParseException e) {
+                    byte[] thisUserPhotoBytes = null;
+                    byte[] otherUserPhotoBytes = null;
                     Intent i = null;
                     boolean inChatRoom = parseChatRoomses.size() > 0; // TODO - this should only ever be 0 or 1
 
                     if (finalUser.getIsSenior()) {
+                        // get profile photo info of both users if chat activity will be launched
+                        if (inChatRoom) {
+                            try {
+                                ParseQuery<ParseWSUser> q2 = ParseQuery.getQuery("User");
+                                q2.whereEqualTo("username", parseChatRoomses.get(0).getVolunteerUsername());
+                                List<ParseWSUser> results = q2.find();
+
+                                thisUserPhotoBytes = finalUser.getPhoto().getData(); // assume that senior is "theUser", we'll swap it if that's not the case.
+                                otherUserPhotoBytes = results.get(0).getPhoto().getData();
+                            } catch (ParseException e2) {
+                                e2.printStackTrace();
+                            }
+                        }
 
                         // handle senior users
                         if (inChatRoom) {
@@ -96,6 +112,8 @@ public class MainActivity extends ActionBarActivity {
                             i.putExtra("otherUsername", parseChatRoomses.get(0).getVolunteerUsername());
                             i.putExtra("otherUserFullName", parseChatRoomses.get(0).getVolunteerFullName());
                             i.putExtra("fromShowTaskDetailsActivity", false); // don't add the task summary chat message
+                            i.putExtra("thisUserPhoto", thisUserPhotoBytes);
+                            i.putExtra("otherUserPhoto", otherUserPhotoBytes);
                         } else if (finalUser.getTaskType() == null || finalUser.getTaskType().equals("")) { // a blank task type is a "deleted" (non-existent, unset) task.
                             // go to the Senior Home activity
                             i = new Intent(MainActivity.this, SeniorHomeActivity.class);
@@ -117,6 +135,8 @@ public class MainActivity extends ActionBarActivity {
                             i.putExtra("otherUsername", parseChatRoomses.get(0).getSeniorUsername());
                             i.putExtra("otherUserFullName", Util.getAnonymizedName(parseChatRoomses.get(0).getSeniorFullName()));
                             i.putExtra("fromShowTaskDetailsActivity", false); // don't add the task summary chat message
+                            i.putExtra("thisUserPhoto", otherUserPhotoBytes); // swapping, since the senior profile photo is stored in "thisUserPhotoBytes"
+                            i.putExtra("otherUserPhoto", thisUserPhotoBytes);
                         } else {
                             // go to the Find Task activity
                             i = new Intent(MainActivity.this, FindTaskActivity.class);

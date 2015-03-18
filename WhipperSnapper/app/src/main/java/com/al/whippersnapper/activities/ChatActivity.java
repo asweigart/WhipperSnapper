@@ -60,6 +60,9 @@ public class ChatActivity extends ActionBarActivity {
     private ChatListAdapter mAdapter;
     private ParseWSUser thisUser;
 
+    private byte[] thisUserProfilePhoto;
+    private byte[] otherUserProfilePhoto;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +92,7 @@ public class ChatActivity extends ActionBarActivity {
 
         lvChat = (ListView) findViewById(R.id.lvChat);
         mMessages = new ArrayList<ChatMessage>();
-        mAdapter = new ChatListAdapter(ChatActivity.this, thisUser.getUsername(), mMessages);
+        mAdapter = new ChatListAdapter(ChatActivity.this, thisUser.getUsername(), mMessages, getIntent().getByteArrayExtra("thisUserPhoto"), getIntent().getByteArrayExtra("otherUserPhoto"));
         lvChat.setAdapter(mAdapter);
 
 
