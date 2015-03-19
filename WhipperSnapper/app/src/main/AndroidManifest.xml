@@ -16,7 +16,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <permission android:name="com.al.whippersnapper.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+
+    <permission
+        android:name="com.al.whippersnapper.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="com.al.whippersnapper.permission.C2D_MESSAGE" />
 
     <uses-feature
@@ -79,23 +83,27 @@
             android:label="@string/title_activity_show_task_details" >
         </activity>
 
-
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.parse.ParseBroadcastReceiver">
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.al.whippersnapper" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver" android:exported="false">
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
@@ -103,7 +111,9 @@
             </intent-filter>
         </receiver>
 
-        <meta-data android:name="com.parse.push.notification_icon" android:resource="@mipmap/ic_launcher"/>
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@mipmap/ic_launcher" />
 
     </application>
 

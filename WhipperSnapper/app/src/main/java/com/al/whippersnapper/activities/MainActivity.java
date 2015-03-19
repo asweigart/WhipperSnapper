@@ -2,6 +2,7 @@ package com.al.whippersnapper.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -28,18 +29,37 @@ import com.parse.ParseUser;
 
 import org.apache.http.Header;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
     public static int INVALID_LOGIN_CREDENTIAL = 101; // Odd. This constant doesn't seem to exist in Parse
     public static final boolean DEBUG_USE_REAL_PHONE_NUMBER = false;
-    public static String DEBUG_FAKE_PHONE_NUMBER = "12125550007";
+    public static String DEBUG_FAKE_PHONE_NUMBER = "12125550006";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // check to see if a fake phone number should be loaded
+        if (!DEBUG_USE_REAL_PHONE_NUMBER) {
+            File fakePhoneFile = new File(Environment.getExternalStorageDirectory() + "/_fakePhoneNumber.txt");
+            try {
+                FileInputStream streamIn = new FileInputStream(fakePhoneFile);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(streamIn));
+                DEBUG_FAKE_PHONE_NUMBER = reader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+                finish();
+            }
+        }
+
         boolean creatingProfile = false;
 
         ParseWSUser thisUser = null;

@@ -1,21 +1,28 @@
 package com.al.whippersnapper.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.al.whippersnapper.R;
 
 public class UserTypePickerActivity extends ActionBarActivity {
     public static final int USER_TYPE_REQUEST_CODE = 42;
+    private Typeface bikoTypeface;
+    TextView tvAppTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_type_picker);
+
+        bikoTypeface = Typeface.createFromAsset(getAssets(), "fonts/Biko_Regular.otf");
+        tvAppTitle.setTypeface(bikoTypeface);
     }
 
 

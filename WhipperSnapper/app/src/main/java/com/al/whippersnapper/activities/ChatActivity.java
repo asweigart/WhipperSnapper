@@ -1,6 +1,7 @@
 package com.al.whippersnapper.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -50,6 +51,7 @@ public class ChatActivity extends ActionBarActivity {
     private TextView tvOtherUserName;
     private Button btnAccept;
     private Button btnDecline;
+    private Button btnCall;
     private EditText etMessageToSend;
     private Button btnSend;
 
@@ -72,6 +74,7 @@ public class ChatActivity extends ActionBarActivity {
         setContentView(R.layout.activity_chat);
         btnAccept = (Button) findViewById(R.id.btnAcceptOffer);
         btnDecline = (Button) findViewById(R.id.btnDeclineOffer);
+        btnCall = (Button) findViewById(R.id.btnCall);
         tvOtherUserName = (TextView) findViewById(R.id.tvOtherUserName);
         etMessageToSend = (EditText) findViewById(R.id.etMessageToSend);
         btnSend = (Button) findViewById(R.id.btnSend);
@@ -85,7 +88,8 @@ public class ChatActivity extends ActionBarActivity {
 
         // hide the accept button if this is the volunteer
         if (!thisUser.getIsSenior()) {
-            btnAccept.setVisibility(View.GONE);
+            btnAccept.setVisibility(View.GONE); // only seniors can accept an offer for help
+            btnCall.setVisibility(View.GONE); // only seniors can call the other user
             chatRoomName = thisUser.getUsername() + Util.CHAT_ROOM_SEPARATOR + otherUsername; // senior name goes first
         } else {
             chatRoomName = otherUsername + Util.CHAT_ROOM_SEPARATOR + thisUser.getUsername(); // senior name goes first
@@ -97,9 +101,6 @@ public class ChatActivity extends ActionBarActivity {
         mMessages = new ArrayList<ChatMessage>();
         mAdapter = new ChatListAdapter(ChatActivity.this, thisUser.getUsername(), mMessages, getIntent().getByteArrayExtra("thisUserPhoto"), getIntent().getByteArrayExtra("otherUserPhoto"));
         lvChat.setAdapter(mAdapter);
-
-
-
 
         pubnub = new Pubnub("pub-c-b441d296-3edc-4025-b178-97c45e8f92aa", "sub-c-e2a329fa-cc25-11e4-8a92-02ee2ddab7fe");
         subscribeToChannel();
@@ -430,6 +431,8 @@ public class ChatActivity extends ActionBarActivity {
     }
 
     public void onCallClick() {
-
+        Intent i = new Intent(Intent.ACTION_DIAL);
+        i.setData(Uri.parse("tel:" + otherUser.getPhone()));
+        startActivity(i);
     }
 }

@@ -73,4 +73,6 @@
     <string name="You_have_declined">You have declined. You can now close this chat room.</string>
     <string name="The_address_for_this_task_is">The address for this task is\s</string>
     <string name="Call">Call</string>
+    <string name="title_activity___debug_fake_phone">_DebugFakePhoneActivity</string>
+
 </resources>
