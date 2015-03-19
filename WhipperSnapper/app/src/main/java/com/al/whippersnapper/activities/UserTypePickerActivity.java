@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.al.whippersnapper.R;
@@ -14,7 +15,9 @@ import com.al.whippersnapper.R;
 public class UserTypePickerActivity extends ActionBarActivity {
     public static final int USER_TYPE_REQUEST_CODE = 42;
     private Typeface bikoTypeface;
-    TextView tvAppTitle;
+    private TextView tvAppTitle;
+    private Button btnIAmASenior;
+    private Button btnIAmAVolunteer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +25,14 @@ public class UserTypePickerActivity extends ActionBarActivity {
         setContentView(R.layout.activity_user_type_picker);
 
         bikoTypeface = Typeface.createFromAsset(getAssets(), "fonts/Biko_Regular.otf");
+        tvAppTitle = (TextView) findViewById(R.id.tvAppTitle);
         tvAppTitle.setTypeface(bikoTypeface);
+
+        btnIAmASenior = (Button) findViewById(R.id.btnIAmASenior);
+        btnIAmAVolunteer = (Button) findViewById(R.id.btnIAmAVolunteer);
+
+        btnIAmASenior.setTypeface(bikoTypeface);
+        btnIAmAVolunteer.setTypeface(bikoTypeface);
     }
 
 

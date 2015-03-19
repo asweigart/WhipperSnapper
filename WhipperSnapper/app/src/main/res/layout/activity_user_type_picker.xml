@@ -13,7 +13,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/WhipperSnapper"
         android:id="@+id/tvAppTitle"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textSize="44sp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -21,15 +22,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivAvatar1" />
+
         <Button
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/I_am_a_senior"
             android:id="@+id/btnIAmASenior"
             android:layout_gravity="center_horizontal"
-            android:onClick="onSeniorClick" />
+            android:onClick="onSeniorClick"
+            android:layout_weight="1" />
 
-        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivAvatar2" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -38,12 +50,13 @@
         android:layout_gravity="center_horizontal">
 
         <Button
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/I_am_a_volunteer"
             android:id="@+id/btnIAmAVolunteer"
             android:layout_gravity="center_horizontal"
-            android:onClick="onVolunteerClick" />
+            android:onClick="onVolunteerClick"
+            android:layout_weight="1" />
 
         </LinearLayout>
 
