@@ -20,16 +20,19 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1">
 
         <ImageView
+            android:contentDescription="Gif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ivTitleSeniorAvatar1" />
+            android:id="@+id/ivTitleSeniorAvatar1"
+            android:layout_gravity="center_vertical" />
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="@string/I_am_a_senior"
             android:id="@+id/btnIAmASenior"
             android:layout_gravity="center_horizontal"
@@ -37,8 +40,10 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:contentDescription="Gif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:id="@+id/ivTitleSeniorAvatar2" />
 
     </LinearLayout>
@@ -47,16 +52,19 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1">
 
         <ImageView
+            android:contentDescription="Gif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:id="@+id/ivTitleVolunteerAvatar1" />
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="@string/I_am_a_volunteer"
             android:id="@+id/btnIAmAVolunteer"
             android:layout_gravity="center_horizontal"
@@ -64,9 +72,11 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:contentDescription="Gif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ivTitleVolunteerAvatar2" />
+            android:id="@+id/ivTitleVolunteerAvatar2"
+            android:layout_gravity="center_vertical" />
 
         </LinearLayout>
 
