@@ -1,9 +1,12 @@
 package com.al.whippersnapper.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
+import android.widget.ImageView;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -37,6 +40,20 @@ public final class Util {
         }
 
         return relativeDate;
+    }
+
+
+    public static void loadGifIntoImageView(Context ctx, ImageView ivImage, int rawId) {
+        try {
+            GifAnimationDrawable anim = new GifAnimationDrawable(ctx.getResources().openRawResource(rawId));
+            ivImage.setImageDrawable(anim);
+            ((GifAnimationDrawable) ivImage.getDrawable()).setVisible(true, true);
+            anim.start();
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

@@ -22,8 +22,8 @@
     <string name="title_activity_find_task">FindTaskActivity</string>
     <string name="title_activity_user_type_picker">UserTypePickerActivity</string>
     <string name="WhipperSnapper">WhipperSnapper</string>
-    <string name="I_am_a_senior">I am a senior.</string>
-    <string name="I_am_a_volunteer">I am a volunteer.</string>
+    <string name="I_am_a_senior">I\'m a senior.</string>
+    <string name="I_am_a_volunteer">I\'m a volunteer.</string>
     <string name="title_activity_fill_out_profile">FillOutProfileActivity</string>
     <string name="Tell_us_your_information">Tell us your information:</string>
     <string name="Full_name">Full name</string>
@@ -74,5 +74,6 @@
     <string name="The_address_for_this_task_is">The address for this task is\s</string>
     <string name="Call">Call</string>
     <string name="title_activity___debug_fake_phone">_DebugFakePhoneActivity</string>
+    <string name="Help_is_on_the_way">Help is on the way.</string>
 
 </resources>

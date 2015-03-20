@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.media.Image;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,10 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.utils.GifAnimationDrawable;
+import com.al.whippersnapper.utils.Util;
 
 import java.io.IOException;
 
@@ -28,8 +32,6 @@ public class UserTypePickerActivity extends ActionBarActivity {
     private ImageView ivTitleSeniorAvatar2;
     private ImageView ivTitleVolunteerAvatar1;
     private ImageView ivTitleVolunteerAvatar2;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,30 +48,19 @@ public class UserTypePickerActivity extends ActionBarActivity {
         btnIAmASenior.setTypeface(bikoTypeface);
         btnIAmAVolunteer.setTypeface(bikoTypeface);
 
+        // tagline
+        ((TextView) findViewById(R.id.tvTagLineLabel)).setTypeface(bikoTypeface);
+
         // load the animated gifs of the little avatars
         ivTitleSeniorAvatar1 = (ImageView) findViewById(R.id.ivTitleSeniorAvatar1);
         ivTitleSeniorAvatar2 = (ImageView) findViewById(R.id.ivTitleSeniorAvatar2);
         ivTitleVolunteerAvatar1 = (ImageView) findViewById(R.id.ivTitleVolunteerAvatar1);
         ivTitleVolunteerAvatar2 = (ImageView) findViewById(R.id.ivTitleVolunteerAvatar2);
-        loadGifIntoImageView(ivTitleSeniorAvatar1, R.raw.title_senior_avatar1);
-        loadGifIntoImageView(ivTitleSeniorAvatar2, R.raw.title_senior_avatar2);
-        loadGifIntoImageView(ivTitleVolunteerAvatar1, R.raw.title_volunteer_avatar1);
-        loadGifIntoImageView(ivTitleVolunteerAvatar2, R.raw.title_volunteer_avatar2);
+        Util.loadGifIntoImageView(this, ivTitleSeniorAvatar1, R.raw.title_senior_avatar1);
+        Util.loadGifIntoImageView(this, ivTitleSeniorAvatar2, R.raw.title_senior_avatar2);
+        Util.loadGifIntoImageView(this, ivTitleVolunteerAvatar1, R.raw.title_volunteer_avatar1);
+        Util.loadGifIntoImageView(this, ivTitleVolunteerAvatar2, R.raw.title_volunteer_avatar2);
     }
-
-    protected void loadGifIntoImageView(ImageView ivImage, int rawId) {
-        try {
-            GifAnimationDrawable anim = new GifAnimationDrawable(getResources().openRawResource(rawId));
-            ivImage.setImageDrawable(anim);
-            ((GifAnimationDrawable) ivImage.getDrawable()).setVisible(true, true);
-            anim.start();
-        } catch (Resources.NotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,13 +87,21 @@ public class UserTypePickerActivity extends ActionBarActivity {
     public void onSeniorClick(View v) {
         Intent i = new Intent(UserTypePickerActivity.this, FillOutProfileActivity.class);
         i.putExtra("isSenior", true);
-        startActivityForResult(i, USER_TYPE_REQUEST_CODE);
+        Pair<View, String> p1 = Pair.create((View)ivTitleSeniorAvatar1, "avatar1");
+        Pair<View, String> p2 = Pair.create((View)ivTitleSeniorAvatar2, "avatar2");
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, p1, p2);
+        startActivity(i, options.toBundle());
     }
 
     public void onVolunteerClick(View v) {
         Intent i = new Intent(UserTypePickerActivity.this, FillOutProfileActivity.class);
         i.putExtra("isSenior", false);
-        startActivityForResult(i, USER_TYPE_REQUEST_CODE);
+        Pair<View, String> p1 = Pair.create((View)ivTitleVolunteerAvatar1, "avatar1");
+        Pair<View, String> p2 = Pair.create((View)ivTitleVolunteerAvatar2, "avatar2");
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, p1, p2);
+        startActivity(i, options.toBundle());
     }
 
     @Override

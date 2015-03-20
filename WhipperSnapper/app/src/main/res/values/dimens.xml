@@ -9,5 +9,10 @@
     <dimen name="profile_photo_in_find_tasks">80dp</dimen>
     <dimen name="AcceptDeclineButtonHeight">40dp</dimen>
     <dimen name="no_internet_size">80dp</dimen>
-    <dimen name="title_avatar_size">25dp</dimen>
+    <dimen name="title_avatar_width">49dp</dimen>
+    <dimen name="title_avatar_height">85dp</dimen>
+    <dimen name="small_avatar_width">33dp</dimen>
+    <dimen name="small_avatar_height">57dp</dimen>
+    <dimen name="title_button_text_size">24sp</dimen>
+    <dimen name="title_button_margin">6dp</dimen>
 </resources>

@@ -56,6 +56,8 @@ public class FillOutProfileActivity extends ActionBarActivity {
     private Button btnCreateProfile;
     private TextView tvForPrivacyLabel;
     private ProgressBar pbCreatingProfile;
+    private ImageView ivAvatar1;
+    private ImageView ivAvatar2;
 
     private String userPhoneNumber;
     private byte[] photoBytes;
@@ -77,6 +79,15 @@ public class FillOutProfileActivity extends ActionBarActivity {
         btnCreateProfile = (Button) findViewById(R.id.btnCreateProfile);
         tvForPrivacyLabel = (TextView) findViewById(R.id.tvForPrivacyLabel);
         pbCreatingProfile = (ProgressBar) findViewById(R.id.pbCreatingProfile);
+        ivAvatar1 = (ImageView) findViewById(R.id.ivAvatar1);
+        ivAvatar2 = (ImageView) findViewById(R.id.ivAvatar2);
+        if (getIntent().getBooleanExtra("isSenior", true)) {
+            Util.loadGifIntoImageView(this, ivAvatar1, R.raw.title_senior_avatar1);
+            Util.loadGifIntoImageView(this, ivAvatar2, R.raw.title_senior_avatar2);
+        } else {
+            Util.loadGifIntoImageView(this, ivAvatar1, R.raw.title_volunteer_avatar1);
+            Util.loadGifIntoImageView(this, ivAvatar2, R.raw.title_volunteer_avatar2);
+        }
 
         pbCreatingProfile.setVisibility(View.INVISIBLE);
         btnTakePhotoNow.setEnabled(true);

@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary_color"
     tools:context="com.al.whippersnapper.activities.FillOutProfileActivity">
 
     <TextView
@@ -10,7 +11,8 @@
         android:id="@+id/tvTellUsLabel"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@color/light_primary_color" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -23,7 +25,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="@string/Full_name" />
+        android:hint="@string/Full_name"
+        android:textColorHint="@color/light_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,7 +35,8 @@
         android:id="@+id/tvForPrivacyLabel"
         android:layout_below="@+id/etFullName"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@color/light_primary_color" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -44,7 +48,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:elegantTextHeight="true"
-        android:hint="@string/Street_address" />
+        android:hint="@string/Street_address"
+        android:textColorHint="@color/light_primary_color" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -55,7 +60,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/etAddress"
         android:layout_alignEnd="@+id/etAddress"
-        android:hint="@string/City_State_Zip" />
+        android:hint="@string/City_State_Zip"
+        android:textColorHint="@color/light_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,7 +72,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/btnTakePhotoNow"
-        android:layout_alignEnd="@+id/btnTakePhotoNow" />
+        android:layout_alignEnd="@+id/btnTakePhotoNow"
+        android:textColor="@color/light_primary_color" />
 
     <ImageView
         android:layout_width="@dimen/profile_photo_on_signup_size"
@@ -86,7 +93,9 @@
         android:layout_toRightOf="@+id/ivProfilePhoto"
         android:layout_alignRight="@+id/etCityStateZip"
         android:layout_alignEnd="@+id/etCityStateZip"
-        android:onClick="onTakePhotoNowClick" />
+        android:onClick="onTakePhotoNowClick"
+        android:backgroundTint="@color/accent_color"
+        android:textColor="@color/text_on_primary_color" />
 
     <Button
         android:layout_width="wrap_content"
@@ -97,7 +106,9 @@
         android:layout_toRightOf="@+id/ivProfilePhoto"
         android:layout_alignRight="@+id/btnTakePhotoNow"
         android:layout_alignEnd="@+id/btnTakePhotoNow"
-        android:onClick="onUploadPhotoClick" />
+        android:onClick="onUploadPhotoClick"
+        android:backgroundTint="@color/accent_color"
+        android:textColor="@color/text_on_primary_color" />
 
     <Button
         android:layout_width="wrap_content"
@@ -109,7 +120,9 @@
         android:layout_alignRight="@+id/btnUploadPhoto"
         android:layout_alignEnd="@+id/btnUploadPhoto"
         android:layout_alignParentBottom="true"
-        android:onClick="onCreateProfileClick" />
+        android:onClick="onCreateProfileClick"
+        android:textColor="@color/text_on_primary_color"
+        android:backgroundTint="@color/accent_color" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
@@ -119,5 +132,24 @@
         android:indeterminate="true"
         android:layout_above="@+id/btnCreateProfile"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="@dimen/small_avatar_width"
+        android:layout_height="@dimen/small_avatar_height"
+        android:id="@+id/ivAvatar2"
+        android:transitionName="avatar2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="@dimen/small_avatar_width"
+        android:layout_height="@dimen/small_avatar_height"
+        android:id="@+id/ivAvatar1"
+        android:transitionName="avatar1"
+        android:layout_marginRight="@dimen/small_avatar_width"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/ivAvatar2"
+        android:layout_alignEnd="@+id/ivAvatar2" />
 
 </RelativeLayout>

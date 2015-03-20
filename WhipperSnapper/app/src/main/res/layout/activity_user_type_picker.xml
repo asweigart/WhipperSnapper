@@ -5,7 +5,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.al.whippersnapper.activities.UserTypePickerActivity">
+    android:background="@color/primary_color"
+    tools:context="com.al.whippersnapper.activities.UserTypePickerActivity"
+    android:id="@+id/llMainlayout">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +16,19 @@
         android:text="@string/WhipperSnapper"
         android:id="@+id/tvAppTitle"
         android:layout_gravity="center_horizontal"
-        android:textSize="44sp" />
+        android:layout_centerHorizontal="true"
+        android:textSize="44sp"
+        android:textColor="@color/text_on_primary_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Help_is_on_the_way"
+        android:id="@+id/tvTagLineLabel"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/light_primary_color"
+        android:layout_marginBottom="4dp"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -25,9 +39,10 @@
 
         <ImageView
             android:contentDescription="Gif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/title_avatar_width"
+            android:layout_height="@dimen/title_avatar_height"
             android:id="@+id/ivTitleSeniorAvatar1"
+            android:transitionName="avatar1"
             android:layout_gravity="center_vertical" />
 
         <Button
@@ -37,12 +52,17 @@
             android:id="@+id/btnIAmASenior"
             android:layout_gravity="center_horizontal"
             android:onClick="onSeniorClick"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textColor="@color/text_on_primary_color"
+            android:layout_margin="@dimen/title_button_margin"
+            android:textSize="@dimen/title_button_text_size"
+            android:background="@color/accent_color" />
 
         <ImageView
             android:contentDescription="Gif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/title_avatar_width"
+            android:layout_height="@dimen/title_avatar_height"
+            android:transitionName="avatar2"
             android:layout_gravity="center_vertical"
             android:id="@+id/ivTitleSeniorAvatar2" />
 
@@ -57,8 +77,9 @@
 
         <ImageView
             android:contentDescription="Gif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/title_avatar_width"
+            android:layout_height="@dimen/title_avatar_height"
+            android:transitionName="avatar1"
             android:layout_gravity="center_vertical"
             android:id="@+id/ivTitleVolunteerAvatar1" />
 
@@ -69,12 +90,17 @@
             android:id="@+id/btnIAmAVolunteer"
             android:layout_gravity="center_horizontal"
             android:onClick="onVolunteerClick"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textColor="@color/text_on_primary_color"
+            android:layout_margin="@dimen/title_button_margin"
+            android:textSize="@dimen/title_button_text_size"
+            android:background="@color/accent_color" />
 
         <ImageView
             android:contentDescription="Gif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/title_avatar_width"
+            android:layout_height="@dimen/title_avatar_height"
+            android:transitionName="avatar2"
             android:id="@+id/ivTitleVolunteerAvatar2"
             android:layout_gravity="center_vertical" />
 

@@ -10,5 +10,6 @@
     <item name="text_icons" type="color">#FFFFFF</item>
     <item name="divider_color" type="color">#B6B6B6</item>
     <item name="text_field_background" type="color">#FFFFFF</item>
+    <item name="text_on_primary_color" type="color">#FFFFFF</item>
 
 </resources>

@@ -2,6 +2,8 @@ package com.al.whippersnapper.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -40,7 +42,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
     public static int INVALID_LOGIN_CREDENTIAL = 101; // Odd. This constant doesn't seem to exist in Parse
     public static final boolean DEBUG_USE_REAL_PHONE_NUMBER = false;
-    public static String DEBUG_FAKE_PHONE_NUMBER = "12125550006";
+    public static String DEBUG_FAKE_PHONE_NUMBER = "12125550010";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,18 @@ public class MainActivity extends ActionBarActivity {
                 e.printStackTrace();
                 finish();
             }
+        }
+
+        if (!isNetworkAvailable()) {
+            // there's no internet access
+            // hide the progress bar and show the "no internet" image.
+            ProgressBar pbMainProgressBar = (ProgressBar) findViewById(R.id.pbMainProgressBar);
+            pbMainProgressBar.setVisibility(View.GONE);
+            ImageView ivNoInterent = (ImageView) findViewById(R.id.ivNoInternet);
+            ivNoInterent.setVisibility(View.VISIBLE);
+            TextView tvNoInternetLabel = (TextView) findViewById(R.id.tvNoInternetLabel);
+            tvNoInternetLabel.setVisibility(View.VISIBLE);
+            return;
         }
 
         boolean creatingProfile = false;
@@ -79,17 +93,7 @@ public class MainActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
         }
-        if (thisUser == null) {
-            // there's no internet access
-            // hide the progress bar and show the "no internet" image.
-            ProgressBar pbMainProgressBar = (ProgressBar) findViewById(R.id.pbMainProgressBar);
-            pbMainProgressBar.setVisibility(View.GONE);
-            ImageView ivNoInterent = (ImageView) findViewById(R.id.ivNoInternet);
-            ivNoInterent.setVisibility(View.VISIBLE);
-            TextView tvNoInternetLabel = (TextView) findViewById(R.id.tvNoInternetLabel);
-            tvNoInternetLabel.setVisibility(View.VISIBLE);
-            return;
-        }
+
 
         final ParseWSUser finalUser = thisUser; // used so we can reference this in the callback
 
@@ -213,5 +217,12 @@ public class MainActivity extends ActionBarActivity {
         } else {
             return MainActivity.DEBUG_FAKE_PHONE_NUMBER;
         }
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }
