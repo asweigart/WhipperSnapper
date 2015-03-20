@@ -41,7 +41,7 @@
     <string name="title_activity_senior_home">SeniorHomeActivity</string>
     <string name="This_is_the_home_screen">This is the home screen. You have no requests currently. You can request a task now, or close this app until you need a task done.</string>
     <string name="Create_a_task_request">Create a Task Request</string>
-    <string name="The_task_I_need_done_is">The task I need done is:</string>
+    <string name="The_task_I_need_done_is">The type of task I need done is:</string>
     <string name="Additional_details">Additional details about the task:</string>
     <string name="Optional_take_photos">(Optional) Click to take a photo that can help WhipperSnapper volunteers understand the task:</string>
     <string name="Task_details_hint">Tell the WhipperSnapper volunteer if they need to bring something, when this task needs to be done, if the time flexible, and so on...</string>

@@ -25,7 +25,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ivAvatar1" />
+            android:id="@+id/ivTitleSeniorAvatar1" />
 
         <Button
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ivAvatar2" />
+            android:id="@+id/ivTitleSeniorAvatar2" />
 
     </LinearLayout>
 
@@ -49,6 +49,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivTitleVolunteerAvatar1" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,6 +62,11 @@
             android:layout_gravity="center_horizontal"
             android:onClick="onVolunteerClick"
             android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivTitleVolunteerAvatar2" />
 
         </LinearLayout>
 

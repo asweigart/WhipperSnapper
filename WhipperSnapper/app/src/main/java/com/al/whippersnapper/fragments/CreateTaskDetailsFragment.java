@@ -1,6 +1,7 @@
 package com.al.whippersnapper.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,11 +11,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.al.whippersnapper.R;
 import com.al.whippersnapper.activities.CreateTaskActivity;
@@ -24,6 +27,20 @@ import java.io.ByteArrayOutputStream;
 
 
 public class CreateTaskDetailsFragment extends Fragment {
+
+    String[] taskTypeStrings;
+    int[] taskTypeIcons = {R.drawable.task_type_gardening,
+            R.drawable.task_type_tech,
+            R.drawable.task_type_car_ride,
+            R.drawable.task_type_pickup,
+            R.drawable.task_type_cards,
+            R.drawable.task_type_housekeeping,
+            R.drawable.task_type_fixing,
+            R.drawable.task_type_paperwork,
+            R.drawable.task_type_petcare,
+            R.drawable.task_type_other};
+
+
     public interface onTaskPhotoClickListener {
         public void onTaskPhotoClick();
     }
@@ -96,7 +113,21 @@ public class CreateTaskDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_create_task_details, container, false);
 
 
+        String[] tempTaskTypes = {getResources().getStringArray(R.array.taskTypes)[0],
+                getResources().getStringArray(R.array.taskTypes)[1],
+                getResources().getStringArray(R.array.taskTypes)[2],
+                getResources().getStringArray(R.array.taskTypes)[3],
+                getResources().getStringArray(R.array.taskTypes)[4],
+                getResources().getStringArray(R.array.taskTypes)[5],
+                getResources().getStringArray(R.array.taskTypes)[6],
+                getResources().getStringArray(R.array.taskTypes)[7],
+                getResources().getStringArray(R.array.taskTypes)[8],
+                getResources().getStringArray(R.array.taskTypes)[9]};
+        taskTypeStrings = tempTaskTypes;
+
         spTaskType = (Spinner) v.findViewById(R.id.spTaskType);
+        spTaskType.setAdapter(new TaskTypeSpinnerAdapter(getActivity(), R.layout.task_type_spinner_row, taskTypeStrings));
+
         etTaskDetails = (EditText) v.findViewById(R.id.etTaskDetails);
 
         // set up click listener for photo
@@ -164,5 +195,36 @@ public class CreateTaskDetailsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+
+    /* My custom adapter for the spinner so that it shows icons in it. */
+    public class TaskTypeSpinnerAdapter extends ArrayAdapter<String> {
+        public TaskTypeSpinnerAdapter(Context context, int textViewResourceId, String[] objects) {
+            super(context, textViewResourceId, objects);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView,ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater=getActivity().getLayoutInflater();
+            View row=inflater.inflate(R.layout.task_type_spinner_row, parent, false);
+
+            TextView tvTaskTypeText = (TextView)row.findViewById(R.id.tvTaskTypeText);
+            tvTaskTypeText.setText(taskTypeStrings[position]);
+
+            ImageView ivTaskTypeIcon = (ImageView)row.findViewById(R.id.ivTaskTypeIcon);
+            ivTaskTypeIcon.setImageResource(taskTypeIcons[position]);
+
+            return row;
+        }
     }
 }

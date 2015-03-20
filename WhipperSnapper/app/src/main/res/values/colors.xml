@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="info_window_background" type="color">#FFFFFF</item>
+    <item name="primary_text" type="color">#212121</item>
+    <item name="secondary_text" type="color">#727272</item>
+    <item name="primary_color" type="color">#FF6732</item>
+    <item name="accent_color" type="color">#00BCD4</item>
+    <item name="dark_primary_color" type="color">#E64A19</item>
+    <item name="light_primary_color" type="color">#FFCCBC</item>
+    <item name="text_icons" type="color">#FFFFFF</item>
+    <item name="divider_color" type="color">#B6B6B6</item>
+    <item name="text_field_background" type="color">#FFFFFF</item>
+
 </resources>
