@@ -14,7 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/I_need_the_task_done_at"
-        android:id="@+id/tvTaskDoneAtLabel" />
+        android:id="@+id/tvTaskDoneAtLabel"
+        android:textColor="@color/light_primary_color" />
 
 
     <RadioGroup
@@ -33,7 +34,8 @@
             android:layout_below="@+id/tvTaskDoneAtLabel"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:checked="true" />
+            android:checked="true"
+            android:textColor="@color/text_on_primary_color" />
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -43,7 +45,8 @@
             android:layout_below="@+id/rbMyHomeAddress"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:checked="false" />
+            android:checked="false"
+            android:textColor="@color/text_on_primary_color" />
     </RadioGroup>
 
     <fragment
@@ -67,7 +70,7 @@
         android:layout_alignRight="@+id/map"
         android:layout_alignEnd="@+id/map"
         android:background="@color/accent_color"
-        android:textColor="@color/light_primary_color" />
+        android:textColor="@color/text_on_primary_color" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"

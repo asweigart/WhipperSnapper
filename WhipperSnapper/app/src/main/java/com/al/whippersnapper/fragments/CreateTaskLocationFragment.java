@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.IntentSender;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -169,6 +170,10 @@ public class CreateTaskLocationFragment extends Fragment implements
 
         pbInLocationFrag = (ProgressBar) v.findViewById(R.id.pbInDetailsFrag);
 
+        // set font on buttons
+        Typeface bikoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Biko_Regular.otf");
+        btnDone_FromMap.setTypeface(bikoTypeface);
+
         return v;
     }
 
@@ -234,7 +239,7 @@ public class CreateTaskLocationFragment extends Fragment implements
         map = googleMap;
         if (map != null) {
             // Map is ready
-            Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             map.setMyLocationEnabled(true);
             map.setOnMapLongClickListener(this);
 
@@ -253,7 +258,7 @@ public class CreateTaskLocationFragment extends Fragment implements
     @Override
     public void onMapLongClick(LatLng point) {
         // TODO - should probably use an overlay on the map instead of long pressing to set spot.
-        Toast.makeText(getActivity().getApplicationContext(), "Long Press", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity().getApplicationContext(), "Long Press", Toast.LENGTH_LONG).show();
 
         rbMapLocation.setChecked(true); // setting map marker checks this radio button
         map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them

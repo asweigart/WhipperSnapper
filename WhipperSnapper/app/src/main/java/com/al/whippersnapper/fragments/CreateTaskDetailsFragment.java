@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -149,6 +150,11 @@ public class CreateTaskDetailsFragment extends Fragment {
         });
 
         pbInDetailsFrag = (ProgressBar) v.findViewById(R.id.pbInDetailsFrag);
+
+        // set font on buttons
+        Typeface bikoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Biko_Regular.otf");
+        btnDone_FromDetails.setTypeface(bikoTypeface);
+
 
         return v;
     }

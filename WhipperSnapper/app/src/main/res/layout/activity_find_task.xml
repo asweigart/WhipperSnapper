@@ -8,8 +8,12 @@
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabsFindTask"
+        android:background="@color/accent_color"
         app:pstsShouldExpand="true"
         app:pstsTextAllCaps="true"
+        app:pstsDividerColor="@color/text_field_background"
+        app:pstsIndicatorColor="@color/text_field_background"
+        app:pstsUnderlineColor="@color/text_field_background"
         android:layout_width="match_parent"
         android:layout_height="48dp"></com.astuetz.PagerSlidingTabStrip>
 

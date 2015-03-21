@@ -44,7 +44,7 @@
     <string name="The_task_I_need_done_is">The type of task I need done is:</string>
     <string name="Additional_details">Additional details about the task:</string>
     <string name="Optional_take_photos">(Optional) Click to take a photo that can help WhipperSnapper volunteers understand the task:</string>
-    <string name="Task_details_hint">Tell the WhipperSnapper volunteer if they need to bring something, when this task needs to be done, if the time flexible, and so on...</string>
+    <string name="Task_details_hint">Tell the WhipperSnapper volunteer any specific details about the task...</string>
     <string name="Unable_to_get_data_from_the_database">Unable to get data from the database.</string>
 
 <!-- TODO: Remove or change this placeholder text -->
