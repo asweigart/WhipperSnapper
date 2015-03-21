@@ -1,31 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/senior_home_screen_padding"
-    android:orientation="vertical" >
-
+    android:background="@color/primary_color">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/WhipperSnapper"
-        android:id="@+id/tvTitleLabel"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/tvAppTitle"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:textSize="44sp"
+        android:textColor="@color/text_on_primary_color" />
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/This_is_the_home_screen"
         android:id="@+id/tvInstructionsLabel"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Create_a_task_request"
-        android:id="@+id/btnCreateTaskRequest"
         android:layout_gravity="center_horizontal"
-        android:onClick="onCreateTaskRequestClick" />
-</LinearLayout>
+        android:textColor="@color/light_primary_color"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:src="@raw/plus_sign"
+        fab:fab_type="normal"
+        fab:fab_shadow="true"
+        fab:fab_colorNormal="@color/accent_color"
+        android:onClick="onCreateTaskRequestClick"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/tvInstructionsLabel"
+        android:layout_marginBottom="105dp" />
+
+
+    <ImageView
+        android:layout_width="@dimen/small_avatar_width"
+        android:layout_height="@dimen/small_avatar_height"
+        android:id="@+id/ivAvatar2"
+        android:transitionName="avatar2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="@dimen/small_avatar_width"
+        android:layout_height="@dimen/small_avatar_height"
+        android:id="@+id/ivAvatar1"
+        android:transitionName="avatar1"
+        android:layout_marginRight="@dimen/small_avatar_width"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/ivAvatar2"
+        android:layout_alignEnd="@+id/ivAvatar2" />
+
+</RelativeLayout>

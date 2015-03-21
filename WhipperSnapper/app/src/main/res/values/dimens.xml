@@ -15,4 +15,5 @@
     <dimen name="small_avatar_height">57dp</dimen>
     <dimen name="title_button_text_size">24sp</dimen>
     <dimen name="title_button_margin">6dp</dimen>
+    <dimen name="small_button_margin">4dp</dimen>
 </resources>

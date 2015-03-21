@@ -1,7 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_color"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.al.whippersnapper.activities.FillOutProfileActivity">
 
     <TextView
@@ -17,7 +22,6 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/etFullName"
         android:layout_below="@+id/tvTellUsLabel"
@@ -26,7 +30,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="@string/Full_name"
-        android:textColorHint="@color/light_primary_color" />
+        android:textColorHint="@color/light_primary_color"
+        android:textColor="@color/text_on_primary_color"
+        android:inputType="textCapWords|textAutoCorrect" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,7 +55,9 @@
         android:layout_alignParentEnd="true"
         android:elegantTextHeight="true"
         android:hint="@string/Street_address"
-        android:textColorHint="@color/light_primary_color" />
+        android:textColorHint="@color/light_primary_color"
+        android:textColor="@color/text_on_primary_color"
+        android:inputType="textCapWords|textAutoCorrect" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -61,13 +69,15 @@
         android:layout_alignRight="@+id/etAddress"
         android:layout_alignEnd="@+id/etAddress"
         android:hint="@string/City_State_Zip"
-        android:textColorHint="@color/light_primary_color" />
+        android:textColorHint="@color/light_primary_color"
+        android:textColor="@color/text_on_primary_color"
+        android:inputType="textCapWords|textAutoCorrect" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Your_address_will_only_be_shown"
-        android:id="@+id/textView"
+        android:id="@+id/tvForPrivacyLabel2"
         android:layout_below="@+id/etCityStateZip"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -79,23 +89,24 @@
         android:layout_width="@dimen/profile_photo_on_signup_size"
         android:layout_height="@dimen/profile_photo_on_signup_size"
         android:id="@+id/ivProfilePhoto"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/tvForPrivacyLabel2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@mipmap/ic_personal_photo" />
+        android:src="@raw/personal_photo_white" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Take_photo_now"
         android:id="@+id/btnTakePhotoNow"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/tvForPrivacyLabel2"
         android:layout_toRightOf="@+id/ivProfilePhoto"
         android:layout_alignRight="@+id/etCityStateZip"
         android:layout_alignEnd="@+id/etCityStateZip"
         android:onClick="onTakePhotoNowClick"
-        android:backgroundTint="@color/accent_color"
-        android:textColor="@color/text_on_primary_color" />
+        android:textColor="@color/text_on_primary_color"
+        android:background="@color/accent_color"
+        android:layout_margin="@dimen/small_button_margin" />
 
     <Button
         android:layout_width="wrap_content"
@@ -107,8 +118,9 @@
         android:layout_alignRight="@+id/btnTakePhotoNow"
         android:layout_alignEnd="@+id/btnTakePhotoNow"
         android:onClick="onUploadPhotoClick"
-        android:backgroundTint="@color/accent_color"
-        android:textColor="@color/text_on_primary_color" />
+        android:textColor="@color/text_on_primary_color"
+        android:background="@color/accent_color"
+        android:layout_margin="@dimen/small_button_margin" />
 
     <Button
         android:layout_width="wrap_content"
@@ -122,7 +134,7 @@
         android:layout_alignParentBottom="true"
         android:onClick="onCreateProfileClick"
         android:textColor="@color/text_on_primary_color"
-        android:backgroundTint="@color/accent_color" />
+        android:background="@color/accent_color" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"

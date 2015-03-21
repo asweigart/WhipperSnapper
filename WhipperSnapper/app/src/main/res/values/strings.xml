@@ -39,7 +39,7 @@
     <string name="Your_photo_is_still_needed">(Your photo is still needed.)</string>
     <string name="Creating_profile">(Creating your profile...)</string>
     <string name="title_activity_senior_home">SeniorHomeActivity</string>
-    <string name="This_is_the_home_screen">This is the home screen. You have no requests currently. You can request a task now, or close this app until you need a task done.</string>
+    <string name="This_is_the_home_screen">You currently have no task requests. You can request a task now, or close this app until you need a task done.</string>
     <string name="Create_a_task_request">Create a Task Request</string>
     <string name="The_task_I_need_done_is">The type of task I need done is:</string>
     <string name="Additional_details">Additional details about the task:</string>

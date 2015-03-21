@@ -8,9 +8,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -55,6 +58,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
     private EditText etCityStateZip;
     private Button btnCreateProfile;
     private TextView tvForPrivacyLabel;
+    private TextView tvForPrivacyLabel2;
     private ProgressBar pbCreatingProfile;
     private ImageView ivAvatar1;
     private ImageView ivAvatar2;
@@ -78,6 +82,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
         etCityStateZip = (EditText) findViewById(R.id.etCityStateZip);
         btnCreateProfile = (Button) findViewById(R.id.btnCreateProfile);
         tvForPrivacyLabel = (TextView) findViewById(R.id.tvForPrivacyLabel);
+        tvForPrivacyLabel2 = (TextView) findViewById(R.id.tvForPrivacyLabel2);
         pbCreatingProfile = (ProgressBar) findViewById(R.id.pbCreatingProfile);
         ivAvatar1 = (ImageView) findViewById(R.id.ivAvatar1);
         ivAvatar2 = (ImageView) findViewById(R.id.ivAvatar2);
@@ -102,53 +107,76 @@ public class FillOutProfileActivity extends ActionBarActivity {
         // obtain the phone number from the device
         userPhoneNumber = getThisDevicePhoneNumber();
 
+        // set font on buttons
+        Typeface bikoTypeface = Typeface.createFromAsset(getAssets(), "fonts/Biko_Regular.otf");
+        btnTakePhotoNow.setTypeface(bikoTypeface);
+        btnUploadPhoto.setTypeface(bikoTypeface);
+        btnCreateProfile.setTypeface(bikoTypeface);
 
-        // add TextWatcher to Full Name field
-        etFullName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // s.toString()
-                String fullName = etFullName.getText().toString();
-                tvForPrivacyLabel.setText(getResources().getString(R.string.For_privacy_your_name_will_appear_as) + Util.getAnonymizedName(fullName));
-                setDoneButtonIfComplete();
-            }
+        if (getIntent().getBooleanExtra("isSenior", true)) {
+            // privacy features are for seniors
 
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
+            tvForPrivacyLabel.setVisibility(View.VISIBLE);
+            tvForPrivacyLabel2.setVisibility(View.VISIBLE);
 
-        // add TextWatcher to Address field
-        etAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            // add TextWatcher to Full Name field
+            etFullName.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // s.toString()
-                setDoneButtonIfComplete();
-            }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // s.toString()
+                    String fullName = etFullName.getText().toString();
+                    tvForPrivacyLabel.setText(getResources().getString(R.string.For_privacy_your_name_will_appear_as) + " " + Util.getAnonymizedName(fullName));
+                    setDoneButtonIfComplete();
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
 
-        // add TextWatcher to City, State, Zip field
-        etCityStateZip.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            // add TextWatcher to Address field
+            etAddress.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // s.toString()
-                setDoneButtonIfComplete();
-            }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // s.toString()
+                    setDoneButtonIfComplete();
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+
+            // add TextWatcher to City, State, Zip field
+            etCityStateZip.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // s.toString()
+                    setDoneButtonIfComplete();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+        } else {
+            // volunteers don't have their name annoynmized
+            tvForPrivacyLabel.setVisibility(View.INVISIBLE);
+            tvForPrivacyLabel2.setVisibility(View.INVISIBLE);
+        }
 
     }
 
@@ -235,10 +263,19 @@ public class FillOutProfileActivity extends ActionBarActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     if (getIntent().getBooleanExtra("isSenior", true)) {
-                        // This is a senior, start the Senior Home activity
-                        Intent i = new Intent(FillOutProfileActivity.this, SeniorHomeActivity.class);
-                        startActivity(i);
-                        finish();
+                        // This is a senior, start the Senior Home activity (in the ui thread so the shared transition can be seen)
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent i = new Intent(FillOutProfileActivity.this, SeniorHomeActivity.class);
+                                Pair<View, String> p1 = Pair.create((View) ivAvatar1, "avatar1");
+                                Pair<View, String> p2 = Pair.create((View) ivAvatar2, "avatar2");
+                                ActivityOptionsCompat options = ActivityOptionsCompat.
+                                        makeSceneTransitionAnimation(FillOutProfileActivity.this, p1, p2);
+                                startActivity(i);
+                                finish();
+                            }
+                        });
                     } else {
                         // This is a volunteer, start the Find Task activity
                         Intent i = new Intent(FillOutProfileActivity.this, FindTaskActivity.class);
