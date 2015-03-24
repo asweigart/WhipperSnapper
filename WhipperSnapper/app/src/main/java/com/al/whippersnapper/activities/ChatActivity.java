@@ -1,6 +1,7 @@
 package com.al.whippersnapper.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -79,6 +80,18 @@ public class ChatActivity extends ActionBarActivity {
         etMessageToSend = (EditText) findViewById(R.id.etMessageToSend);
         btnSend = (Button) findViewById(R.id.btnSend);
 
+        etMessageToSend.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    onSendClick(null);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
         thisUser = (ParseWSUser) ParseUser.getCurrentUser();
 
         String otherUsername = getIntent().getStringExtra("otherUsername");
@@ -96,6 +109,12 @@ public class ChatActivity extends ActionBarActivity {
         }
 
         tvOtherUserName.setText(getResources().getString(R.string.You_are_chatting_with) + otherUserFullName);
+
+        // set font on buttons
+        Typeface bikoTypeface = Typeface.createFromAsset(getAssets(), "fonts/Biko_Regular.otf");
+        btnAccept.setTypeface(bikoTypeface);
+        btnDecline.setTypeface(bikoTypeface);
+        btnCall.setTypeface(bikoTypeface);
 
         lvChat = (ListView) findViewById(R.id.lvChat);
         mMessages = new ArrayList<ChatMessage>();

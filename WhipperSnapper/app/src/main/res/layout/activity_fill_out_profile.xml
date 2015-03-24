@@ -30,9 +30,10 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="@string/Full_name"
-        android:textColorHint="@color/light_primary_color"
-        android:textColor="@color/text_on_primary_color"
-        android:inputType="textCapWords|textAutoCorrect" />
+        android:inputType="textCapWords|textAutoCorrect"
+        android:background="@color/text_field_background"
+        android:layout_margin="4dp"
+        android:textColor="@color/text_field_foreground" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,9 +56,10 @@
         android:layout_alignParentEnd="true"
         android:elegantTextHeight="true"
         android:hint="@string/Street_address"
-        android:textColorHint="@color/light_primary_color"
-        android:textColor="@color/text_on_primary_color"
-        android:inputType="textCapWords|textAutoCorrect" />
+        android:textColor="@color/text_field_foreground"
+        android:inputType="textCapWords|textAutoCorrect"
+        android:background="@color/text_field_background"
+        android:layout_margin="4dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -69,9 +71,10 @@
         android:layout_alignRight="@+id/etAddress"
         android:layout_alignEnd="@+id/etAddress"
         android:hint="@string/City_State_Zip"
-        android:textColorHint="@color/light_primary_color"
-        android:textColor="@color/text_on_primary_color"
-        android:inputType="textCapWords|textAutoCorrect" />
+        android:textColor="@color/text_field_foreground"
+        android:inputType="textCapWords|textAutoCorrect"
+        android:background="@color/text_field_background"
+        android:layout_margin="4dp" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -22,7 +22,10 @@
             android:text="@string/decline"
             android:id="@+id/btnDeclineOffer"
             android:layout_weight="1"
-            android:onClick="onDeclineOfferClick" />
+            android:onClick="onDeclineOfferClick"
+            android:background="@color/accent_color"
+            android:layout_margin="@dimen/small_button_margin"
+            android:textColor="@color/text_on_primary_color" />
 
         <Button
             android:layout_width="wrap_content"
@@ -30,7 +33,10 @@
             android:text="@string/accept"
             android:id="@+id/btnAcceptOffer"
             android:layout_weight="1"
-            android:onClick="onAcceptOfferClick" />
+            android:onClick="onAcceptOfferClick"
+            android:background="@color/accent_color"
+            android:layout_margin="@dimen/small_button_margin"
+            android:textColor="@color/text_on_primary_color" />
 
         <Button
             android:layout_width="wrap_content"
@@ -38,7 +44,10 @@
             android:text="@string/Call"
             android:id="@+id/btnCall"
             android:layout_weight="1"
-            android:onClick="onCallClick" />
+            android:onClick="onCallClick"
+            android:background="@color/accent_color"
+            android:layout_margin="@dimen/small_button_margin"
+            android:textColor="@color/text_on_primary_color" />
 
     </LinearLayout>
 
@@ -64,7 +73,9 @@
         android:layout_toLeftOf="@+id/btnSend"
         android:layout_toStartOf="@+id/btnSend"
         android:layout_alignTop="@+id/btnSend"
-        android:hint="@string/Say_something" />
+        android:hint="@string/Say_something"
+        android:textColor="@color/text_on_primary_color"
+        android:background="@color/text_field_background" />
 
     <Button
         android:layout_width="wrap_content"
@@ -74,7 +85,10 @@
         android:layout_above="@+id/linearLayout"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onSendClick" />
+        android:onClick="onSendClick"
+        android:background="@color/accent_color"
+        android:layout_margin="@dimen/small_button_margin"
+        android:textColor="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
