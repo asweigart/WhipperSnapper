@@ -49,15 +49,32 @@
             android:textColor="@color/text_on_primary_color" />
     </RadioGroup>
 
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/mapFrameLayout"
         android:background="#FF00FF"
         android:layout_below="@+id/radioGroup"
-        android:layout_above="@+id/btnDone_FromMap"
-        />
+        android:layout_above="@+id/btnDone_FromMap">
+
+        <fragment
+            android:id="@+id/map"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivMapPin"
+            android:src="@raw/pin"
+            android:layout_above="@+id/btnDone_FromMap"
+            android:layout_alignEnd="@+id/map"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -67,8 +84,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/map"
-        android:layout_alignEnd="@+id/map"
+        android:layout_alignRight="@+id/mapFrameLayout"
+        android:layout_alignEnd="@+id/mapFrameLayout"
         android:background="@color/accent_color"
         android:textColor="@color/text_on_primary_color" />
 
@@ -81,6 +98,7 @@
         android:layout_centerHorizontal="true"
         android:indeterminate="true"
         android:visibility="gone" />
+
 
 
 </RelativeLayout>

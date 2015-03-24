@@ -170,24 +170,9 @@ public class CreateTaskActivity extends FragmentActivity implements
             setAddressIfNoLatLng(theUser);
         } else {
             // the "use this place on the map" is set
-            LatLng markerLocationOnMap = pagerAdapter.getTaskLocationFragment().getMarkerLocationOnMap();
-            if (markerLocationOnMap == null) {
-                // no marker was ever set. Use the current location by default
-                Location location = LocationServices.FusedLocationApi.getLastLocation(pagerAdapter.getTaskLocationFragment().getmGoogleApiClient());
-                if (location != null) {
-                    // was able to get current location
-                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    theUser.setTaskLat(currentLocation.latitude);
-                    theUser.setTaskLng(currentLocation.longitude);
-                } else {
-                    // wasn't able to get location, use the user's address instead
-                    setAddressIfNoLatLng(theUser);
-                }
-            } else {
-                // use the location of the set marker
-                theUser.setTaskLat(markerLocationOnMap.latitude);
-                theUser.setTaskLng(markerLocationOnMap.longitude);
-            }
+            LatLng mapCenter = pagerAdapter.getTaskLocationFragment().getCenterLocationOnMap();
+            theUser.setTaskLat(mapCenter.latitude);
+            theUser.setTaskLng(mapCenter.longitude);
         }
 
         theUser.saveInBackground(new SaveCallback() {

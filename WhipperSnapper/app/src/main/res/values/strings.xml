@@ -51,7 +51,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="I_need_the_task_done_at">I need the task done at:</string>
     <string name="My_home_address">My home address:\s</string>
-    <string name="The_location_on_this_map">This location (long press on map to set):</string>
+    <string name="The_location_on_this_map">This location:</string>
     <string name="All_done_Create_my_task_request">All done. Create my task request.</string>
     <string name="title_activity_waiting_for_chat">WaitingForChatActivity</string>
     <string name="All_set">All set!</string>

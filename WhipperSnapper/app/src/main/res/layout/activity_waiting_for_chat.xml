@@ -49,7 +49,8 @@
         android:text="@string/Waiting_message"
         android:id="@+id/tvInstructionsLabel"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/light_primary_color" />
+        android:textColor="@color/light_primary_color"
+        android:layout_weight="1" />
 
     <Button
         android:layout_width="wrap_content"

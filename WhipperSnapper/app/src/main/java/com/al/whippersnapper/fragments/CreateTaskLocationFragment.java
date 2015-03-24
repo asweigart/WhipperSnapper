@@ -33,6 +33,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -41,8 +42,7 @@ import com.parse.ParseException;
 public class CreateTaskLocationFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        GoogleMap.OnMapLongClickListener {
+        LocationListener {
 
 
     private SupportMapFragment mapFragment;
@@ -52,8 +52,10 @@ public class CreateTaskLocationFragment extends Fragment implements
     private long UPDATE_INTERVAL = 60000;  /* 60 secs */
     private long FASTEST_INTERVAL = 5000; /* 5 secs */
 
-    public LatLng getMarkerLocationOnMap() {
-        return markerLocationOnMap;
+    private final static int INITIAL_ZOOM_LEVEL = 17;
+
+    public LatLng getCenterLocationOnMap() {
+        return map.getCameraPosition().target;
     }
 
     public RadioButton getRbMyHomeAddress() {
@@ -155,7 +157,7 @@ public class CreateTaskLocationFragment extends Fragment implements
 
         // add actual address to the radio button text
         rbMyHomeAddress = (RadioButton) v.findViewById(R.id.rbMyHomeAddress);
-        rbMyHomeAddress.setText(getResources().getString(R.string.My_home_address) + thisUser.getAddress());
+        rbMyHomeAddress.setText(getResources().getString(R.string.My_home_address) + " " + thisUser.getAddress());
 
         rbMapLocation = (RadioButton) v.findViewById(R.id.rbMapLocation);
 
@@ -241,7 +243,6 @@ public class CreateTaskLocationFragment extends Fragment implements
             // Map is ready
             //Toast.makeText(getActivity(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             map.setMyLocationEnabled(true);
-            map.setOnMapLongClickListener(this);
 
             // Now that map has loaded, let's get our location!
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -255,26 +256,15 @@ public class CreateTaskLocationFragment extends Fragment implements
         }
     }
 
-    @Override
-    public void onMapLongClick(LatLng point) {
-        // TODO - should probably use an overlay on the map instead of long pressing to set spot.
-        //Toast.makeText(getActivity().getApplicationContext(), "Long Press", Toast.LENGTH_LONG).show();
-
-        rbMapLocation.setChecked(true); // setting map marker checks this radio button
-        map.clear(); // clears all overlays, polylines, etc from map too, but that's okay because we don't use them
-        map.addMarker(new MarkerOptions()
-                        .position(point)
-                        .draggable(true));
-        markerLocationOnMap = point;
-    }
 
 
-
+    /*
     public void onMove(View v) {
         LatLng latLng = new LatLng(49, -122);
         CameraUpdate camUpdate = CameraUpdateFactory.newLatLng(latLng);
         map.animateCamera(camUpdate);
     }
+    */
 
     protected void connectClient() {
         // Connect the client.
@@ -389,7 +379,7 @@ public class CreateTaskLocationFragment extends Fragment implements
         if (location != null) {
             //Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, INITIAL_ZOOM_LEVEL);
             map.animateCamera(cameraUpdate);
             startLocationUpdates();
         } else {
