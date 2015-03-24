@@ -53,10 +53,10 @@
         android:layout_alignRight="@+id/spTaskType"
         android:layout_alignEnd="@+id/spTaskType"
         android:hint="@string/Task_details_hint"
-        android:background="@color/primary_color"
-        android:textColorHint="@color/light_primary_color"
+        android:background="@color/text_field_background"
         android:layout_marginBottom="16dp"
-        android:textColor="@color/text_on_primary_color" />
+        android:textColor="@color/text_field_foreground"
+        android:padding="@dimen/small_button_margin" />
 
     <TextView
         android:layout_width="wrap_content"

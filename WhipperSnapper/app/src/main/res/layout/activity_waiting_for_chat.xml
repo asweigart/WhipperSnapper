@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvWaitingTaskPostedOn"
-        android:textColor="@color/text_on_primary_color" />
+        android:textColor="@color/light_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -27,7 +27,7 @@
         android:text="@string/Help_is_on_the_way"
         android:id="@+id/tvTagLineLabel"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/light_primary_color"
+        android:textColor="@color/text_field_foreground"
         android:layout_marginBottom="4dp"
         android:textSize="18sp" />
 
