@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="info_window_background" type="color">#FFFFFF</item>
+    <item name="info_window_background" type="color">#FF6732</item>
     <item name="primary_text" type="color">#212121</item>
     <item name="secondary_text" type="color">#727272</item>
     <item name="primary_color" type="color">#FF6732</item>
