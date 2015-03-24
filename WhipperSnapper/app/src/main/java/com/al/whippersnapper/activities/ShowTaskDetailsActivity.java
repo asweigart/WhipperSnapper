@@ -2,11 +2,13 @@ package com.al.whippersnapper.activities;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +37,11 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_task_details);
+
+        // set up typeface
+        Typeface bikoTypeface = Typeface.createFromAsset(getAssets(), "fonts/Biko_Regular.otf");
+        Button btnOffer = (Button) findViewById(R.id.btnOffer);
+        btnOffer.setTypeface(bikoTypeface);
 
         ivTaskDetailsProfilePhoto = (ImageView) findViewById(R.id.ivTaskDetailsProfilePhoto);
         tvTaskDetailsSeniorName = (TextView) findViewById(R.id.tvTaskDetailsSeniorName);

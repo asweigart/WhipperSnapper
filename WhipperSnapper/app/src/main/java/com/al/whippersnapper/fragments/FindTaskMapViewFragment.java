@@ -33,6 +33,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -65,6 +66,7 @@ public class FindTaskMapViewFragment extends Fragment implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LatLng lastCameraPosition;
 
+    public final static int NUM_MAP_AVATARS = 21;
     public final static int MAX_RANGE = 10000; // 10km, TODO: this should depend on the map zoom level
 
     private HashMap<Marker, ParseWSUser> markerUserMapping;
@@ -178,10 +180,41 @@ public class FindTaskMapViewFragment extends Fragment implements
                 Log.e("XXXXXXXX", "setMarkersForNearbyTasks: Showing" + parseWSUsers.size() + " of " + DEBUG_originalUsersLength);
 
                 // create markers for each task
+                int mapAvatar;
+
                 for (int i = 0; i < parseWSUsers.size(); i++) {
                     ParseWSUser user = parseWSUsers.get(i);
+
+                    // select an avatar based on the hash of the task string
+                    String taskString = String.valueOf(user.getTaskLat()) + String.valueOf(user.getTaskLng());
+                    switch ((taskString.hashCode() + user.getTaskDetails().hashCode()) % NUM_MAP_AVATARS) {
+                        case 0: mapAvatar = R.raw.map_avatar_0; break;
+                        case 1: mapAvatar = R.raw.map_avatar_1; break;
+                        case 2: mapAvatar = R.raw.map_avatar_2; break;
+                        case 3: mapAvatar = R.raw.map_avatar_3; break;
+                        case 4: mapAvatar = R.raw.map_avatar_4; break;
+                        case 5: mapAvatar = R.raw.map_avatar_5; break;
+                        case 6: mapAvatar = R.raw.map_avatar_6; break;
+                        case 7: mapAvatar = R.raw.map_avatar_7; break;
+                        case 8: mapAvatar = R.raw.map_avatar_8; break;
+                        case 9: mapAvatar = R.raw.map_avatar_9; break;
+                        case 10: mapAvatar = R.raw.map_avatar_10; break;
+                        case 11: mapAvatar = R.raw.map_avatar_11; break;
+                        case 12: mapAvatar = R.raw.map_avatar_12; break;
+                        case 13: mapAvatar = R.raw.map_avatar_13; break;
+                        case 14: mapAvatar = R.raw.map_avatar_14; break;
+                        case 15: mapAvatar = R.raw.map_avatar_15; break;
+                        case 16: mapAvatar = R.raw.map_avatar_16; break;
+                        case 17: mapAvatar = R.raw.map_avatar_17; break;
+                        case 18: mapAvatar = R.raw.map_avatar_18; break;
+                        case 19: mapAvatar = R.raw.map_avatar_19; break;
+                        case 20: mapAvatar = R.raw.map_avatar_20; break;
+                        default: mapAvatar = R.raw.map_avatar_20; break;
+                    }
+
                     Marker marker = map.addMarker(new MarkerOptions()
-                            .position(new LatLng((double) user.getTaskLat(), (double) user.getTaskLng())));
+                                    .icon(BitmapDescriptorFactory.fromResource(mapAvatar))
+                                    .position(new LatLng((double) user.getTaskLat(), (double) user.getTaskLng())));
                     markerUserMapping.put(marker, user);
 
                     // add the user object to the arraylist so that the List View fragment can access it
@@ -380,7 +413,7 @@ public class FindTaskMapViewFragment extends Fragment implements
         // Display the connection status
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location != null) {
-            Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "GPS location was found!", Toast.LENGTH_SHORT).show();
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             lastCameraPosition = latLng;
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);

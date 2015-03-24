@@ -2,6 +2,7 @@ package com.al.whippersnapper.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,11 @@ public class WaitingForChatActivity extends ActionBarActivity {
         tvWaitingTaskType = (TextView) findViewById(R.id.tvWaitingTaskType);
         tvWaitingTaskDetails = (TextView) findViewById(R.id.tvWaitingTaskDetails);
         tvWaitingTaskPostedOn = (TextView) findViewById(R.id.tvWaitingTaskPostedOn);
+
+        // set up typeface
+        Typeface bikoTypeface = Typeface.createFromAsset(getAssets(), "fonts/Biko_Regular.otf");
+        Button btnCancelThisTask = (Button) findViewById(R.id.btnCancelThisTask);
+        btnCancelThisTask.setTypeface(bikoTypeface);
 
         // load task details into ui from the intent
         tvWaitingTaskType.setText(getIntent().getStringExtra("taskType"));

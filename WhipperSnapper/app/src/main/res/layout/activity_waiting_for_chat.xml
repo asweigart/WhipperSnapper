@@ -15,14 +15,41 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/All_set"
         android:id="@+id/tvAllSetLabel"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/text_on_primary_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Your_task_request"
+        android:id="@+id/tvYourTaskLabel"
+        android:textColor="@color/light_primary_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWaitingTaskType"
+        android:textColor="@color/text_on_primary_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWaitingTaskDetails"
+        android:textColor="@color/text_on_primary_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWaitingTaskPostedOn"
+        android:textColor="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Waiting_message"
         android:id="@+id/tvInstructionsLabel"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/light_primary_color" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,26 +57,10 @@
         android:text="@string/Cancel_this_task_request"
         android:id="@+id/btnCancelThisTask"
         android:layout_gravity="center_horizontal"
-        android:onClick="onCancelTaskClick" />
+        android:onClick="onCancelTaskClick"
+        android:background="@color/accent_color"
+        android:layout_margin="@dimen/title_button_margin"
+        android:textColor="@color/text_on_primary_color"
+        android:padding="@dimen/title_button_margin" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Your_task_request"
-        android:id="@+id/tvYourTaskLabel" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvWaitingTaskType" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvWaitingTaskDetails" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvWaitingTaskPostedOn" />
 </LinearLayout>
