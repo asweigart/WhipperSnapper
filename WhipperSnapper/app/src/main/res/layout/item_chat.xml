@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="@color/primary_color">
 
     <ImageView
         android:id="@+id/ivOtherUserChatPhoto"
@@ -19,7 +20,8 @@
         android:layout_marginRight="64dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="DUMMY: Chat text goes here.">
+        android:text="DUMMY: Chat text goes here."
+        android:textColor="@color/text_on_primary_color">
     </TextView>
     <ImageView
         android:id="@+id/ivChatPhoto"

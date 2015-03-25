@@ -10,20 +10,21 @@
     <ImageView
         android:layout_width="@dimen/profile_photo_on_signup_size"
         android:layout_height="@dimen/profile_photo_on_signup_size"
-        android:id="@+id/ivTaskDetailsProfilePhoto"
+        android:id="@+id/ivTaskDetailsTaskPhoto"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@raw/no_task_photo_white" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTaskDetailsSeniorName"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ivTaskDetailsProfilePhoto"
+        android:layout_toRightOf="@+id/ivTaskDetailsTaskPhoto"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,17 +34,20 @@
         android:layout_alignLeft="@+id/tvTaskDetailsSeniorName"
         android:layout_alignStart="@+id/tvTaskDetailsSeniorName"
         android:layout_alignRight="@+id/tvTaskDetailsSeniorName"
-        android:layout_alignEnd="@+id/tvTaskDetailsSeniorName" />
+        android:layout_alignEnd="@+id/tvTaskDetailsSeniorName"
+        android:textColor="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTaskDetailsDetails"
-        android:layout_below="@+id/ivTaskDetailsProfilePhoto"
+        android:layout_below="@+id/ivTaskDetailsTaskPhoto"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@color/text_on_primary_color"
+        android:textSize="20sp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -66,7 +70,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvTaskDetailsPostedOn"
         android:layout_below="@+id/tvTaskDetailsType"
-        android:layout_toRightOf="@+id/ivTaskDetailsProfilePhoto"
+        android:layout_toRightOf="@+id/ivTaskDetailsTaskPhoto"
         android:layout_alignRight="@+id/tvTaskDetailsDetails"
-        android:layout_alignEnd="@+id/tvTaskDetailsDetails" />
+        android:layout_alignEnd="@+id/tvTaskDetailsDetails"
+        android:textColor="@color/light_primary_color" />
 </RelativeLayout>

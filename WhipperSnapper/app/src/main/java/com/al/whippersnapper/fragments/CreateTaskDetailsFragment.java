@@ -124,7 +124,7 @@ public class CreateTaskDetailsFragment extends Fragment {
                 getResources().getStringArray(R.array.taskTypes)[7],
                 getResources().getStringArray(R.array.taskTypes)[8],
                 getResources().getStringArray(R.array.taskTypes)[9]};
-        taskTypeStrings = tempTaskTypes;
+        taskTypeStrings = tempTaskTypes; // this "tempTaskTypes" hack is done because Java doesn't allow the array literal syntax used here. Sheesh.
 
         spTaskType = (Spinner) v.findViewById(R.id.spTaskType);
         spTaskType.setAdapter(new TaskTypeSpinnerAdapter(getActivity(), R.layout.task_type_spinner_row, taskTypeStrings));

@@ -35,6 +35,8 @@ import com.al.whippersnapper.models.ParseWSUser;
 import com.al.whippersnapper.utils.Util;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -67,6 +69,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
     private byte[] photoBytes;
 
     private boolean isPhotoSet;
+    private boolean isPhotoDoneUploading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +181,22 @@ public class FillOutProfileActivity extends ActionBarActivity {
             tvForPrivacyLabel2.setVisibility(View.INVISIBLE);
         }
 
+
+
+        // do the sign up when the activity is first launched, and then just update it afterwards
+        ParseWSUser thisUser = new ParseWSUser();
+        thisUser.setUsername(userPhoneNumber);
+        thisUser.setPassword("password"); // Super secret 1337 password, yo.
+        thisUser.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    e.printStackTrace();
+                    Toast.makeText(FillOutProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
     }
 
 
@@ -222,16 +241,14 @@ public class FillOutProfileActivity extends ActionBarActivity {
         // TODO: Run all this in a background thread
 
         // create a user account on Parse
-        ParseWSUser thisUser = new ParseWSUser();
-        thisUser.setUsername(userPhoneNumber);
-        thisUser.setPassword("password"); // Super secret 1337 password, yo.
+        ParseWSUser thisUser = (ParseWSUser) ParseWSUser.getCurrentUser();
         thisUser.setPhone(userPhoneNumber);
         thisUser.setIsSenior(getIntent().getBooleanExtra("isSenior", true));
         thisUser.setFullName(etFullName.getText().toString());
         thisUser.setAddress(etAddress.getText().toString());
         thisUser.setCityStateZip(etCityStateZip.getText().toString());
-        ParseFile profilePhotoFile = new ParseFile("profilePhoto.jpg", photoBytes);
-        thisUser.setPhoto(profilePhotoFile);
+        //ParseFile profilePhotoFile = new ParseFile("profilePhoto.jpg", photoBytes); // now the photo is saved as soon as it has
+        //thisUser.setPhoto(profilePhotoFile);
         thisUser.setTaskType("");
 
         // geocode the address, save the lat & lng
@@ -245,6 +262,7 @@ public class FillOutProfileActivity extends ActionBarActivity {
         thisUser.setLat(homeLatLng.getLatitude()); // it's okay if lat & lng are null.
         thisUser.setLng(homeLatLng.getLongitude());
 
+        /*
         try {
             // We're displaying the progress bar, so this is fine.
             //long start = System.currentTimeMillis();
@@ -257,8 +275,9 @@ public class FillOutProfileActivity extends ActionBarActivity {
             // enable everything so the user can retry
             enableTheForm();
         }
+        */
 
-        thisUser.signUpInBackground(new SignUpCallback() {
+        thisUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
@@ -331,22 +350,38 @@ public class FillOutProfileActivity extends ActionBarActivity {
             }
         }
         //.e("XXXXXXXXXX", "Original size: " + photo.getWidth() + " " + photo.getHeight());
-        if (photo != null) {
+        if ((requestCode == TAKE_PHOTO_NOW_REQUEST || requestCode == UPLOAD_PHOTO_REQUEST) && resultCode == RESULT_OK) {
+            if (photo != null) {
 
-            // Scale the photo
-            Matrix m = new Matrix();
-            m.setRectToRect(new RectF(0, 0, photo.getWidth(), photo.getHeight()), new RectF(0, 0, PROFILE_PHOTO_MAX_WIDTH, PROFILE_PHOTO_MAX_HEIGHT), Matrix.ScaleToFit.CENTER);
-            photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), m, true);
-            //Log.e("XXXXXXXXXX", "Scaled size: " + photo.getWidth() + " " + photo.getHeight());
+                // Scale the photo
+                Matrix m = new Matrix();
+                m.setRectToRect(new RectF(0, 0, photo.getWidth(), photo.getHeight()), new RectF(0, 0, PROFILE_PHOTO_MAX_WIDTH, PROFILE_PHOTO_MAX_HEIGHT), Matrix.ScaleToFit.CENTER);
+                photo = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight(), m, true);
+                //Log.e("XXXXXXXXXX", "Scaled size: " + photo.getWidth() + " " + photo.getHeight());
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            photoBytes = stream.toByteArray();
-            //Log.e("XXXXXXXXXXX", String.valueOf(photoBytes.length)); // confirmed that called createScaledBitmap signifcantly reduces the size.
-            ivProfilePhoto.setImageBitmap(BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length));
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                photoBytes = stream.toByteArray();
+                //Log.e("XXXXXXXXXXX", String.valueOf(photoBytes.length)); // confirmed that called createScaledBitmap signifcantly reduces the size.
+                ivProfilePhoto.setImageBitmap(BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length));
 
-            isPhotoSet = true; // photo is marked as set (for the validator)
-            setDoneButtonIfComplete();
+                isPhotoSet = true; // photo is marked as set (for the validator)
+                setDoneButtonIfComplete();
+
+                // start uploading the photo now so the time to complete it is less
+                isPhotoDoneUploading = false;
+                ParseWSUser theUser = (ParseWSUser) ParseUser.getCurrentUser();
+                ParseFile profilePhotoFile = new ParseFile("profilePhoto.jpg", photoBytes);
+                theUser.setPhoto(profilePhotoFile);
+                try {
+                    // this is okay: we are now in the background anyway
+                    profilePhotoFile.save(); // Takes an estimated 1300 ms
+                    theUser.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                isPhotoDoneUploading = true;
+            }
         }
     }
 

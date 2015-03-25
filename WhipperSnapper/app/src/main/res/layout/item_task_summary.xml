@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/primary_color">
 
 
     <ImageView
         android:layout_width="@dimen/profile_photo_in_find_tasks"
         android:layout_height="@dimen/profile_photo_in_find_tasks"
         android:id="@+id/ivFeatureTaskPhoto"
-        android:src="@mipmap/ic_launcher"
+        android:transitionName="taskPhoto"
+        android:src="@raw/no_task_photo_white"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -22,7 +24,8 @@
         android:layout_below="@+id/tvFeaturePostedOn"
         android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,7 +34,8 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,7 +45,8 @@
         android:layout_alignRight="@+id/tvFeaturePostedOn"
         android:layout_alignEnd="@+id/tvFeaturePostedOn"
         android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
-        android:layout_toEndOf="@+id/ivFeatureTaskPhoto" />
+        android:layout_toEndOf="@+id/ivFeatureTaskPhoto"
+        android:textColor="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,6 +55,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/tvFeatureTaskType"
         android:layout_toRightOf="@+id/ivFeatureTaskPhoto"
-        android:layout_toEndOf="@+id/ivFeatureTaskPhoto" />
+        android:layout_toEndOf="@+id/ivFeatureTaskPhoto"
+        android:textColor="@color/light_primary_color" />
 
 </RelativeLayout>

@@ -43,7 +43,7 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
         Button btnOffer = (Button) findViewById(R.id.btnOffer);
         btnOffer.setTypeface(bikoTypeface);
 
-        ivTaskDetailsProfilePhoto = (ImageView) findViewById(R.id.ivTaskDetailsProfilePhoto);
+        ivTaskDetailsProfilePhoto = (ImageView) findViewById(R.id.ivTaskDetailsTaskPhoto);
         tvTaskDetailsSeniorName = (TextView) findViewById(R.id.tvTaskDetailsSeniorName);
         tvTaskDetailsType = (TextView) findViewById(R.id.tvTaskDetailsType);
         tvTaskDetailsDetails = (TextView) findViewById(R.id.tvTaskDetailsDetails);
@@ -53,9 +53,6 @@ public class ShowTaskDetailsActivity extends ActionBarActivity {
         byte[] taskPhotoBytes = getIntent().getByteArrayExtra("taskPhoto");
         if (taskPhotoBytes != null) {
             ivTaskDetailsProfilePhoto.setImageBitmap(BitmapFactory.decodeByteArray(taskPhotoBytes, 0, taskPhotoBytes.length));
-        } else {
-            // use default image if there is no task photo
-            ivTaskDetailsProfilePhoto.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_no_task_photo));
         }
         tvTaskDetailsSeniorName.setText(getIntent().getStringExtra("seniorName"));
         tvTaskDetailsType.setText(getIntent().getStringExtra("taskType"));

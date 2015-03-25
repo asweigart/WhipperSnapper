@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.LinkAddress;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +74,18 @@ public class FindTaskMapViewFragment extends Fragment implements
     private HashMap<Marker, ParseWSUser> markerUserMapping;
     private LayoutInflater mInflater;
 
+    String[] taskTypeStrings;
+    int[] taskTypeIcons = {R.drawable.task_type_gardening,
+            R.drawable.task_type_tech,
+            R.drawable.task_type_car_ride,
+            R.drawable.task_type_pickup,
+            R.drawable.task_type_cards,
+            R.drawable.task_type_housekeeping,
+            R.drawable.task_type_fixing,
+            R.drawable.task_type_paperwork,
+            R.drawable.task_type_petcare,
+            R.drawable.task_type_other};
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -97,6 +111,22 @@ public class FindTaskMapViewFragment extends Fragment implements
         }
 
         markerUserMapping = new HashMap<Marker, ParseWSUser>();
+
+
+
+
+        // get an array of task types and their icons (this is used in the info window)
+        String[] tempTaskTypes = {getResources().getStringArray(R.array.taskTypes)[0],
+                getResources().getStringArray(R.array.taskTypes)[1],
+                getResources().getStringArray(R.array.taskTypes)[2],
+                getResources().getStringArray(R.array.taskTypes)[3],
+                getResources().getStringArray(R.array.taskTypes)[4],
+                getResources().getStringArray(R.array.taskTypes)[5],
+                getResources().getStringArray(R.array.taskTypes)[6],
+                getResources().getStringArray(R.array.taskTypes)[7],
+                getResources().getStringArray(R.array.taskTypes)[8],
+                getResources().getStringArray(R.array.taskTypes)[9]};
+        taskTypeStrings = tempTaskTypes; // this "tempTaskTypes" hack is done because Java doesn't allow the array literal syntax used here. Sheesh.
     }
 
     @Override
@@ -451,11 +481,21 @@ public class FindTaskMapViewFragment extends Fragment implements
         // gather the data for this info window
         ParseWSUser user = markerUserMapping.get(marker);
 
-        // set the text
+        // set the text and icon
         View infoWindow = mInflater.inflate(R.layout.infowindow_task, null);
+        ImageView ivInfoTaskTypeIcon = (ImageView) infoWindow.findViewById(R.id.ivInfoTaskTypeIcon);
         TextView tvInfoTaskType = (TextView) infoWindow.findViewById(R.id.tvInfoTaskType);
         TextView tvInfoSeniorName = (TextView) infoWindow.findViewById(R.id.tvInfoSeniorName);
         TextView tvInfoTaskDetails = (TextView) infoWindow.findViewById(R.id.tvInfoTaskDetails);
+
+        // figure out which icon to set in the info window
+        String markerTaskType = markerUserMapping.get(marker).getTaskType().toString();
+        for (int i = 0; i < taskTypeStrings.length; i++) { // loop through all the task types, and set the image view once the right one is found
+            if (markerTaskType.equals(taskTypeStrings[i])) {
+                ivInfoTaskTypeIcon.setImageResource(taskTypeIcons[i]);
+                break; // no need to continue through the others.
+            }
+        }
 
         tvInfoTaskType.setText(markerUserMapping.get(marker).getTaskType());
         tvInfoTaskDetails.setText(markerUserMapping.get(marker).getTaskDetails());

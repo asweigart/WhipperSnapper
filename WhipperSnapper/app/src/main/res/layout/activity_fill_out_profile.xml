@@ -70,14 +70,16 @@
         android:layout_below="@+id/etAddress"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/etAddress"
-        android:layout_alignEnd="@+id/etAddress"
         android:hint="@string/City_State_Zip"
         android:textColor="@color/text_field_foreground"
         android:inputType="textCapWords|textAutoCorrect"
         android:background="@color/text_field_background"
-        android:layout_margin="4dp"
-        android:padding="@dimen/small_button_margin" />
+        android:padding="@dimen/small_button_margin"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -107,12 +109,14 @@
         android:id="@+id/btnTakePhotoNow"
         android:layout_below="@+id/tvForPrivacyLabel2"
         android:layout_toRightOf="@+id/ivProfilePhoto"
-        android:layout_alignRight="@+id/etCityStateZip"
-        android:layout_alignEnd="@+id/etCityStateZip"
         android:onClick="onTakePhotoNowClick"
         android:textColor="@color/text_on_primary_color"
         android:background="@color/accent_color"
-        android:layout_margin="@dimen/small_button_margin" />
+        android:layout_marginLeft="@dimen/small_button_margin"
+        android:layout_marginRight="@dimen/small_button_margin"
+        android:layout_marginTop="@dimen/small_button_margin"
+        android:layout_marginBottom="@dimen/small_button_margin"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -121,12 +125,14 @@
         android:id="@+id/btnUploadPhoto"
         android:layout_below="@+id/btnTakePhotoNow"
         android:layout_toRightOf="@+id/ivProfilePhoto"
-        android:layout_alignRight="@+id/btnTakePhotoNow"
-        android:layout_alignEnd="@+id/btnTakePhotoNow"
         android:onClick="onUploadPhotoClick"
         android:textColor="@color/text_on_primary_color"
         android:background="@color/accent_color"
-        android:layout_margin="@dimen/small_button_margin" />
+        android:layout_marginLeft="@dimen/small_button_margin"
+        android:layout_marginRight="@dimen/small_button_margin"
+        android:layout_marginTop="@dimen/small_button_margin"
+        android:layout_marginBottom="@dimen/small_button_margin"
+        android:layout_alignEnd="@+id/ivAvatar2" />
 
     <Button
         android:layout_width="wrap_content"

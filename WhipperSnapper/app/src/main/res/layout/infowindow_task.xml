@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ivInfoTaskTypeIcon"
         android:layout_gravity="center_horizontal"
-        android:background="#FFFFFF" />
+        android:background="@color/text_on_primary_color" />
 
     <TextView
         android:layout_width="wrap_content"

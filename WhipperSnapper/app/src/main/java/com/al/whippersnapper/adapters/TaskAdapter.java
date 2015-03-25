@@ -61,9 +61,6 @@ public class TaskAdapter extends ArrayAdapter<ParseWSUser> {
         }
         if (taskPhotoBytes != null) { // only set the image if there is an image
             vh.ivFeatureTaskPhoto.setImageBitmap(BitmapFactory.decodeByteArray(taskPhotoBytes, 0, taskPhotoBytes.length));
-        } else {
-            // use the default image if there is no task photo
-            vh.ivFeatureTaskPhoto.setImageBitmap(BitmapFactory.decodeResource(convertView.getContext().getResources(), R.mipmap.ic_no_task_photo));
         }
 
         // set the other task text views.

@@ -83,7 +83,7 @@ public class FindTaskListViewFragment extends Fragment {
                 i.putExtra("seniorName", Util.getAnonymizedName(user.getFullName())); // TODO - use constants instead of "seniorName"
                 i.putExtra("taskType", user.getTaskType());
                 i.putExtra("taskDetails", user.getTaskDetails());
-                i.putExtra("postedOn", Util.getRelativeTimeAgo(user.getTaskPostedOn().toString())); // TODO - might want to reformat this date, or have a relative "9 minutes ago" string
+                i.putExtra("postedOn", Util.getRelativeTimeAgo(user.getTaskPostedOn().toString()));
                 i.putExtra("taskPhoto", taskPhotoBytes);
                 i.putExtra("seniorUsername", user.getUsername());
                 startActivity(i);
