@@ -8,6 +8,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +61,9 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
         // Show-hide image based on the logged-in user.
         // Display the profile image to the right for our user, left for other users.
         if (message.getUser() != null) {
+            final Animation photoIn = new AlphaAnimation(0.0f, 1.0f);
+            photoIn.setDuration(500);
+
             if (message.getUser().equals("")) { // TODO for some reason, after I added the final task address message, sometimes this value would be null.
                 // system chat messages have a blank username, don't show either photo
                 holder.imageRight.setVisibility(View.GONE);
@@ -71,6 +76,10 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
                 holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
                 //if (thisUserPhoto != null)
                     holder.imageRight.setImageBitmap(BitmapFactory.decodeByteArray(thisUserPhoto, 0, thisUserPhoto.length));
+
+                if (position == this.getCount() - 1) {
+                    holder.imageRight.startAnimation(photoIn);
+                }
             } else {
                 // message came from other user
                 holder.imageLeft.setVisibility(View.VISIBLE);
@@ -78,9 +87,21 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
                 holder.text.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
                 //if (otherUserPhoto != null)
                     holder.imageLeft.setImageBitmap(BitmapFactory.decodeByteArray(otherUserPhoto, 0, otherUserPhoto.length));
+
+                if (position == this.getCount() - 1) {
+                    holder.imageLeft.startAnimation(photoIn);
+                }
             }
 
+
             holder.text.setText(message.getMessage());
+
+            if (position == this.getCount() - 1) {
+                final Animation textIn = new AlphaAnimation(0.0f, 1.0f);
+                textIn.setDuration(500);
+                holder.text.startAnimation(textIn);
+            }
+
         } else {
             Log.e("XXXXXXXXX", "message was null in ChatListAdapter.java");
         }

@@ -11,7 +11,8 @@
         android:layout_height="64dp"
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_personal_photo"
-        android:layout_gravity="top" />
+        android:layout_gravity="top"
+        android:layout_marginTop="2dp" />
     <TextView
         android:textSize="18sp"
         android:id="@+id/tvChatText"
@@ -35,5 +36,6 @@
         android:layout_height="64dp"
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_personal_photo"
-        android:layout_gravity="top" />
+        android:layout_gravity="top"
+        android:layout_marginTop="2dp" />
 </LinearLayout>
